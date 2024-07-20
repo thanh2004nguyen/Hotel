@@ -1,0 +1,109 @@
+﻿<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="utf-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>@ViewData["Title"] - Hotel</title>
+   
+
+    @* link font end *@
+   
+    <link href="https://fonts.googleapis.com/css?family=Poppins:200,300,400,500,600,700" rel="stylesheet">
+    <link href="https://fonts.googleapis.com/css?family=Playfair+Display:400,400i,700,700i" rel="stylesheet">
+    <script src="https://cdn.ckeditor.com/4.22.1/standard/ckeditor.js"></script>
+
+    <link rel="stylesheet" href="~/ForntEnd/css/open-iconic-bootstrap.min.css">
+    <link rel="stylesheet" href="~/ForntEnd/css/animate.css">
+
+    <link rel="stylesheet" href="~/ForntEnd/css/owl.carousel.min.css">
+    <link rel="stylesheet" href="~/ForntEnd/css/owl.theme.default.min.css">
+    <link rel="stylesheet" href="~/ForntEnd/css/magnific-popup.css">
+
+    <link rel="stylesheet" href="~/ForntEnd/css/aos.css">
+    <link rel="stylesheet" href="~/ForntEnd/css/call.css">
+
+    <link rel="stylesheet" href="~/ForntEnd/css/ionicons.min.css">
+
+    <link rel="stylesheet" href="~/ForntEnd/css/bootstrap-datepicker.css">
+    <link rel="stylesheet" href="~/ForntEnd/css/jquery.timepicker.css">
+
+
+    <link rel="stylesheet" href="~/ForntEnd/css/flaticon.css">
+    <link rel="stylesheet" href="~/ForntEnd/css/icomoon.css">
+
+
+    <link rel="stylesheet" href="~/ForntEnd/css/style.css">
+    <link rel="stylesheet" href="cdn.datatables.net/1.13.6/css/jquery.dataTables.min.css">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.2/css/all.min.css" integrity="sha512-z3gLpd7yknf1YoNbCzqRKc4qyor8gaKU1qmn+CShxbuBusANI9QpRohGBreCFkKxLhei6S9CQXFEbbKuqLg0DA==" crossorigin="anonymous" referrerpolicy="no-referrer" />
+    
+
+
+  
+    @* link font end *@
+</head>
+<body>
+      @Html.Partial("Header")
+    <div style="background-color:#f2f2f2">
+        <main role="main" class="" id="check-admin-margin-layout" style="background-color:white">
+            @RenderBody()
+        </main>
+
+        <a role="button" class=""  style="width:fit-content; position:fixed;bottom:100px;right:100px; z-index:1000; width:50px;height:50px; border-radius:10px"  href="tel:/02854338868">
+            <div class="btn btn-primary nav-link p-2" style="width:fit-content;">
+                <i class="fas fa-phone"></i>
+                <span class="phone-number text-dark">02854338868</span>
+            </div>
+           
+        </a>
+       
+        
+    </div>
+    @Html.Partial("Footer")
+     
+    <script src="~/lib/jquery/dist/jquery.min.js"></script>
+    <script src="~/lib/bootstrap/dist/js/bootstrap.bundle.min.js"></script>
+    <script src="~/js/site.js" asp-append-version="true"></script>
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/5.15.3/css/all.min.css">
+    @*  FontENd JS *@
+    <script src="~/ForntEnd/js/jquery.min.js"></script>
+    <script src="~/ForntEnd/js/jquery-migrate-3.0.1.min.js"></script>
+    <script src="~/ForntEnd/js/popper.min.js"></script>
+    <script src="~/ForntEnd/js/bootstrap.min.js"></script>
+    <script src="~/ForntEnd/js/jquery.easing.1.3.js"></script>
+    <script src="~/ForntEnd/js/jquery.waypoints.min.js"></script>
+    <script src="~/ForntEnd/js/jquery.stellar.min.js"></script>
+    <script src="~/ForntEnd/js/owl.carousel.min.js"></script>
+    <script src="~/ForntEnd/js/jquery.magnific-popup.min.js"></script>
+    <script src="~/ForntEnd/js/aos.js"></script>
+    <script src="~/ForntEnd/js/jquery.animateNumber.min.js"></script>
+    <script src="~/ForntEnd/js/bootstrap-datepicker.js"></script>
+    <script src="~/ForntEnd/js/jquery.timepicker.min.js"></script>
+    <script src="~/ForntEnd/js/scrollax.min.js"></script>
+    <script src="https://maps.googleapis.com/maps/api/js?key=AIzaSyBVWaKrjvy3MaE7SQ74_uJiULgl1JY0H2s&sensor=false"></script>
+    <script src="~/ForntEnd/js/google-map.js"></script>
+    
+    <script src="~/ForntEnd/js/main.js"></script>
+
+    <script>
+
+ 
+        $(document).ready(function () {
+            $('#room_table').DataTable();
+            $('#room_type').DataTable();
+            $('#table_property').DataTable();
+            $('#table_unity').DataTable();
+            $('#banner_table').DataTable();
+           
+        });
+    </script>
+
+    <link rel="stylesheet" href="https://cdn.datatables.net/1.13.6/css/jquery.dataTables.css" />
+
+    <script src="https://cdn.datatables.net/1.13.6/js/jquery.dataTables.js"></script>
+
+    @*  FontENd JS *@
+
+    @await RenderSectionAsync("Scripts", required: false)
+    <script src="~/ForntEnd/js/modal_delete.js"></script>
+</body>
+</html>

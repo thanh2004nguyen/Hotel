@@ -1,0 +1,47 @@
+﻿@model Hotel.Models.RoomUnity
+@{
+    ViewData["Title"] = "Create RoomUnity";
+}
+<body>
+        @if (!string.IsNullOrEmpty(ViewData["Err"] as string))
+    {
+        <div class="alert alert-danger">@ViewData["Err"]</div>
+    }
+
+
+    <div class="container " style="min-height:40vh;background-color:white ">
+        <div style="display:flex;justify-content:space-between;align-items:center ">
+        <h1 class="mb-3">Tạo Tiện Ích Mới</h1>
+        <div>
+                <a asp-action="Index" role="button" class="btn btn-secondary">Trở lại danh sách</a>
+        </div>
+        </div>
+        <div class="col-md-5">
+            <form asp-action="Create">
+                <div asp-validation-summary="ModelOnly" class="text-danger"></div>
+                <div class="form-group">
+                    <label  class="control-label">Tên Tiện Ích</label>
+                    <input asp-for="Name" class="form-control" />
+                    <span asp-validation-for="Name" class="text-danger"></span>
+                </div>
+                <div class="form-group">
+                    <input type="submit" value="Tạo" class="btn btn-primary" />
+                </div>
+            </form>
+        </div>
+    </div>
+
+   
+
+    @section Scripts {
+        @{
+            await Html.RenderPartialAsync("_ValidationScriptsPartial");
+        }
+    }
+
+
+
+</body>
+
+
+

@@ -1,0 +1,44 @@
+﻿@{
+    ViewData["Title"] = "Create";
+}
+
+@model Hotel.Dtos.HomeDataDto
+
+
+<div class="container" style="min-height:50vh">
+    <h1 class="mb-3">Thêm nội dung trang home</h1>
+
+    <form asp-action="Create" method="post" enctype="multipart/form-data">
+
+        <div class="form-group">
+            <label class="control-label"> Lựa chọn Loại Thông tin</label>
+           <select asp-for="Type">
+                <option value="Lời chào">Lời chào</option>
+                <option value="Tiện nghi">Tiện nghi</option>
+           </select>
+           
+        </div>
+
+        <div class="form-group">
+            <label class="control-label"> Tiêu đề</label>
+            <input type="text" asp-for="Header">
+            <span asp-validation-for="Header" class="text-danger"></span>
+        </div>
+
+        <div class="form-group">
+            <label class="control-label"> Nội dung</label>
+            <textarea style="width:50%; height:100px" type="text" asp-for="Content" id="content-data" ></textarea>
+            <span asp-validation-for="Content" class="text-danger"></span>
+        </div>
+
+        <div class="form-group">
+            <label class="control-label"> Chọn hình ảnh</label>
+            <input type="file" required asp-for="Image" >
+        </div>
+
+        <button type="submit" class="btn btn-primary">Thêm nội dung</button>
+    </form>
+</div>
+<script>
+    CKEDITOR.replace('content-data');
+</script>

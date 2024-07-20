@@ -1,0 +1,34 @@
+﻿
+@{
+    ViewData["Title"] = "Create";
+}
+
+@model Hotel.Dtos.BannerDto
+
+<div class="container" style="min-height:100vh">
+    <h1 class="mb-3">Tạo banner mới</h1>
+
+<form asp-action="Create" asp-controller="AdminBanner" method="post" enctype="multipart/form-data">
+
+    <div class="form-group">
+        <label class="control-label">Tiêu đề Banner</label>
+        <input type="Text" asp-for="Title" placeholder="Nhập tiêu đề Banner">
+        <span asp-validation-for="Title" class="text-danger"></span>
+    </div>
+
+    <div class="form-group">
+        <label class="control-label">Nội dung Banner</label>
+        <input type="Text" asp-for="Content" placeholder="Nhập nội dung Banner">
+        <span asp-validation-for="Content" class="text-danger"></span>
+    </div>
+
+    <div class="form-group">
+        <label class="control-label">Image Banner</label>
+        <input type="file" asp-for="image" >
+        <span asp-validation-for="image" class="text-danger"></span>
+    </div>
+
+   
+    <button type="submit" class="btn btn-primary">Create Room</button>
+</form>
+</div>

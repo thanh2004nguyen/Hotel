@@ -1,0 +1,51 @@
+﻿@{
+    ViewData["Title"] = "Room Update";
+}
+
+@model Room
+<div class="container" style="min-height:100vh;background-color:white;box-shadow: rgba(0, 0, 0, 0.24) 0px 3px 8px; padding:1rem;padding-bottom:1rem">
+
+<form asp-action="Edit" method="post" enctype="multipart/form-data">
+
+    <h4>Chỉnh sửa thông tin phòng</h4>
+    <input hidden asp-for="Id" />
+    @for (int i = 0; i < @ViewBag.RoomPropertyList.Items.Count; i++)
+    {
+        var propertyList = @ViewBag.RoomPropertyList.Items;
+        var propertyDetails = ViewBag.PropertyDetails;
+
+        <div class="form-control">
+            <label class="form-check-label">@propertyList[i].Name</label>
+            <input hidden name="PropertyId[@i]" value="@propertyList[i].Id">
+            @foreach (var de in propertyDetails)
+            {
+                if (de.RoomPropertyId == @propertyList[i].Id)
+                {
+                    <input type="text" name="PropertyDetail[@i]" value="@de.Detail" required>
+                }
+            }
+        </div>
+    }
+
+    <div class="form-group">
+        <label class="control-label">Loại Phòng</label>
+        <select asp-for="RoomTypeID" class="form-control" asp-items="ViewBag.RoomTypeList"></select>
+    </div>
+
+    <label>Tiện Ích</label>
+    @foreach (var unity in @ViewBag.RoomUnitiesList.Items)
+    {
+        var isChecked = Model.Unities != null && Model.Unities.Any(u => u.Name == unity.Name);
+        <div class="form-check">
+            <input type="checkbox" class="form-check-input" name="Unities" value="@unity.Id" @(isChecked ? "checked" : "")>
+            <label class="form-check-label">@unity.Name</label>
+        </div>
+    }
+
+    <label class="control-label">Hinh Anh</label>
+    <input type="file" id="ImageFile" name="ImageFile" class="form-control-file" multiple />
+
+    <button type="submit" class="btn btn-primary mt-2">Xong</button>
+</form>
+
+</div>

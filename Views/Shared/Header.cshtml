@@ -1,0 +1,162 @@
+﻿@using Hotel.Filters;
+
+
+
+<nav class="navbar navbar-expand-lg navbar-dark ftco_navbar mb-5 ftco-navbar-light" id="ftco-navbar" style="top:0">
+	<div class="container">
+		<a class="navbar-brand" href="/"><img src="~/images/Logo.jpg" style="width:80px" /></a>
+		<button class="navbar-toggler" type="button" data-toggle="collapse" data-target="#ftco-nav" aria-controls="ftco-nav" aria-expanded="false" aria-label="Toggle navigation">
+			<span class="oi oi-menu"></span> Menu
+		</button>
+
+		<div class="collapse navbar-collapse" id="ftco-nav">
+			<ul class="navbar-nav  ml-auto mr-auto d-flex align-items-center">
+
+				<li class="nav-item home-c "><a href="/" class="nav-link text-white home-cl" style="font-size:20px">Trang chủ</a></li>
+				<li class="nav-item room-c "><a asp-action="Index" asp-controller="Room" class="nav-link text-white  room-cl" style="font-size:20px">Phòng</a></li>
+				<li class="nav-item price-c  "><a asp-controller="About" asp-action="Price" class="nav-link text-white price-cl" style="font-size:20px">Bảng giá</a></li>
+				
+
+					<div class="dropdown nav-link">
+
+					<span style="font-size:20px" class=" dropdown-toggle about-c nav-link text-white about-cl" id="dropdownMenuButton" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
+							Thông tin
+						</span>
+
+
+						<div class="dropdown-menu">
+							@await Component.InvokeAsync("HeaderData")
+						</div>
+					</div>
+				</li>
+				<li class="nav-item"><a href="#footer_contact" class="nav-link text-white " style="font-size:20px">Liên hệ</a></li>
+
+
+
+
+
+
+				@if (User.Identity.IsAuthenticated)
+				{
+					<li class="nav-item" style="display:flex;justify-content:center;align-items:center">
+						<div class="dropdown">
+							
+								@if (User.IsInRole("admin"))
+								{
+									<button class="btn btn-secondary dropdown-toggle" type="button" id="dropdownMenuButton" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">Quản lý</button >
+							}else{
+								<button class="btn btn-secondary dropdown-toggle" type="button" id="dropdownMenuButton" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">Nhân viên</button>
+							}	
+							
+							<div class="dropdown-menu" aria-labelledby="dropdownMenuButton">
+								<a class="dropdown-item" asp-controller="User" asp-action="Register">Tạo tài khoản</a>
+								<a class="dropdown-item" asp-controller="User" asp-action="ChangePassword">Thay đổi mật khẩu</a>
+								<a class="dropdown-item" href="/admin/RoomType/Index">Quản Lý Loại Phòng</a>
+								<a class="dropdown-item" href="/admin/RoomUnity/Index">Quản Lý Tiện Ích</a>
+								<a class="dropdown-item" href="/admin/Room/Index">Quản Lý Phòng</a>
+								<a class="dropdown-item" href="/admin/RoomProperty/Index">Quản Lý chi tiết phòng</a>
+							
+								<a class="dropdown-item" asp-controller="AdminBanner" asp-action="Index">Quản Lý Banner</a>
+								<a class="dropdown-item" asp-controller="AdminPolicy" asp-action="Index">Quản Lý Policy</a>
+								<a class="dropdown-item" asp-controller="AdminHotel" asp-action="Index">Quản Lý Trang chủ</a>
+								<a class="dropdown-item" asp-controller="AdminGalery" asp-action="Index">Quản Lý Ảnh phòng</a>
+								<a class="dropdown-item" asp-controller="AdminComment" asp-action="Index">Quản Lý bình luận</a>
+								<a class="dropdown-item" asp-controller="AdminOrder" asp-action="Index">Quản Lý Order</a>
+							</div>
+						</div>
+					</li>
+					<li class="nav-item">
+						<span class="nav-link notice_newOrder " style="cursor: pointer">
+							<i class="fa-regular fa-bell" style="font-size:25px"></i>
+
+						</span>
+					</li>
+					<li style="margin-left:10px" class=" text-dark nav-item "> <a asp-controller="user" class="nav-link text-white " asp-action="Logout" style="font-size:20px">Đăng xuất</a></li>
+				}
+				
+			</ul>
+			@if (!User.Identity.IsAuthenticated)
+			{
+				<a role="button" class="btn btn-primary mr-2 nav-link" style="padding:10px" href="tel:/02854338868">
+					<i class="fas fa-phone"></i>
+					<span class="phone-number text-dark">02854338868</span>
+				</a>
+			}
+			
+			
+
+		
+		</div>
+	</div>
+</nav>
+@if (User.Identity.IsAuthenticated)
+{
+	<script>
+
+		//play audio
+
+		const playAudio = () => {
+			// Create an AudioContext
+			const audioContext = new (window.AudioContext || window.webkitAudioContext)();
+
+			// Create an AudioBufferSourceNode
+			const source = audioContext.createBufferSource();
+
+			// Construct the URL to the MP3 file in the wwwroot folder
+			const audioFileUrl = '/audio/notice.wav'; // Replace with the actual path
+
+			// Fetch the MP3 file
+			fetch(audioFileUrl)
+				.then(response => response.arrayBuffer())
+				.then(data => audioContext.decodeAudioData(data))
+				.then(buffer => {
+					// Set the buffer as the source's audio buffer
+					source.buffer = buffer;
+
+					// Connect the source to the audio context's destination (speakers)
+					source.connect(audioContext.destination);
+
+					// Play the audio
+					source.start(0);
+				})
+				.catch(error => {
+					console.error('Error loading audio file: ' + error);
+				});
+
+		}
+
+
+
+		const getOrder = () => {
+			$.get('/admin/order/CountOrder',
+				(data) => {
+					localStorage.setItem('tempTimes', data)
+					let check = localStorage.getItem("orderTimes");
+					if (check) {
+						if (Number(check) < Number(data)) {
+							playAudio()
+							if (!$('.notice_newOrder').find('div').length > 0) {
+								$('.notice_newOrder').append(`<div class="bg bg-danger" style="width:10px;height:10px;border-radius:50%; position:relative;bottom:40px;left:20px"></div>`)
+							}
+
+						}
+					} else {
+						localStorage.setItem('orderTimes', data)
+					}
+
+				})
+		}
+
+		const recallData = setInterval(() => {
+			getOrder();
+		}, 60000)
+
+
+		$(document).ready(() => { recallData })
+
+
+		$('.notice_newOrder').click(() => {
+			location.href = '/admin/order/index'
+		})
+	</script>
+}

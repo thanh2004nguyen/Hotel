@@ -1,0 +1,33 @@
+﻿@{
+    ViewData["Title"] = "Create";
+}
+
+@model Image
+
+<div class="container" style="min-height:50vh">
+    <h1 class="mb-3">Thêm ảnh mới trang About</h1>
+
+    <form asp-action="Create"  method="post" enctype="multipart/form-data">
+
+
+        <div class="form-group">
+            <label class="control-label"> Chọn loại phòng </label>
+        <select asp-for="RoomId">
+            @foreach (var i in ViewData["RoomList"] as List<Hotel.Models.Room>)
+            {
+                <option value="@i.Id">@i.RoomType.Type</option>
+            }
+        </select>
+        </div>
+       
+
+        <div class="form-group">
+            <label class="control-label"> Chọn hình ảnh</label>
+            <input type="file" required asp-for="ImageFile" multiple>
+          
+        </div>
+
+
+        <button type="submit" class="btn btn-primary">Thêm ảnh</button>
+    </form>
+</div>

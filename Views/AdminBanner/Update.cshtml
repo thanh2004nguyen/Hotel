@@ -1,0 +1,38 @@
+﻿@{
+    ViewData["Title"] = "Update";
+}
+
+
+@model Banner
+
+<div class="container" style="min-height:100vh">
+    <h1 class="mb-3">Chỉnh sủa thông tin Banner</h1>
+
+    <form asp-action="Update" asp-controller="AdminBanner" method="post" enctype="multipart/form-data">
+
+        <div class="form-group">
+            <label class="control-label">Tiêu đề Banner</label>
+            <input type="Text" name="title" value="@Model.Title" placeholder="Nhập tiêu đề Banner">
+            <span asp-validation-for="Title" class="text-danger"></span>
+        </div>
+
+        <div class="form-group">
+            <label class="control-label">Nội dung Banner</label>
+            <input type="Text" name="content" value="@Model.Content" placeholder="Nhập nội dung Banner">
+            <span asp-validation-for="Content" class="text-danger"></span>
+        </div>
+
+        
+        <input type="hidden" name="id" value="@Model.Id">
+        <input type="hidden" asp-for="Image" value="@Model.Image">
+        
+        <img src="~/images/@Model.Image" style="width500px;height:300px" alt="error">
+        
+        <div class="form-group mt-3">
+            <label class="control-label">Image Banner</label>
+            <input type="file" name="img">
+        </div>
+
+        <button type="submit" class="btn btn-primary">Update Banner</button>
+    </form>
+</div>

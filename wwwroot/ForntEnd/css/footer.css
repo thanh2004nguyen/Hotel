@@ -1,0 +1,31 @@
+﻿.footer-container {
+    max-width: 1200px;
+    margin: 0 auto;
+    padding: 20px;
+}
+
+.my-custom-row {
+    display: flex;
+    flex-wrap: wrap;
+    justify-content: space-between;
+}
+
+.content-col {
+    flex: 1;
+}
+
+.iframe-col {
+    flex: 1;
+}
+
+.iframe-container {
+    position: relative;
+    padding-top: 56.25%; /* 16:9 aspect ratio - adjust as needed */
+}
+
+/* Media query for screens with a width less than 500px */
+@media (max-width: 500px) {
+    .my-custom-row {
+        flex-direction: column;
+    }
+}

@@ -1,0 +1,57 @@
+﻿@{
+    ViewData["Title"] = "Create";
+}
+
+@model Hotel.Dtos.CommentDto
+<div class="container" style="min-height:40vh;background-color:white;padding:2rem">
+    <h1 class="mb-3">Tạo comment mới</h1>
+
+    
+    @if (ViewData.ContainsKey("error"))
+    {
+        <p class="alert alert-warning" role="alert">@ViewData["error"]</p>
+    }
+   
+    @if (ViewData.ContainsKey("success"))
+    {
+        <p class="alert alert-warning" role="alert">@ViewData["success"]</p>
+    }
+
+    <form asp-action="Create" method="post" enctype="multipart/form-data">
+
+        <div class="form-group">
+            <label class="control-label">Tên</label>
+            <input asp-for="Name">
+            <span asp-validation-for="Name" class="text-danger"></span>
+        </div>
+
+        <div class="form-group">
+            <label class="control-label">nội dung</label>
+            <input asp-for="Content">
+            <span asp-validation-for="Content" class="text-danger"></span>
+        </div>
+
+        <div class="form-group">
+            <label class="control-label">số sao</label>
+            <input type="number" min="1" max="=5" asp-for="start">
+            <span asp-validation-for="start" class="text-danger"></span>
+        </div>
+
+        <select asp-for="RoomId">
+            @foreach (var i in ViewData["PeopleList"] as List<Hotel.Models.Room>)
+            {
+                <option value="@i.Id">@i.RoomType.Type</option>
+            }
+        </select>
+
+        <div class="form-group">
+            <label class="control-label">chọn avatar</label>
+            <input required type="file"  asp-for="image">
+          
+        </div>
+        
+
+
+        <button type="submit" class="btn btn-primary">Tạo mới</button>
+    </form>
+</div>

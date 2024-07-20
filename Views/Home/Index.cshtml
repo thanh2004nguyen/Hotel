@@ -1,0 +1,378 @@
+﻿﻿@using Hotel.Models.Shared;
+@model Hotel.Dtos.HomeDto
+
+
+
+@* intro *@
+<link rel="stylesheet" href="~/ForntEnd/css/mia1.css" type='text/css' media='all' rel='stylesheet' id='flatsome-main-css'>
+<link rel="stylesheet" href="~/ForntEnd/css/mia2.css" type='text/css' media='all' rel='stylesheet' id='flatsome-main-css'>
+<link rel="stylesheet" href="~/ForntEnd/css/mia.css" type='text/css' media='all' rel='stylesheet' id='flatsome-main-css'>
+<script src="https://cdnjs.cloudflare.com/ajax/libs/jquery/3.5.1/jquery.min.js" integrity="sha512-bLT0Qm9VnAYZDflyKcBaQ2gg0hSYNQrJ8RilYldYQ1FxQYoCLtUjuuRuZo+fjqhx/qtq/1itJ0C2ejDxltZVFg==" crossorigin="anonymous"></script>
+<script src="https://cdnjs.cloudflare.com/ajax/libs/slick-carousel/1.6.0/slick.js" integrity="sha512-KvlmAB+wx0zLQRe7hCFzBwyaU/AvbwPoJgxfBZ6g+ZF9MBMY4YAo3+BycXH2Rc+fDPbZ0fJsi3AfOTmQYZEn9A==" crossorigin="anonymous"></script>
+
+
+@* banner *@
+@if (Model.Banners != null)
+{
+
+
+
+    <section class="home-slider owl-carousel banner-bg-home" style="height:fit-content;" >
+
+        @foreach (var b in Model.Banners)
+        {
+            var img = $"~/images/{b.Image}";
+            <div class="slider-item " style="background-image: url('@Url.Content(img)'); background-position:center; background-position:center;background-size:100%;height:70vh">
+                <div class="overlay"></div>
+                <div class="container" style="height:100%">
+                    <div class="row no-gutters slider-text align-items-start justify-content-center" style="height:100%">
+                        <div class="col-md-12 ftco-animate d-flex align-items-center justify-content-center" style="height:100%">
+                            <div class="text mb-5 pb-3">
+                                <h1 class="mb-3">@Html.DisplayFor(i=>b.Title)</h1>
+                                <h2>@Html.DisplayFor(i=>b.Content)</h2>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        }
+    </section>
+
+}
+
+@if (Model.hotelDatas != null)
+{
+    foreach (var item in Model.hotelDatas.Where(d => d.Type == "Lời chào"))
+    {
+        var img = $"~/images/{item.Url}";
+        @*   start hello *@
+        <section class="section section-intro" style="padding: 30px 0; padding-top:0" id="section_894630452">
+            <div class="bg section-bg fill bg-fill  bg-loaded">
+            </div>
+            <div class="section-content relative">
+                <div class="row row-large row-gioithieu" id="row-1158504080">
+                    <div id="col-1909256363" class="col col-hinhanh pb-0 medium-6 small-12 large-6">
+                        <div class="col-inner">
+                            <div class="banner has-hover" id="banner-126835757">
+                                <div class="banner-inner fill">
+                                    <div class="banner-bg fill">
+                                        <div class="bg fill bg-fill "></div>
+                                        <img src="@Url.Content(img)" />
+                                    </div>
+                                    <div class="banner-layers container">
+                                        <div class="fill banner-link"></div>
+                                        <div id="text-box-988802694" class="text-box banner-layer x100 md-x100 lg-x100 y100 md-y100 lg-y100 res-text">
+                                            <div class="text dark">
+
+                                                <div class="text-inner text-center">
+
+                                                    <div class="item-contact">
+                                                        <a href="tel:02854338868">
+
+                                                            <div>Hotline</div>
+                                                            <div>24/7</div>
+                                                            <p>
+                                                        </a>
+                                                    </div>
+                                                </div>
+                                            </div>
+                                            <style>
+                                                #text-box-988802694 {
+                                                    width: 50%;
+                                                }
+
+                                                    #text-box-988802694 .text {
+                                                        font-size: 100%;
+                                                    }
+                                            </style>
+                                        </div>
+                                    </div>
+                                </div>
+                                <div class="height-fix is-invisible"><img width="1348" height="1034" src="https://unsplash.com/photos/e616t35Vbeg" class="attachment-original size-original" alt="" loading="lazy" srcset="https://miahotelvungtau.com/wp-content/uploads/2022/07/DSCF3549-1.jpg 1348w, https://miahotelvungtau.com/wp-content/uploads/2022/07/DSCF3549-1-521x400.jpg 521w, https://miahotelvungtau.com/wp-content/uploads/2022/07/DSCF3549-1-1043x800.jpg 1043w, https://miahotelvungtau.com/wp-content/uploads/2022/07/DSCF3549-1-768x589.jpg 768w" sizes="(max-width: 1348px) 100vw, 1348px" /></div>
+
+                                <style>
+                                    #banner-126835757 .bg.bg-loaded {
+                                    }
+                                </style>
+                            </div>
+                        </div>
+                    </div>
+                    <div id="col-1990368549" class="col pb-0 medium-6 small-12 large-6">
+                        <div class="col-inner">
+                            <div class="box-intro">
+                                <div class="group-title">
+                                    <div class="box-title">
+                                        <div class="sub-title">
+                                            <h3>Chào Mừng Quý Khách Đến  Với</h3>
+                                        </div>
+                                        <div class="title">
+                                            <h2>HÙNG PHÁT Hotel </h2>
+                                        </div>
+                                    </div>
+                                </div>
+                                <div class="content">
+                                    <p><strong style="text-transform:uppercase">@item.Header</strong></p>
+
+                                    <p>@Html.Raw(item.Content)</p>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+
+
+
+
+            <style>
+                #section_894630452 {
+                    padding-top: 60px;
+                    padding-bottom: 60px;
+                }
+            </style>
+        </section>
+        @*     end hello *@
+    }
+}
+
+
+
+
+<section class="ftco-section bg-light">
+    <div class="container">
+        <div class="row justify-content-center mb-5 pb-3">
+            <div class="col-md-7 heading-section text-center ftco-animate">
+                <h2 class="mb-4">Our Rooms</h2>
+
+            </div>
+        </div>
+        <div class="row">
+            @if (Model.Rooms != null)
+            {
+                foreach (var r in Model.Rooms)
+                {
+                    var rimg = $"~/images/{r.Images.ToArray()[0].Url}";
+                    <div class="col-sm col-md-6 col-lg-4 ftco-animate">
+                        <div class="room">
+                            <a asp-action="Index" asp-controller="SingleRoom" asp-route-id="@r.Id">
+
+                                <div class="img d-flex justify-content-center align-items-center" style="background-image: url('@Url.Content(rimg)')">
+                                    <div class="icon d-flex justify-content-center align-items-center">
+                                        <span class="icon-search2"></span>
+                                    </div>
+                                </div>
+
+                            </a>
+
+                            <div class="text p-3 ">
+                                <h3 class="mb-3 text-center" style="margin-left:auto; text-transform:uppercase">
+                                    <a asp-controller="SingleRoom" style="color:#8d703b;" asp-route-id="@r.Id">@r.RoomType.Type</a>
+                                </h3>
+
+                                <div class="d-flex justify-content-start align-items-center" style="width:100%; flex-flow: wrap">
+                                    @if (r.Details != null)
+                                    {
+                                        @foreach (var de in r.Details)
+                                        {
+                                            <div style="min-width:40%; width:fit-content ;margin-left:auto" class="mb-2 d-flex justify-content-start align-items-center">
+                                                <i class="@CommonMethod.CheckIcon(de.Name)" style="font-size:20px"></i>
+                                                <span class=" ml-2" style="font-size:16px">@de.Detail</span>
+                                            </div>
+                                        }
+                                    }
+                                </div>
+
+                                @if (r.IsFulled == true)
+                                {
+                                    <hr style="margin-bottom:0">
+                                    <p class=" bg bg-danger text-dark" style="height:100%;padding:16px 0;font-weight:bold">Tạm thời hết phòng</p>
+                                }
+                                else
+                                {
+                                    <hr>
+                                    <p class="pt-1"><a asp-action="Index" asp-controller="SingleRoom" asp-route-id="@r.Id" class="btn-custom">Xem Chi Tiết Phòng<span class="icon-long-arrow-right"></span></a></p>
+                                }
+
+
+                            </div>
+                        </div>
+                    </div>
+                }
+            }
+
+        </div>
+    </div>
+
+
+
+</section>
+
+
+<section class="section section-dichvu" id="section_1783060384">
+    <div class="bg section-bg fill bg-fill  bg-loaded">
+    </div>
+
+    <div class="section-content relative">
+
+        <div class="img has-hover shape-1 x md-x lg-x y md-y lg-y" id="image_1267708277">
+
+            <style>
+                #image_1267708277 {
+                    width: 8%;
+                }
+            </style>
+        </div>
+
+        @if (Model.hotelDatas.Where(d => d.Type == "Tiện nghi") != null)
+        {
+            var list = Model.hotelDatas.Where(d => d.Type == "Tiện nghi").ToList();
+            for(var i=0; i<list.Count();i++ ){
+                var img = $"~/images/{list[i].Url}";
+                if (i % 2 == 0)
+                {
+                    @* start *@
+                    <div class="row service-top" id="row-322719010">
+
+                        <div id="col-27298551" class="col col-dichvu hide-for-small medium-6 small-12 large-6" data-animate="fadeInLeft">
+                            <div class="col-inner">
+
+                                <div class="image-block">
+                                    <div class="img1"><img src="~/images/dichvu1.jpg" alt=""></div>
+                                    <div class="img2"><img src="@Url.Content(img)" alt=""></div>
+                                    <div class="text1">HÙNG PHÁT</div>
+                                </div>
+                            </div>
+                        </div>
+                        <div id="col-311355405" class="col medium-6 small-12 large-6" data-animate="fadeInRight">
+                            <div class="col-inner">
+                                <div class="content-block">
+                                    <div class="title-box">
+                                        <div class="sub-title">Tiện nghi</div>
+                                        <h2 class="sec-title">@list[i].Header</h2>
+
+                                    </div>
+                                    <div class="content">
+                                        <p>
+                                            @Html.Raw(list[i].Content)
+                                        </p>
+
+                                        <div class="text">
+                                            <h4>Liên hệ lễ tân:<br /><a class="btn2" href="tel:02854338868"><i class="fas fa-phone-alt"></i>02854338868</a></h4>
+                                        </div>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+
+                    </div>
+                    @* end *@
+                }else
+                {
+                  <div class="row service-bottom" id="row-1780575493">
+
+            <div id="col-974914177" class="col col-dichvu pb-0 medium-5 small-12 large-5" data-animate="fadeInLeft">
+                <div class="col-inner">
+
+
+                    <div class="content-block">
+                        <div class="title-box">
+                            <div class="sub-title">Tiện nghi</div>
+                            <h2 class="sec-title">
+                               @list[i].Header
+                            </h2>
+                            
+                        </div>
+                        <div class="content">@Html.Raw(list[i].Content)</div>
+                        <div class="text">
+                            <h4>Liên hệ lễ tân:<br /><a class="btn2" href="tel:02854338868"><i class="fas fa-phone-alt"></i>02854338868</a></h4>
+                        </div>
+                    </div>
+                </div>
+            </div>
+
+
+
+            <div id="col-395761577" class="col pb-0 medium-7 small-12 large-7" data-animate="fadeInRight">
+                <div class="col-inner">
+
+
+                    <div class="image-block">
+                        <div class="img1"><img src="~/images/dichvu3.jpg" alt=""></div>
+                        <div class="img2"><img src="~/images/dichvu4.jpg" alt=""></div>
+                        <div class="text2">Phòng Bếp</div>
+                    </div>
+                </div>
+            </div>
+
+
+        </div>   
+                }
+          
+            }
+        }
+
+
+       
+
+    </div>
+
+
+    <style>
+        #section_1783060384 {
+            padding-top: 60px;
+            padding-bottom: 60px;
+        }
+    </style>
+</section>
+
+<h3 class="mb-2">Đánh giá :</h3>
+<div class="col-md-12 col-lg-12 room-single ftco-animate mb-5" style="border-top:0.2rem solid #ccc;padding:1rem">
+    @*  start *@
+
+    @if (Model.comments != null)
+    {
+        foreach (var c in Model.comments)
+
+        {
+            var img = $"~/images/{c.avatar}";
+            <div class="mb-1">
+                <div>
+                    <div class="d-flex align-items-center ">
+                        <img class="mr-3" style="width:50px;height:50px ; border-radius:50%" src="@Url.Content(img)" />
+                        <div>
+                            <p style="margin-bottom:0 ;font-weight:bold">@c.Name </p>
+                            <p style="margin-bottom:0 ;font-weight:bold">
+                                @for (var i = 0; i < c.start; i++)
+                                {
+                                    <i class="fa-solid fa-star" style="color:yellow"></i>
+                                }
+                                @for (var i = 0; i < 5 - c.start; i++)
+                                {
+                                    <i class="fa-solid fa-star"></i>
+                                }
+
+
+                            </p>
+                        </div>
+                    </div>
+                    <p>
+                        @c.Content
+                    </p>
+                </div>
+            </div>
+        }
+    }
+
+
+
+</div>
+
+
+
+
+<script type='text/javascript' id='flatsome-js-js-extra'>
+    /* <![CDATA[ */
+    var flatsomeVars = { "ajaxurl": "https:\/\/miahotelvungtau.com\/wp-admin\/admin-ajax.php", "rtl": "", "sticky_height": "70", "lightbox": { "close_markup": "<button title=\"%title%\" type=\"button\" class=\"mfp-close\"><svg xmlns=\"http:\/\/www.w3.org\/2000\/svg\" width=\"28\" height=\"28\" viewBox=\"0 0 24 24\" fill=\"none\" stroke=\"currentColor\" stroke-width=\"2\" stroke-linecap=\"round\" stroke-linejoin=\"round\" class=\"feather feather-x\"><line x1=\"18\" y1=\"6\" x2=\"6\" y2=\"18\"><\/line><line x1=\"6\" y1=\"6\" x2=\"18\" y2=\"18\"><\/line><\/svg><\/button>", "close_btn_inside": false }, "user": { "can_edit_pages": false }, "i18n": { "mainMenu": "Main Menu" }, "options": { "cookie_notice_version": "1" } };
+    /* ]]> */
+</script>
+<script type='text/javascript' src='https://miahotelvungtau.com/wp-content/themes/flatsome/assets/js/flatsome.js?ver=3.13.0' id='flatsome-js-js'></script>

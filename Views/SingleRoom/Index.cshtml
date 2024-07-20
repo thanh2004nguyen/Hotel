@@ -1,0 +1,277 @@
+﻿@using Hotel.Models.Shared;
+@model Hotel.Dtos.RoomDto
+@{
+    var disable = Model.Room.IsFulled ? "disabled" : "";
+    var disableColor = Model.Room.IsFulled ? "btn-secondary" : "btn-primary";
+}
+<style>
+    /* Hide the radio buttons */
+    .radio-option input[type="radio"] {
+        display: none;
+    }
+
+    /* Style the radio options */
+    .radio-option label {
+        display: flex;
+        flex-direction: column;
+        align-items: center;
+        text-align: center;
+        cursor: pointer;
+        color: black; /* Set the default label text color */
+    }
+
+    /* Define specific styles for each radio option icon */
+    .radio-option input[value="day"] + label i::before {
+        content: "\f185"; /* Unicode code for the sun icon */
+        font-family: 'Font Awesome 6 Free';
+        font-size: 24px; /* Adjust the size as needed */
+    }
+
+    .radio-option input[value="hour"] + label i::before {
+        content: "\f017"; /* Unicode code for the clock icon */
+        font-family: 'Font Awesome 6 Free';
+        font-size: 24px; /* Adjust the size as needed */
+    }
+
+    .radio-option input[value="night"] + label i::before {
+        content: "\f186"; /* Unicode code for the moon icon */
+        font-family: 'Font Awesome 6 Free';
+        font-size: 24px; /* Adjust the size as needed */
+    }
+
+    /* Change icon and label color when checked */
+    .radio-option input[type="radio"]:checked + label i::before {
+        color: blue; /* Change the icon color to blue when selected */
+    }
+
+    .radio-option input[type="radio"]:checked + label {
+        color: blue; /* Change the label text color to blue when selected */
+    }
+
+
+
+</style>
+
+
+
+<div class="hero-wrap" style="background-size:fit;background-position:botton; background-image: url('@Url.Content("~/images/HP.png")');">
+</div>
+
+@if (ViewData.ContainsKey("success"))
+{
+    <p class="alert alert-success" role="alert">@ViewData["success"]</p>
+}
+@if (ViewData.ContainsKey("error"))
+{
+    <p class="alert alert-danger" role="alert">@ViewData["error"]</p>
+}
+
+<section class="ftco-section col-lg-12">
+    <div style="padding : 0 40px">
+        <div class="row">
+            <div class="col-lg-12">
+                <div class="row">
+                    <div class="col-lg-12 ftco-animate">
+                        <div class="row">
+
+
+                            <div class="col-lg-8 single-slider owl-carousel">
+                                @foreach (var a in @Model.Room.Images)
+                                {
+                                    var IUrl = $"~/images/{a.Url}";
+                                    <div class="item">
+                                        <div class="room-img"
+                                             style="background-image: url('@Url.Content(@IUrl)');background-position:center;background-size:contain"></div>
+                                    </div>
+
+                                }
+                            </div>
+                            <div class="col-lg-4 sidebar ftco-animate">
+
+                                <div class="sidebar-box ftco-animate" style="border:0.1rem solid #ccc;box-shadow: rgba(0, 0, 0, 0.16) 0px 1px 4px; ">
+                                    <form asp-action="HandleAddOrder" method="post">
+
+                                        @if (Model.Room.IsFulled == false)
+                                        {
+                                            <p>Thời gian đặt phòng</p>
+                                        <div class="d-flex justify-content-around">
+                                            <div class="radio-option">
+                                                    <input required type="radio" asp-for="@Model.Order.Type" value="Theo ngày" id="dayRadio" />
+                                                <label for="dayRadio">
+                                                    <i class="far fa-sun" style="font-size:22px"></i>
+                                                    Theo ngày
+                                                </label>
+                                            </div>
+
+                                            <div class="radio-option">
+                                                    <input required type="radio" asp-for="@Model.Order.Type" value="Theo giờ" id="hourRadio" />
+                                                <label for="hourRadio">
+                                                        <i class="far fa-clock" style="font-size:22px"></i>
+                                                    Theo giờ
+                                                </label>
+                                            </div>
+
+                                            <div class="radio-option">
+                                                    <input required type="radio" asp-for="@Model.Order.Type" value=" Qua đêm" id="nightRadio" />
+                                                <label for="nightRadio">
+                                                        <i class="far fa-moon" style="font-size:22px"></i>
+                                                    Qua đêm
+                                                </label>
+                                            </div>
+
+                                            </div>
+                                            <input asp-for="@Model.Order.RoomId" hidden value="@Model.Room.Id" />
+                                            <input hidden name="id" value="@Model.Room.Id" />
+                                            <div class="form-group">
+                                                <label class="control-label">Tên</label>
+                                                <input required asp-for="@Model.Order.Name" class="form-control" />
+                                                <span asp-validation-for="@Model.Order.Name" class="text-danger"></span>
+
+                                            </div>
+
+
+                                            <div class="form-group">
+                                                <label class="control-label">Số điện thoại</label>
+                                                <input type="number" required asp-for="@Model.Order.Phone" class="form-control" />
+                                                <span asp-validation-for="@Model.Order.Phone" class="text-danger"></span>
+
+                                            </div>
+                                            <div class="form-group">
+                                                <label class="control-label">Ngày Check in</label>
+                                                <input id="dateInput" type="date" required asp-for="@Model.Order.Date" class="form-control" />
+                                                <span asp-validation-for="@Model.Order.Date" class="text-danger"></span>
+
+                                            </div>
+                                            <div class="form-group">
+                                                <label class="control-label">Ghi chú</label>
+                                                <input asp-for="@Model.Order.Message" class="form-control" />
+
+                                            </div>
+                                        }
+                                        else
+                                        {
+                                            <div class=" d-fex align-items-center justify-content-center" style=" width:100%; height:40vh">
+                                                <p class="h1 text-danger text-center">Hết Phòng</p>
+                                            </div>
+                                        }
+                                        <div class="form-group">
+                                            <input type="submit" value="Gửi" class="btn @disableColor" @disable />
+                                        </div>
+
+                                    </form>
+                                </div>
+
+
+                            </div>
+                        </div>
+
+                    </div>
+
+
+                    <div class="col-md-12 room-single  mb-5 ftco-animate" style="margin-top:0">
+                        <h1 style="font-size:42px ; text-transform:capitalize" class="text-dark mb-2"> phòng @Model.Room.RoomType.Type</h1>
+                        <div s class="d-flex justify-content-start align-items-center" style="flex-wrap:wrap">
+                            @foreach (var p in Model.Room.Details)
+                            {
+                                <div style="width:fit-content " class="mb-2 mr-5 d-flex justify-content-start align-items-center">
+                                    <i class="@CommonMethod.CheckIcon(p.Name)" style="font-size:20px; color:black"></i>
+                                    <span class=" ml-2" style="font-size:16px; color:black">@p.Detail</span>
+                                </div>
+                            }
+                        </div>
+
+                        <p class="mb-4">
+                            @Html.Raw(Model.Room.RoomType.Description)
+                        </p>
+
+                        <div class="d-flex mt-2 mb-4" style="width: 100%; flex-wrap: wrap;">
+                            @foreach (var uni in Model.Room.Unities!)
+                            {
+                                <div class="col-6 col-md-3 mb-2">
+                                    <div class="d-flex align-items-center justify-content-start">
+                                        <i class="fa-solid fa-check" style="color: #c7a46d; font-size: 20px; margin-right: 20px;"></i>
+                                        <span style="font-size: 18px; color: #c7a46d;">
+                                            @uni.Name
+                                        </span>
+                                    </div>
+                                </div>
+                            }
+                        </div>
+
+                        <h4 style="font-size:28px; font-weight:bold">Quy định phòng </h4>
+                        <div class="d-flex mt-2 mb-4" style="width: 100%; flex-wrap: wrap;">
+                            @foreach (var uni in Model.Policies)
+                            {
+                                <div class="col-6 col-sm-4 col-md-3 mb-2">
+                                    <div class="d-flex align-items-center justify-content-start" style="width: 100%;">
+                                        <i class="fa-solid fa-rectangle-list" style="font-size: 20px; margin-right: 20px;"></i>
+                                        <span style="font-size: 18px;">
+                                            @uni.Content
+                                        </span>
+                                    </div>
+                                </div>
+                            }
+                        </div>
+                       
+                    </div>
+
+                    <h3 class="mb-2">Đánh giá :</h3>
+                    <div class="col-md-12 col-lg-12 room-single ftco-animate mb-5" style="border-top:0.2rem solid #ccc;padding:1rem">
+                       @*  start *@
+
+                       @if(Model.Comments!=null){
+                            foreach (var c in Model.Comments)
+                               
+                            {
+                                var img = $"~/images/{c.avatar}";
+                                <div  class="mb-1">
+                                    <div>
+                                        <div class="d-flex align-items-center ">
+                                            <img class="mr-3" style="width:50px;height:50px ; border-radius:50%" src="@Url.Content(img)" />
+                                            <div>
+                                                <p style="margin-bottom:0 ;font-weight:bold">@c.Name </p>
+                                                <p style="margin-bottom:0 ;font-weight:bold">
+                                                    @for (var i = 0; i <c.start; i++)
+                                                    {
+                                                        <i class="fa-solid fa-star" style="color:yellow" ></i>
+                                                    }
+                                                    @for (var i = 0;i<5-c.start; i++)
+                                                    {
+                                                        <i class="fa-solid fa-star"></i>
+                                                    }
+  
+                                                   
+                                                </p>
+                                            </div>
+                                        </div>
+                                        <p>
+                                            @c.Content
+                                        </p>
+                                    </div>
+                                </div>
+                            }
+                        }
+                        
+          
+
+                    </div>
+
+                    @*    end *@
+
+                </div>
+            </div>
+        </div>
+
+    </div>
+
+</section>
+
+<script>
+    const dateInput = document.getElementById('dateInput');
+    const today = new Date();
+    const year = today.getFullYear();
+    const month = String(today.getMonth() + 1).padStart(2, '0'); // Months are 0-indexed.
+    const day = String(today.getDate()).padStart(2, '0');
+    const todayFormatted = `${year}-${month}-${day}`;
+    dateInput.setAttribute('min', todayFormatted);
+</script>

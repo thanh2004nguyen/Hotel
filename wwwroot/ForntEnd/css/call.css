@@ -1,0 +1,26 @@
+﻿/* Style for the button */
+.call-button {
+    display: inline-block;
+    padding: 10px 20px;
+    background-color: dodgerblue;
+    color: white;
+    border: none;
+    cursor: pointer;
+    border-radius: 5px;
+    transition: background-color 0.3s;
+}
+
+/* Style for the phone number */
+.phone-number {
+    font-weight: bold;
+}
+
+/* Change button color on hover */
+.call-button:hover {
+    background-color: #333;
+}
+
+/* Remove underlines from anchor tags */
+a {
+    text-decoration: none;
+}

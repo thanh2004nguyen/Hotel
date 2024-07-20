@@ -1,0 +1,9 @@
+﻿@model List<RoomType>
+	
+	
+		@foreach (var roomType in Model)
+
+		{
+	<a class="dropdown-item" asp-controller="About" asp-action="Index" asp-route-type="@roomType.Type">@roomType.Type</a>
+		}
+	

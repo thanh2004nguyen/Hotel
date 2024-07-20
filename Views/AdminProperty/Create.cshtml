@@ -1,0 +1,16 @@
+﻿@{
+    ViewData["Title"] = "Create";
+}
+
+@model RoomProperty
+<div class="container" style="min-height:40vh;background-color:white;padding:2rem">
+    <h1 class="mb-3">Tạo Mới</h1>
+<form asp-action="Create" method="post">
+    <div class="form-group">
+        <label class="control-label">Tên</label>
+        <input  asp-for="Name">
+         <span asp-validation-for="Name" class="text-danger"></span>
+    </div>
+    <button type="submit" class="btn btn-primary">Xong</button>
+</form>
+</div>

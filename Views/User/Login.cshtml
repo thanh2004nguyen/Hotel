@@ -1,0 +1,57 @@
+﻿@model Hotel.Dtos.LoginDto
+<div class="container">
+    <div class="row" style="display:flex;justify-content:center;align-items:center;min-height:100vh;">
+        <div class="col-sm-9 col-md-7 col-lg-5 mx-auto">
+            <div>
+
+                @if (ViewData.ContainsKey("ChangePassSuccessed"))
+                {
+                    <p class="alert alert-warning" role="alert">@ViewData["ChangePassSuccessed"]</p>
+                }
+
+                @if (ViewData.ContainsKey("Error"))
+                {
+                    <p class="alert alert-warning" role="alert">@ViewData["Error"]</p>
+                }
+                @if (ViewData.ContainsKey("Blocked"))
+                {
+                    <p class="alert alert-warning" role="alert">@ViewData["Blocked"]</p>
+                }
+                @if (ViewData.ContainsKey("success"))
+                {
+                    <p class="alert alert-success" role="alert">@ViewData["success"]</p>
+                }
+
+                @if (ViewData.ContainsKey("ErrorPassword"))
+                {
+                    <p class="alert alert-success" role="alert">@ViewData["ErrorPassword"]</p>
+                }
+            </div>
+            <div class="card border-0 shadow rounded-3 my-5">
+                <div class="card-body p-4 p-sm-5">
+                    <h5 class="card-title text-center mb-5 fw-light fs-5">Đăng nhập</h5>
+                    <form asp-action="Login" asp-controller="User" method="post">
+                        <div class="form-floating mb-3">
+                            <input type="text" asp-for="Email" class="form-control" id="floatingInput" placeholder="Tên đăng nhập">
+                            <label for="floatingInput">Tên đăng nhập</label>
+                            <span asp-validation-for="Email" class="text-danger"></span>
+                        </div>
+                        <div class="form-floating mb-3">
+
+                            <input asp-for="Password" type="password" class="form-control" id="floatingPassword" placeholder="Password">
+                            <label for="floatingPassword">Mật khẩu</label>
+                            <span asp-validation-for="Password" class="text-danger"></span>
+                        </div>
+
+                        <div class="d-grid">
+                            <button class="btn btn-primary btn-login text-uppercase fw-bold" type="submit">
+                              Đăng nhập
+                            </button>
+                        </div>
+                    </form>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+   

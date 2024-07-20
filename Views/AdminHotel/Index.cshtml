@@ -1,0 +1,56 @@
+﻿@model IEnumerable<HotelData>
+@{
+    ViewData["Title"] = "Index";
+}
+<h1 class="mb-3">Quản lý Thông tin trang chủ</h1>
+<div class="container"  style="min-height:100vh;background-color:white;box-shadow: rgba(0, 0, 0, 0.24) 0px 3px 8px; padding:1rem;padding-bottom:1rem">
+    @if (TempData.ContainsKey("success"))
+    {
+        <div class="alert alert-success">
+            @TempData["success"]
+        </div>
+    }
+
+    @if (TempData.ContainsKey("error"))
+    {
+        <div class="alert alert-danger">
+            @TempData["error"]
+        </div>
+    }
+
+    <a asp-action="Create">Thêm thông tin mới</a>
+
+    <table id="banner_table" class="table table-hover table-striped table-bordered">
+        <thead>
+            <tr>
+               
+                <th>ảnh</th>
+                <th>Loại</th>
+                <th>Tiêu đề</th>
+                <th>Nội dung</th>
+                <th>Hành động</th>
+            </tr>
+        </thead>
+        <tbody>
+            @foreach (var item in Model)
+            {
+                var img = $"~/images/{@item.Url}";
+                <tr>
+                    
+                    <td scope="col">
+                        <img style="width:70px;height:70px" src="@Url.Content(img)" />
+                    </td>
+                    <td>@Html.DisplayFor(a=>item.Type)</td>
+                    <td>@Html.DisplayFor(a=>item.Header)</td>
+                    <td>@Html.DisplayFor(a=>item.Content)</td>
+
+                    <td>
+                        <a asp-action="Delete" role="button" class="btn btn-danger" asp-route-id="@item.Id">Xóa</a>
+                        <a asp-action="Edit" role="button" class="btn btn-warning" asp-route-id="@item.Id">Chỉnh sửa</a>
+                    </td>
+                </tr>
+            }
+        </tbody>
+    </table>
+</div>
+

@@ -1,0 +1,37 @@
+﻿@model Hotel.Models.RoomProperty
+@{
+    ViewData["Title"] = "Edit RoomProperty";
+}
+<body>
+    <div class="container" style="min-height:100vh;background-color:white;padding:2rem">
+        <div style="display:flex;justify-content:space-between;align-items:center">
+        <h1 class="mb-3">Sửa Mô Tả Phòng</h1>
+    <div>
+        <a asp-action="Index" class="btn btn-secondary" role="button">Trở lại danh sách</a>
+    </div>
+        </div>
+        <div class="col-md-5">
+            <form asp-action="Edit">
+                <div asp-validation-summary="ModelOnly" class="text-danger"></div>
+                <input hidden asp-for="Id" value="@Model.Id" />
+                <div class="form-group">
+                    <label asp-for="Name" class="control-label">Tên</label>
+                    <input asp-for="Name" class="form-control" />
+                    <span asp-validation-for="Name" class="text-danger"></span>
+                </div>
+                <div class="form-group">
+                    <input type="submit" value="Xong" class="btn btn-primary" />
+                </div>
+            </form>
+        </div>
+    </div>
+
+    @section Scripts {
+        @{
+            await Html.RenderPartialAsync("_ValidationScriptsPartial");
+        }
+    }
+</body>
+
+
+

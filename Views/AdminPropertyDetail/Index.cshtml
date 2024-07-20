@@ -1,0 +1,46 @@
+﻿@model IEnumerable<RoomPropertyDetail>
+@{
+    ViewData["Title"] = "Room PropertyDetail Index";
+}
+<h1 class="text-center">Property detail</h1>
+<div class="container" style="min-height:100vh;background-color:white;box-shadow: rgba(0, 0, 0, 0.24) 0px 3px 8px; padding:1rem;padding-bottom:1rem">
+
+
+
+<p>
+    <a asp-action="Create" role="button" class="btn btn-warning">Tạo Property Detail</a>
+</p>
+    <table id="table_unity" class="table table-hover table-striped table-bordered">
+    <thead class="thead-dark">
+        <tr>
+            <th class="text-center">Id </th>
+                <th class="text-center">Tên</th>
+                <th class="text-center">Action</th>
+        </tr>
+    </thead>
+    <tbody>
+        @foreach (var item in Model)
+        {
+            <tr>
+                    <td class="text-center">@Html.DisplayFor(a=>item.Id)</td>
+                    <td class="text-center">
+                    @Html.DisplayFor(a=>item.Detail)
+                </td>
+
+
+                    <td class="text-center">
+                    <a role="button" class="btn btn-info" asp-action="Edit" asp-route-id="@item.Id">Sửa
+                    </a> |
+                    <button data-id="@item.Id" class="btn btn-danger">Delete</button>
+                </td>
+            </tr>
+        }
+    </tbody>
+</table>
+
+
+
+
+</div>
+
+

@@ -1,0 +1,19 @@
+﻿@{
+    ViewData["Title"] = "Edit";
+}
+
+@model RoomPolicy
+<div class="container" style="min-height:40vh;background-color:white;padding:2rem">
+    <h1 class="mb-3">Chỉnh sửa chính sách</h1>
+    <form asp-action="Edit" method="post">
+        <div class="form-group">
+            <label class="control-label">Nội dung chính sách</label>
+            <input asp-for="Content" value="@Model.Content">
+
+            <span asp-validation-for="Content" class="text-danger"></span>
+            
+        </div>
+        <input asp-for="Id" type="hidden" value="@Model.Id">
+        <button type="submit" class="btn btn-primary">Chỉnh sửa</button>
+    </form>
+</div>

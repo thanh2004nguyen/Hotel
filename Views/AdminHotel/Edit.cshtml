@@ -1,0 +1,54 @@
+﻿@{
+    ViewData["Title"] = "Create";
+}
+
+@model HotelData
+
+
+<div class="container" style="min-height:50vh">
+    <h1 class="mb-3">Chỉnh sửa nội dung trang home</h1>
+
+    <form asp-action="Edit" method="post" enctype="multipart/form-data">
+
+        <div class="form-group">
+            <label class="control-label"> Lựa chọn Loại Thông tin</label>
+            <select asp-for="Type">
+                @if (Model.Type == "Lời chào")
+                {
+                    <option selected value="Lời chào">Lời chào</option>
+                    <option value="Tiện nghi">Tiện nghi</option>
+                }else{
+                    <option value="Lời chào">Lời chào</option>
+                    <option selected value="Tiện nghi">Tiện nghi</option>
+                }                
+            </select>
+
+        </div>
+     
+        <div class="form-group">
+            <label class="control-label"> Tiêu đề</label>
+            <input type="text" asp-for="Header" value="@Model.Header">
+            <span asp-validation-for="Header" class="text-danger"></span>
+        </div>
+
+        <div class="form-group">
+            <label class="control-label"> Nội dung</label>
+            <textarea type="text" id="content-data" asp-for="Content" value="@Model.Content"></textarea>
+            <span asp-validation-for="Content" class="text-danger"></span>
+        </div>
+
+        <div class="form-group">
+            <label class="control-label"> Chọn hình ảnh</label>
+            <input type="file" name="img">
+        </div>
+
+        <input type="hidden" asp-for="Id" value="@Model.Id">
+
+        <button type="submit" class="btn btn-primary">Cập nhập nội dung</button>
+    </form>
+</div>
+
+<script>
+    CKEDITOR.replace('content-data');
+</script>
+

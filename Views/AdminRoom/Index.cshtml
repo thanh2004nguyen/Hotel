@@ -1,0 +1,80 @@
+﻿@model IEnumerable<Room>
+@{
+    ViewData["Title"] = "Index";
+}
+
+
+
+<h1 class="mb-3 text-center">Quản lý phòng</h1>
+@if (ViewData.ContainsKey("success"))
+{
+    <p class="alert alert-success" role="alert">@ViewData["success"]</p>
+}
+
+@if (ViewData.ContainsKey("error"))
+{
+    <p class="alert alert-" role="alert">@ViewData["error"]</p>
+}
+<div class="container" style="min-height:100vh;background-color:white;box-shadow: rgba(0, 0, 0, 0.24) 0px 3px 8px; padding:1rem;padding-bottom:1rem">
+
+    <a asp-action="Create" asp-controller="AdminRoom" class="btn btn-warning mb-3" role="button" >Tạo Phòng Mới</a>
+
+<table id="room_table" class="table table-hover table-striped table-bordered">
+    <thead class="thead-dark">
+        <tr>
+            <th class="text-center">
+                Id
+            </th>
+                <th class="text-center">Loại Phòng</th>
+                <th class="text-center">Tiện Ích</th>
+                <th class="text-center">Mô Tả Phòng</th>
+                <th class="text-center">Action</th>
+        </tr>
+    </thead>
+    <tbody>
+        @foreach (var item in Model)
+               
+            {
+                string show = item.IsFulled == true ? "Còn Phòng" : "Hết Phòng";
+            <tr>
+                <td class="text-center">@Html.DisplayFor(a=>item.Id)</td>
+                    <td class="text-center">
+                     @Html.DisplayFor(a=>item.RoomType!.Type)
+                </td>
+                    <td class="text-center">
+                    @foreach(var u in item.Unities!)
+                    {
+                        @u.Name @Html.Raw("&nbsp;") @Html.Raw("&nbsp;")
+
+                        @Html.Raw("&nbsp;")
+                    }
+
+                </td>
+                    <td class="text-center">
+                        <ul>
+                            @foreach (var property in ViewBag.RoomPropertyList.Items)
+                            {
+                                <li style="list-style:none">
+                                    @property.Name :       
+                                    @foreach (var detail in property.Details)
+                                    {
+                                        if (detail.RoomId == item.Id)
+                                        {
+                                            @detail.Detail
+                                        }
+                                       
+                                    }
+                                </li>
+                            }
+                        </ul>
+                </td>     
+                    <td class="text-center">
+                    <a class="btn btn-info" role="button"  asp-action="Edit" asp-route-id="@item.Id" >Sửa</a> |
+                    <a class="btn btn-danger" role="button" asp-action="SetRoomStament" asp-route-id="@item.Id">@show</a>
+                </td>
+            </tr>
+        }
+    </tbody>
+</table>
+</div>
+
