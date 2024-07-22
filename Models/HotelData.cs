@@ -13,9 +13,9 @@ namespace Hotel.Models
 
         public HotelData() { }
         public HotelData(HomeDataDto data,string img) { 
-		Type= data.Type;
-		Header= data.Header;
-		Content= data.Content;
+			Type= data.Type;
+			Header= data.Header;
+			Content= data.Content;
 			Url = img;
 		}
     }

@@ -1,89 +1,81 @@
-﻿<style>
-    .my-custom-row {
-        display: flex;
-        justify-content: space-between;
-    }
-
-    .iframe-container {
-        position: relative;
-  
-        padding-top: 56.25%; /* 16:9 aspect ratio - adjust as needed */
-    }
-
-        .iframe-container iframe {
-            position: absolute;
-            top: 0;
-            left: 0;
-            width: 100%;
-            height: 100%;
-        }
-
-    .logo-container {
-        display: flex;
-        align-items: center;
-    }
-
-        .logo-container img {
-            max-width: 100px;
-            margin: 0 auto;
-        }
-
-
-</style>
-<link rel="stylesheet" href="~/ForntEnd/css/footer.css" type='text/css' media='all' rel='stylesheet' id='flatsome-main-css'>
-<footer style="border-top:0.2rem solid #ccc;height:fit-content "  id="footer_contact" >
-
-    <div  style="height:100%;width:100%" >
-
-        <div class="my-custom-row">
-    
-            <div class="col-md">
-                <div class="iframe-container">
-                <iframe src="https://www.google.com/maps/embed?pb=!1m18!1m12!1m3!1d3919.9581898057345!2d106.689027709277!3d10.737705889364515!2m3!1f0!2f0!3f0!3m2!1i1024!2i768!4f13.1!3m3!1m2!1s0x31752fa4f8fe7dab%3A0xe01b4b8999a30cf7!2zMzggxJDGsOG7nW5nIHPhu5EgNiwgS2h1IGTDom4gY8awIFRydW5nIFPGoW4sIELDrG5oIENow6FuaCwgVGjDoG5oIHBo4buRIEjhu5MgQ2jDrSBNaW5oIDcxODEzLCBWaeG7h3QgTmFt!5e0!3m2!1svi!2s!4v1696666073653!5m2!1svi!2s" width="500" height="400" style="border:0;" allowfullscreen="" loading="lazy" referrerpolicy="no-referrer-when-downgrade"></iframe>
-                     </div> 
-            
-         <div class="ftco-footer-widget mb-4">
- 
-                </div> 
-         </div> 
-
-
-            <div class="col-md  ">
-          
-                    <div class="logo-container">
-                    <img src="~/images/Logo.jpg" alt="Logo" style="width: 100px" />
+﻿<link href="~/ForntEnd/css/" />
+<!-- Footer Section Begin -->
+<footer class="footer-section">
+    <div class="container">
+        <div class="footer-text">
+            <div class="row">
+                <div class="col-lg-4">
+                    <div class="ft-about">
+                        <div class="logo">
+                            <a href="#">
+                                <img src="img/footer-logo.png" alt="">
+                            </a>
+                        </div>
+                        <p>We inspire and reach millions of travelers<br /> across 90 local websites</p>
+                        <div class="fa-social">
+                            <a href="#"><i class="fa fa-facebook"></i></a>
+                            <a href="#"><i class="fa fa-twitter"></i></a>
+                            <a href="#"><i class="fa fa-tripadvisor"></i></a>
+                            <a href="#"><i class="fa fa-instagram"></i></a>
+                            <a href="#"><i class="fa fa-youtube-play"></i></a>
+                        </div>
                     </div>
-               
-                <p style="font-size:30px;font-weight:bold">Đối Với Hùng Phát- Chỉ Có Khách Hàng Là Tồn Tại Vĩnh Cữu</p>
-                <div class="block-23" >
+                </div>
+                <div class="col-lg-3 offset-lg-1">
+                    <div class="ft-contact">
+                        <h6>Contact Us</h6>
+                        <ul>
+                            <li>(12) 345 67890</li>
+                            <li>info.colorlib@gmail.com</li>
+                            <li>856 Cordia Extension Apt. 356, Lake, United State</li>
+                        </ul>
+                    </div>
+                </div>
+                <div class="col-lg-3 offset-lg-1">
+                    <div class="ft-newslatter">
+                        <h6>New latest</h6>
+                        <p>Get the latest updates and offers.</p>
+                        <form action="#" class="fn-form">
+                            <input type="text" placeholder="Email">
+                            <button type="submit"><i class="fa fa-send"></i></button>
+                        </form>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+    <div class="copyright-option">
+        <div class="container">
+            <div class="row">
+                <div class="col-lg-7">
                     <ul>
-                        <li>
-                            <i class="fa-solid fa-map-location-dot mr-4" style=" font-size:30px"></i>
-                            <span style="font-size:20px ;font-weight:bold" class="text">38 Đường Số 6 Khu Dân Cư Trung Sơn Bình Chánh Thành Phố HCM</span>
-                        </li>
-                        
-                    </ul>
-                    <ul>
-                        <li>
-                            <i class="fa-solid fa-phone-volume mr-4" style=" font-size:30px"></i>
-                            <span  style="font-size:20px ;font-weight:bold" class="text">Phone:028 54338868 </span>
-                        </li>
-
-                    </ul>
-                    <ul>
-                        <li>
-                            <i class="fa-regular fa-envelope mr-4" style=" font-size:30px"></i>
-                            <span style="font-size:20px ;font-weight:bold" class="text">hungphathcmhotel@gmail.com</span>
-                        </li>
-
+                        <li><a href="#">Contact</a></li>
+                        <li><a href="#">Terms of use</a></li>
+                        <li><a href="#">Privacy</a></li>
+                        <li><a href="#">Environmental Policy</a></li>
                     </ul>
                 </div>
-
-
+                <div class="col-lg-5">
+                    <div class="co-text">
+                        <p>
+                            <!-- Link back to Colorlib can't be removed. Template is licensed under CC BY 3.0. -->
+                            Copyright &copy;<script>document.write(new Date().getFullYear());</script> All rights reserved | This template is made with <i class="fa fa-heart" aria-hidden="true"></i> by <a href="https://colorlib.com" target="_blank">Colorlib</a>
+                            <!-- Link back to Colorlib can't be removed. Template is licensed under CC BY 3.0. -->
+                        </p>
+                    </div>
+                </div>
             </div>
-
-
         </div>
-   
     </div>
 </footer>
+<!-- Footer Section End -->
+<!-- Search model Begin -->
+<div class="search-model">
+    <div class="h-100 d-flex align-items-center justify-content-center">
+        <div class="search-close-switch"><i class="icon_close"></i></div>
+        <form class="search-model-form">
+            <input type="text" id="search-input" placeholder="Search here.....">
+        </form>
+    </div>
+</div>
+<!-- Search model end -->

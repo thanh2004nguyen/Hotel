@@ -17,121 +17,98 @@
 
 
 
-    <section class="home-slider owl-carousel banner-bg-home" style="height:fit-content;" >
+   <section class="home-slider owl-carousel banner-bg-home" style="height:fit-content;" >
 
         @foreach (var b in Model.Banners)
         {
             var img = $"~/images/{b.Image}";
-            <div class="slider-item " style="background-image: url('@Url.Content(img)'); background-position:center; background-position:center;background-size:100%;height:70vh">
+            <div class="slider-item " style="background-image: url('@Url.Content(img)'); background-position:center; background-position:center;background-size:100%;height:81vh">
                 <div class="overlay"></div>
                 <div class="container" style="height:100%">
                     <div class="row no-gutters slider-text align-items-start justify-content-center" style="height:100%">
-                        <div class="col-md-12 ftco-animate d-flex align-items-center justify-content-center" style="height:100%">
-                            <div class="text mb-5 pb-3">
+                        <div class="col-lg-6" style="height:100%">
+                            <div class="text mb-5 pb-3"style="margin-top:200px;">
                                 <h1 class="mb-3">@Html.DisplayFor(i=>b.Title)</h1>
-                                <h2>@Html.DisplayFor(i=>b.Content)</h2>
+                                <h2 >@Html.DisplayFor(i=>b.Content)</h2>
                             </div>
                         </div>
+                       
                     </div>
                 </div>
             </div>
         }
     </section>
+    <div class="col-xl-4 col-lg-4 offset-xl-2 offset-lg-1"
+         style="position: absolute; top: 9%; right: 10%; margin-top:165px;">
+        <div class="booking-form">
+            <h3>Booking Your Hotel</h3>
+            <form action="#">
+                <div class="check-date">
+                    <label for="date-in">Check In:</label>
+                    <input type="text" class="date-input" id="date-in">
+                    <i class="fa-regular fa-calendar" style="padding-bottom:16px;"></i>
+                </div>
+                <div class="check-date">
+                    <label for="date-out">Check Out:</label>
+                    <input type="text" class="date-input" id="date-out">
+                    <i class="fa-regular fa-calendar" style="padding-bottom:16px;"></i>
+                </div>
+                <div class="select-option">
+                    <label for="guest">Guests:</label>
+                    <select id="guest">
+                        <option value="">2 Adults</option>
+                        <option value="">3 Adults</option>
+                    </select>
+                </div>
 
+                <button type="submit">Check Availability</button>
+            </form>
+        </div>
+    </div>
 }
 
 @if (Model.hotelDatas != null)
 {
-    foreach (var item in Model.hotelDatas.Where(d => d.Type == "Lời chào"))
+    var item = Model.hotelDatas
+        .Where(d => d.Type == "Lời chào")
+        .OrderByDescending(d => d.CreatedDate)
+        .FirstOrDefault();
+
+    if (item != null)
     {
         var img = $"~/images/{item.Url}";
-        @*   start hello *@
-        <section class="section section-intro" style="padding: 30px 0; padding-top:0" id="section_894630452">
-            <div class="bg section-bg fill bg-fill  bg-loaded">
-            </div>
-            <div class="section-content relative">
-                <div class="row row-large row-gioithieu" id="row-1158504080">
-                    <div id="col-1909256363" class="col col-hinhanh pb-0 medium-6 small-12 large-6">
-                        <div class="col-inner">
-                            <div class="banner has-hover" id="banner-126835757">
-                                <div class="banner-inner fill">
-                                    <div class="banner-bg fill">
-                                        <div class="bg fill bg-fill "></div>
-                                        <img src="@Url.Content(img)" />
-                                    </div>
-                                    <div class="banner-layers container">
-                                        <div class="fill banner-link"></div>
-                                        <div id="text-box-988802694" class="text-box banner-layer x100 md-x100 lg-x100 y100 md-y100 lg-y100 res-text">
-                                            <div class="text dark">
-
-                                                <div class="text-inner text-center">
-
-                                                    <div class="item-contact">
-                                                        <a href="tel:02854338868">
-
-                                                            <div>Hotline</div>
-                                                            <div>24/7</div>
-                                                            <p>
-                                                        </a>
-                                                    </div>
-                                                </div>
-                                            </div>
-                                            <style>
-                                                #text-box-988802694 {
-                                                    width: 50%;
-                                                }
-
-                                                    #text-box-988802694 .text {
-                                                        font-size: 100%;
-                                                    }
-                                            </style>
-                                        </div>
-                                    </div>
-                                </div>
-                                <div class="height-fix is-invisible"><img width="1348" height="1034" src="https://unsplash.com/photos/e616t35Vbeg" class="attachment-original size-original" alt="" loading="lazy" srcset="https://miahotelvungtau.com/wp-content/uploads/2022/07/DSCF3549-1.jpg 1348w, https://miahotelvungtau.com/wp-content/uploads/2022/07/DSCF3549-1-521x400.jpg 521w, https://miahotelvungtau.com/wp-content/uploads/2022/07/DSCF3549-1-1043x800.jpg 1043w, https://miahotelvungtau.com/wp-content/uploads/2022/07/DSCF3549-1-768x589.jpg 768w" sizes="(max-width: 1348px) 100vw, 1348px" /></div>
-
-                                <style>
-                                    #banner-126835757 .bg.bg-loaded {
-                                    }
-                                </style>
+        <!-- About Us Section Begin -->
+        <section class="aboutus-section spad">
+            <br />
+            <div class="container">
+                <div class="row">
+                    <div class="col-lg-6">
+                        <div class="about-text">
+                            <div class="section-title">
+                                <span style="margin: 0 auto">@Html.Raw(item.Type)</span>
+                                <h2>@Html.Raw(item.Header)</h2>
                             </div>
+                            <p class="f-para">
+                                @Html.Raw(item.Content)
+                            </p>
+                            <a href="#" class="primary-btn about-btn">Read More</a>
                         </div>
                     </div>
-                    <div id="col-1990368549" class="col pb-0 medium-6 small-12 large-6">
-                        <div class="col-inner">
-                            <div class="box-intro">
-                                <div class="group-title">
-                                    <div class="box-title">
-                                        <div class="sub-title">
-                                            <h3>Chào Mừng Quý Khách Đến  Với</h3>
-                                        </div>
-                                        <div class="title">
-                                            <h2>HÙNG PHÁT Hotel </h2>
-                                        </div>
+                    <div class="col-lg-6">
+                        <div class="about-pic">
+                            <div class="row">
+                                <div class="col-sm-6">
+                                    <div class="img-wrapper" style=" width: 200%;">
+                                        <img src="@Url.Content(img)" alt="" class="img-fluid" style=" width: 100%; height: 450px;object-fit:cover">
                                     </div>
-                                </div>
-                                <div class="content">
-                                    <p><strong style="text-transform:uppercase">@item.Header</strong></p>
-
-                                    <p>@Html.Raw(item.Content)</p>
                                 </div>
                             </div>
                         </div>
                     </div>
                 </div>
             </div>
-
-
-
-
-            <style>
-                #section_894630452 {
-                    padding-top: 60px;
-                    padding-bottom: 60px;
-                }
-            </style>
         </section>
-        @*     end hello *@
+        <!-- About Us Section End -->
     }
 }
 
@@ -206,124 +183,127 @@
 
 
 </section>
+@if (Model.Rooms != null)
+{
+    <!-- Home Room Section Begin -->
+    <section class="hp-room-section">
+        <div class="row justify-content-center mb-5 pb-3 mt-5">
+            <div class="col-md-7 heading-section text-center ftco-animate">
+                <h2 class="mb-4">Our Rooms</h2>
 
-
-<section class="section section-dichvu" id="section_1783060384">
-    <div class="bg section-bg fill bg-fill  bg-loaded">
-    </div>
-
-    <div class="section-content relative">
-
-        <div class="img has-hover shape-1 x md-x lg-x y md-y lg-y" id="image_1267708277">
-
-            <style>
-                #image_1267708277 {
-                    width: 8%;
-                }
-            </style>
+            </div>
         </div>
-
-        @if (Model.hotelDatas.Where(d => d.Type == "Tiện nghi") != null)
-        {
-            var list = Model.hotelDatas.Where(d => d.Type == "Tiện nghi").ToList();
-            for(var i=0; i<list.Count();i++ ){
-                var img = $"~/images/{list[i].Url}";
-                if (i % 2 == 0)
-                {
-                    @* start *@
-                    <div class="row service-top" id="row-322719010">
-
-                        <div id="col-27298551" class="col col-dichvu hide-for-small medium-6 small-12 large-6" data-animate="fadeInLeft">
-                            <div class="col-inner">
-
-                                <div class="image-block">
-                                    <div class="img1"><img src="~/images/dichvu1.jpg" alt=""></div>
-                                    <div class="img2"><img src="@Url.Content(img)" alt=""></div>
-                                    <div class="text1">HÙNG PHÁT</div>
+        <div class="container-fluid">
+            <div class="hp-room-items">
+                <div class="row">
+                    @foreach (var r in Model.Rooms)
+                    {
+                        var rimg = $"~/images/{r.Images.ToArray()[0].Url}";
+                        <div class="col-lg-4 col-md-6 mb-4" >
+                            <div class="hp-room-item position-relative"
+                                 style="background-image: url('@Url.Content(rimg)'); height: 450px; width: 100%; background-size: cover; background-position: center;border-radius:8px;">
+                                <div class="overlay" ></div>
+                                <div class="hr-text position-absolute text-center" style="margin-bottom: -80px;">
+                                    <h3>Double Room</h3>
+                                    <h2>199$<span>/Pernight</span></h2>
+                                    <table class="text-white">
+                                        <tbody>
+                                            <tr>
+                                                <td class="r-o">Size:</td>
+                                                <td>30 ft</td>
+                                            </tr>
+                                            <tr>
+                                                <td class="r-o">Capacity:</td>
+                                                <td>Max person 5</td>
+                                            </tr>
+                                            <tr>
+                                                <td class="r-o">Bed:</td>
+                                                <td>King Beds</td>
+                                            </tr>
+                                            <tr>
+                                                <td class="r-o">Services:</td>
+                                                <td>Wifi, Television, Bathroom,...</td>
+                                            </tr>
+                                        </tbody>
+                                    </table>
+                                    <a asp-action="Index" asp-controller="SingleRoom" asp-route-id="@r.Id" style="background-color:white; padding: 10px;border-radius:5px;font-weight:700">More Details</a>
                                 </div>
                             </div>
                         </div>
-                        <div id="col-311355405" class="col medium-6 small-12 large-6" data-animate="fadeInRight">
-                            <div class="col-inner">
-                                <div class="content-block">
-                                    <div class="title-box">
-                                        <div class="sub-title">Tiện nghi</div>
-                                        <h2 class="sec-title">@list[i].Header</h2>
-
-                                    </div>
-                                    <div class="content">
-                                        <p>
-                                            @Html.Raw(list[i].Content)
-                                        </p>
-
-                                        <div class="text">
-                                            <h4>Liên hệ lễ tân:<br /><a class="btn2" href="tel:02854338868"><i class="fas fa-phone-alt"></i>02854338868</a></h4>
-                                        </div>
-                                    </div>
-                                </div>
-                            </div>
-                        </div>
-
-                    </div>
-                    @* end *@
-                }else
-                {
-                  <div class="row service-bottom" id="row-1780575493">
-
-            <div id="col-974914177" class="col col-dichvu pb-0 medium-5 small-12 large-5" data-animate="fadeInLeft">
-                <div class="col-inner">
-
-
-                    <div class="content-block">
-                        <div class="title-box">
-                            <div class="sub-title">Tiện nghi</div>
-                            <h2 class="sec-title">
-                               @list[i].Header
-                            </h2>
-                            
-                        </div>
-                        <div class="content">@Html.Raw(list[i].Content)</div>
-                        <div class="text">
-                            <h4>Liên hệ lễ tân:<br /><a class="btn2" href="tel:02854338868"><i class="fas fa-phone-alt"></i>02854338868</a></h4>
-                        </div>
-                    </div>
+                    }
                 </div>
             </div>
-
-
-
-            <div id="col-395761577" class="col pb-0 medium-7 small-12 large-7" data-animate="fadeInRight">
-                <div class="col-inner">
-
-
-                    <div class="image-block">
-                        <div class="img1"><img src="~/images/dichvu3.jpg" alt=""></div>
-                        <div class="img2"><img src="~/images/dichvu4.jpg" alt=""></div>
-                        <div class="text2">Phòng Bếp</div>
-                    </div>
-                </div>
-            </div>
-
-
-        </div>   
-                }
-          
-            }
-        }
-
-
-       
-
-    </div>
-
-
+        </div>
+    </section>
     <style>
-        #section_1783060384 {
-            padding-top: 60px;
-            padding-bottom: 60px;
+        .hp-room-item {
+            position: relative;
+            overflow: hidden;
         }
+
+            .hp-room-item .overlay {
+                position: absolute;
+                top: 0;
+                left: 0;
+                width: 100%;
+                height: 100%;
+                background: rgba(0, 0, 0, 0.4);
+                transition: background 0.3s;
+            }
+
+            .hp-room-item:hover .overlay {
+                background: rgba(0, 0, 0, 0.6);
+            }
+
+            .hp-room-item .hr-text {
+                color: #fff;
+                z-index: 1;
+            }
+
+            .hp-room-item .primary-btn {
+                background: #fff;
+                color: #000;
+            }
     </style>
-</section>
+
+}
+<!-- Home Room Section End -->
+<!-- Custom CSS -->
+
+<!-- Services Section End -->
+@if (Model.hotelDatas.Where(d => d.Type == "Tiện nghi") != null)
+{
+    var list = Model.hotelDatas.Where(d => d.Type == "Tiện nghi").ToList();
+    <section class="services-section spad">
+        <div class="container">
+            <div class="row">
+                <div class="col-lg-12">
+                    <div class="section-title">
+                        <span style="margin: 0 auto">What We Do</span>
+                        <h2>Discover Our Services</h2>
+                    </div>
+                </div>
+            </div>
+            <div class="row">
+               
+                @for (var i = 0; i < list.Count(); i++)
+                {
+                var img = $"~/images/{list[i].Url}";
+                <div class="col-lg-4 col-sm-6">
+                    <div class="service-item">
+                        <img src="@Url.Content(img)" alt="" style="width: 50px; height: 50px; object-fit:cover">
+                        <h4>@Html.Raw(list[i].Header)</h4>
+                        <p>
+                            @Html.Raw(list[i].Content)
+                        </p>
+                    </div>
+                </div>
+                }
+
+            </div>
+        </div>
+    </section>
+}
 
 <h3 class="mb-2">Đánh giá :</h3>
 <div class="col-md-12 col-lg-12 room-single ftco-animate mb-5" style="border-top:0.2rem solid #ccc;padding:1rem">
@@ -371,6 +351,7 @@
 
 
 <script type='text/javascript' id='flatsome-js-js-extra'>
+
     /* <![CDATA[ */
     var flatsomeVars = { "ajaxurl": "https:\/\/miahotelvungtau.com\/wp-admin\/admin-ajax.php", "rtl": "", "sticky_height": "70", "lightbox": { "close_markup": "<button title=\"%title%\" type=\"button\" class=\"mfp-close\"><svg xmlns=\"http:\/\/www.w3.org\/2000\/svg\" width=\"28\" height=\"28\" viewBox=\"0 0 24 24\" fill=\"none\" stroke=\"currentColor\" stroke-width=\"2\" stroke-linecap=\"round\" stroke-linejoin=\"round\" class=\"feather feather-x\"><line x1=\"18\" y1=\"6\" x2=\"6\" y2=\"18\"><\/line><line x1=\"6\" y1=\"6\" x2=\"18\" y2=\"18\"><\/line><\/svg><\/button>", "close_btn_inside": false }, "user": { "can_edit_pages": false }, "i18n": { "mainMenu": "Main Menu" }, "options": { "cookie_notice_version": "1" } };
     /* ]]> */

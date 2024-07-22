@@ -42,7 +42,7 @@ namespace Hotel.Controllers
                 foreach (var detail in data.Details)
                 {
                     var s = await _context.RoomProperties.FindAsync(detail.RoomPropertyId);
-                    detail.Name = s.Name;
+                    detail.Name = s!.Name;
                 }
             }
 

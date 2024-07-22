@@ -1,94 +1,130 @@
 ﻿@using Hotel.Filters;
 
 
-
-<nav class="navbar navbar-expand-lg navbar-dark ftco_navbar mb-5 ftco-navbar-light" id="ftco-navbar" style="top:0">
-	<div class="container">
-		<a class="navbar-brand" href="/"><img src="~/images/Logo.jpg" style="width:80px" /></a>
-		<button class="navbar-toggler" type="button" data-toggle="collapse" data-target="#ftco-nav" aria-controls="ftco-nav" aria-expanded="false" aria-label="Toggle navigation">
-			<span class="oi oi-menu"></span> Menu
-		</button>
-
-		<div class="collapse navbar-collapse" id="ftco-nav">
-			<ul class="navbar-nav  ml-auto mr-auto d-flex align-items-center">
-
-				<li class="nav-item home-c "><a href="/" class="nav-link text-white home-cl" style="font-size:20px">Trang chủ</a></li>
-				<li class="nav-item room-c "><a asp-action="Index" asp-controller="Room" class="nav-link text-white  room-cl" style="font-size:20px">Phòng</a></li>
-				<li class="nav-item price-c  "><a asp-controller="About" asp-action="Price" class="nav-link text-white price-cl" style="font-size:20px">Bảng giá</a></li>
-				
-
-					<div class="dropdown nav-link">
-
-					<span style="font-size:20px" class=" dropdown-toggle about-c nav-link text-white about-cl" id="dropdownMenuButton" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
-							Thông tin
-						</span>
-
-
-						<div class="dropdown-menu">
-							@await Component.InvokeAsync("HeaderData")
+<!-- Header Section Begin -->
+<header class="header-section">
+	<div class="top-nav">
+		<div class="container">
+			<div class="row">
+				<div class="col-lg-6">
+					<ul class="tn-left">
+						<li><i class="fa fa-phone"></i> (12) 345 67890</li>
+						<li><i class="fa fa-envelope"></i> info.colorlib@gmail.com</li>
+					</ul>
+				</div>
+				<div class="col-lg-6">
+					<div class="tn-right">
+						<div class="top-social">
+							<a href="#"><i class="fa fa-facebook"></i></a>
+							<a href="#"><i class="fa fa-twitter"></i></a>
+							<a href="#"><i class="fa fa-tripadvisor"></i></a>
+							<a href="#"><i class="fa fa-instagram"></i></a>
 						</div>
-					</div>
-				</li>
-				<li class="nav-item"><a href="#footer_contact" class="nav-link text-white " style="font-size:20px">Liên hệ</a></li>
-
-
-
-
-
-
-				@if (User.Identity.IsAuthenticated)
-				{
-					<li class="nav-item" style="display:flex;justify-content:center;align-items:center">
-						<div class="dropdown">
-							
-								@if (User.IsInRole("admin"))
-								{
-									<button class="btn btn-secondary dropdown-toggle" type="button" id="dropdownMenuButton" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">Quản lý</button >
-							}else{
-								<button class="btn btn-secondary dropdown-toggle" type="button" id="dropdownMenuButton" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">Nhân viên</button>
-							}	
-							
-							<div class="dropdown-menu" aria-labelledby="dropdownMenuButton">
-								<a class="dropdown-item" asp-controller="User" asp-action="Register">Tạo tài khoản</a>
-								<a class="dropdown-item" asp-controller="User" asp-action="ChangePassword">Thay đổi mật khẩu</a>
-								<a class="dropdown-item" href="/admin/RoomType/Index">Quản Lý Loại Phòng</a>
-								<a class="dropdown-item" href="/admin/RoomUnity/Index">Quản Lý Tiện Ích</a>
-								<a class="dropdown-item" href="/admin/Room/Index">Quản Lý Phòng</a>
-								<a class="dropdown-item" href="/admin/RoomProperty/Index">Quản Lý chi tiết phòng</a>
-							
-								<a class="dropdown-item" asp-controller="AdminBanner" asp-action="Index">Quản Lý Banner</a>
-								<a class="dropdown-item" asp-controller="AdminPolicy" asp-action="Index">Quản Lý Policy</a>
-								<a class="dropdown-item" asp-controller="AdminHotel" asp-action="Index">Quản Lý Trang chủ</a>
-								<a class="dropdown-item" asp-controller="AdminGalery" asp-action="Index">Quản Lý Ảnh phòng</a>
-								<a class="dropdown-item" asp-controller="AdminComment" asp-action="Index">Quản Lý bình luận</a>
-								<a class="dropdown-item" asp-controller="AdminOrder" asp-action="Index">Quản Lý Order</a>
+						
+						<div class="language-option">
+							<img src="~/images/logo.jpg" alt="">
+							<span>EN <i class="fa fa-angle-down"></i></span>
+							<div class="flag-dropdown">
+								<ul>
+									<li><a href="#">Vietnames</a></li>
+									<li><a href="#">English</a></li>
+								</ul>
 							</div>
 						</div>
-					</li>
-					<li class="nav-item">
-						<span class="nav-link notice_newOrder " style="cursor: pointer">
-							<i class="fa-regular fa-bell" style="font-size:25px"></i>
+						@if (User.Identity.IsAuthenticated)
+						{
+							<div class=" dropdown bk-btn" style="margin-left: 10px;background: none;">
+								<a class=" dropdown" href="#" id="navbarDropdown" role="button" data-bs-toggle="dropdown" aria-expanded="false">
+									<img src="~/images/logo-user.png" alt="Profile Picture" style="width: 60px; height: 60px;">
+								</a>
+								<ul class="dropdown-menu" aria-labelledby="navbarDropdown" style="transform: translate(-84px, 73px);">
+									<li><a class="dropdown-item" href="#"><i class="fas fa-cog fa-fw"></i> Settings</a></li>
+									<li><a class="dropdown-item" asp-controller="User" asp-action="ChangePassword"><i class="fas fa-sliders-h fa-fw"></i> Change password</a></li>
 
-						</span>
-					</li>
-					<li style="margin-left:10px" class=" text-dark nav-item "> <a asp-controller="user" class="nav-link text-white " asp-action="Logout" style="font-size:20px">Đăng xuất</a></li>
-				}
-				
-			</ul>
-			@if (!User.Identity.IsAuthenticated)
-			{
-				<a role="button" class="btn btn-primary mr-2 nav-link" style="padding:10px" href="tel:/02854338868">
-					<i class="fas fa-phone"></i>
-					<span class="phone-number text-dark">02854338868</span>
-				</a>
-			}
-			
-			
-
-		
+									<li><hr class="dropdown-divider"></li>
+									<li><a class="dropdown-item" asp-controller="user" class="nav-link text-white " asp-action="Logout"><i class="fas fa-sign-out-alt fa-fw"></i> Log Out</a></li>
+								</ul>
+							</div>
+						}
+						else
+						{
+							<div class=" dropdown bk-btn" style="margin-left: 10px;background: none;">
+							<a class=" dropdown" href="#" id="navbarDropdown" role="button" data-bs-toggle="dropdown" aria-expanded="false">
+								<a class="dropdown-item" asp-controller="user" class="nav-link text-white " asp-action="Login"><i class="fas fa-sign-in-alt fa-fw"></i> Login</a>
+							</a>
+							</div>
+						}
+					</div>
+				</div>
+			</div>
 		</div>
 	</div>
-</nav>
+	<div class="menu-item">
+		<div class="container">
+			<div class="row">
+				<div class="col-lg-2">
+					<div class="logo">
+						<a href="/">
+							<img src="~/images/logo.png" alt="">
+						</a>
+					</div>
+				</div>
+				<div class="col-lg-10">
+					<ul class="nav-menu">
+						<nav class="mainmenu">
+							<ul>
+								<li class="active"><a href="/">Home</a></li>
+								<li><a asp-action="Index" asp-controller="Room">Rooms</a></li>
+								<li >
+									<a >About </a>
+									<ul class="dropdown">
+										<li style="margin-top:-7px; border: 1px solid gray;border-radius:5px;">
+											@await Component.InvokeAsync("HeaderData")
+										</li>
+									</ul>
+								</li>
+								
+								@if (User.Identity.IsAuthenticated)
+								{
+									<li>
+										@if (User.IsInRole("admin"))
+										{
+											<a href="./pages.html">Admin</a>
+										}else{
+											<a href="./pages.html">Employee</a>
+										}
+
+										<ul class="dropdown" style="min-width: 270px;  overflow-y: auto; height: 450px; margin-left: -15px;margin-top:-7px; border: 1px solid gray;border-radius:5px;">
+											<li><a asp-controller="User" asp-action="Register">Create account</a></li>
+											<li><a href="/admin/RoomType/Index">Manager room style</a></li>
+											<li><a href="/admin/RoomUnity/Index">Manager utility</a></li>
+											<li><a href="/admin/Room/Index">Manager Room</a></li>
+											<li><a href="/admin/RoomProperty/Index">Manager room detail</a></li>
+
+											<li><a asp-controller="AdminBanner" asp-action="Index">Manager Banner</a></li>
+											<li><a asp-controller="AdminPolicy" asp-action="Index">Manager Policy</a></li>
+											<li><a asp-controller="AdminHotel" asp-action="Index">Manager Trang chủ</a></li>
+											<li><a asp-controller="AdminGalery" asp-action="Index">Manager room images</a></li>
+											<li><a asp-controller="AdminComment" asp-action="Index">Manager commment</a></li>
+											<li><a asp-controller="AdminOrder" asp-action="Index">Manager Order</a></li>
+										</ul>
+									</li>
+								}
+								<li><a <a asp-controller="About" asp-action="Price">Price</a></li>
+								<li><a href="#footer_contact">Contact</a></li>
+
+							</ul>
+						</nav>
+						@* <div class="nav-right search-switch">
+							<i class="icon_search"></i>
+						</div> *@
+					</div>
+				</div>
+			</div>
+		</div>
+	</div>
+</header>
+
 @if (User.Identity.IsAuthenticated)
 {
 	<script>

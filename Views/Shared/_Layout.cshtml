@@ -7,6 +7,26 @@
    
 
     @* link font end *@
+    <!-- Google Font -->
+    <link href="https://fonts.googleapis.com/css?family=Lora:400,700&display=swap" rel="stylesheet">
+    <link href="https://fonts.googleapis.com/css?family=Cabin:400,500,600,700&display=swap" rel="stylesheet">
+    <link rel="stylesheet" href="~/ForntEnd/css/css-sano/bootstrap.min.css">
+    <link rel="stylesheet" href="~/ForntEnd/css/css-sano/elegant-icons.css">
+    <link rel="stylesheet" href="~/ForntEnd/css/css-sano/flaticon.css">
+    <link rel="stylesheet" href="~/ForntEnd/css/css-sano/font-awesome.min.css">
+    <link rel="stylesheet" href="~/ForntEnd/css/css-sano/jquery-ui.min.css">
+    <link rel="stylesheet" href="~/ForntEnd/css/css-sano/magnific-popup.css">
+    <link rel="stylesheet" href="~/ForntEnd/css/css-sano/nice-select.css">
+    <link rel="stylesheet" href="~/ForntEnd/css/css-sano/owl.carousel.min.css">
+    <link rel="stylesheet" href="~/ForntEnd/css/css-sano/slicknav.min.css">
+    <link rel="stylesheet" href="~/ForntEnd/css/css-sano/style.css">
+    @* link sano hotel start *@
+
+    <!-- flatpickr CSS -->
+    <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/flatpickr/dist/flatpickr.min.css">
+
+
+    @* link sano hotel end *@
    
     <link href="https://fonts.googleapis.com/css?family=Poppins:200,300,400,500,600,700" rel="stylesheet">
     <link href="https://fonts.googleapis.com/css?family=Playfair+Display:400,400i,700,700i" rel="stylesheet">
@@ -59,7 +79,23 @@
         
     </div>
     @Html.Partial("Footer")
-     
+
+
+
+    @*script sano hotel start*@
+    <script src="~/ForntEnd/fonts/js-sano/bootstrap.min.js"></script>
+    <script src="~/ForntEnd/fonts/js-sano/jquery.magnific-popup.min.js"></script>
+    <script src="~/ForntEnd/fonts/js-sano/jquery.nice-select.min.js"></script>
+    <script src="~/ForntEnd/fonts/js-sano/jquery.slicknav.js"></script>
+    <script src="~/ForntEnd/fonts/js-sano/jquery-3.3.1.min.js"></script>
+    <script src="~/ForntEnd/fonts/js-sano/jquery-ui.min.js"></script>
+    <script src="~/ForntEnd/fonts/js-sano/main.js"></script>
+    <script src="~/ForntEnd/fonts/js-sano/owl.carousel.min.js"></script>
+    @*script sano hotel end*@
+
+
+    <!-- flatpickr JS -->
+    <script src="https://cdn.jsdelivr.net/npm/flatpickr"></script>
     <script src="~/lib/jquery/dist/jquery.min.js"></script>
     <script src="~/lib/bootstrap/dist/js/bootstrap.bundle.min.js"></script>
     <script src="~/js/site.js" asp-append-version="true"></script>
@@ -93,6 +129,14 @@
             $('#table_property').DataTable();
             $('#table_unity').DataTable();
             $('#banner_table').DataTable();
+            flatpickr("#date-in", {
+                dateFormat: "d-m-Y",
+                minDate: "today"
+            });
+            flatpickr("#date-out", {
+                dateFormat: "d-m-Y",
+                minDate: "today"
+            });
            
         });
     </script>
