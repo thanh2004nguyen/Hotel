@@ -6,6 +6,20 @@
 
 <!-- Modal -->
 <div class="modal fade" id="exampleModal" tabindex="-1" aria-labelledby="exampleModalLabel" aria-hidden="true">
+    @if (TempData.ContainsKey("success"))
+    {
+        <div class="alert alert-success">
+            @TempData["success"]
+        </div>
+    }
+
+    @if (TempData.ContainsKey("error"))
+    {
+        <div class="alert alert-danger">
+            @TempData["error"]
+        </div>
+    }
+
     <div class="modal-dialog">
         <div class="modal-content">
             <div class="modal-header">
@@ -57,18 +71,41 @@
                         <td class="text-center @isView">@Html.DisplayFor(a=>item.Message)</td>
                         <td class="text-center @isView">@Html.DisplayFor(a=>item.Type)</td>
                         <td class="text-center @isView">@Html.DisplayFor(a=>item.Date)</td>
-                        <td onClick="showDetail('@item.OrderId','@item.Name','@item.Phone','@item.CheckInDate')"
-                            class="text-center h6 @isView" data-toggle="modal" data-target="#exampleModal" style="cursor:pointer">
-                            Xem thông tin khách hàng
+                        <td class="text-center d-flex">
+                            <a onClick="showDetail('@item.OrderId','@item.Name','@item.Phone','@item.CheckInDate')"
+                               class="btn btn-secondary" data-toggle="modal" data-target="#exampleModal" style="cursor:pointer">
+                                Detail
+                            </a>
+                            | <form asp-action="SetIsFulled" asp-controller="AdminOrder" asp-route-id="@item.OrderId" method="post">
+                                <a class="btn btn-success set-isFull-room" data-order-id="@item.OrderId">Set phòng trống</a>
+                            </form>
                         </td>
-
                     </tr>
                 }
             }
         </tbody>
     </table>
 </div>
-
+<script src="https://cdnjs.cloudflare.com/ajax/libs/jquery/3.6.0/jquery.min.js"></script>
+<script>
+    $(document).ready(function () {
+        $('.set-isFull-room').on('click', function () {
+            var orderId = $(this).data('order-id');
+            if (confirm('Bạn muốn set phòng này trống đúng chứ?')) {
+                $.ajax({
+                    url: '@Url.Action("SetIsFulled", "AdminOrder")',
+                    type: 'POST',
+                    data: { id: orderId },
+                    success: function (response) {
+                        window.location.reload();
+                    },
+                    error: function (xhr, status, error) {
+                    }
+                });
+            }
+        });
+    });
+</script>
 
 
 

@@ -12,7 +12,7 @@ namespace Hotel.Models
         public virtual RoomType? RoomType { get; set; }
         public decimal Price { get; set; }
         public ICollection<RoomProperty>? roomProperties { get; set; }
-        public ICollection<Image>? Images { get; set; }
+        public ICollection<Image>? Images { get; set; } 
         public ICollection<RoomUnity>? Unities { get; set; }
         public ICollection<RoomPropertyDetail>? Details { get; set; }
 

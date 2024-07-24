@@ -29,6 +29,7 @@ namespace Hotel.Controllers
                 .ToListAsync();
 
             var rooms = await _context.Rooms
+                .Include(r => r.Unities)
                 .Include(r => r.RoomType)
                 .Include(r => r.Images)
                 .Include(r => r.Details).OrderBy(d=>d.UpdatedDate)

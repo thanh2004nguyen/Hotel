@@ -3,6 +3,8 @@
 @{
     var disable = Model.Room.IsFulled ? "disabled" : "";
     var disableColor = Model.Room.IsFulled ? "btn-secondary" : "btn-primary";
+
+    var userId = Context.Session.GetInt32("UserId");
 }
 <style>
     /* Hide the radio buttons */
@@ -93,10 +95,14 @@
 
                                         @if (Model.Room.IsFulled == false)
                                         {
-                                            <p>Thời gian đặt phòng</p>
+                                            <input asp-for="@Model.Order.UserId" value="@userId" hidden />
+
+                                            <div class="d-flex ">
+                                                <p style="margin-right: 20%">Thời gian đặt phòng</p>
+                                            </div>
                                         <div class="d-flex justify-content-around">
                                             <div class="radio-option">
-                                                    <input required type="radio" asp-for="@Model.Order.Type" value="Theo ngày" id="dayRadio" />
+                                                    <input type="radio" asp-for="@Model.Order.Type" value="Theo ngày" id="dayRadio" />
                                                 <label for="dayRadio">
                                                     <i class="far fa-sun" style="font-size:22px"></i>
                                                     Theo ngày
@@ -104,7 +110,7 @@
                                             </div>
 
                                             <div class="radio-option">
-                                                    <input required type="radio" asp-for="@Model.Order.Type" value="Theo giờ" id="hourRadio" />
+                                                    <input  type="radio" asp-for="@Model.Order.Type" value="Theo giờ" id="hourRadio" />
                                                 <label for="hourRadio">
                                                         <i class="far fa-clock" style="font-size:22px"></i>
                                                     Theo giờ
@@ -112,7 +118,7 @@
                                             </div>
 
                                             <div class="radio-option">
-                                                    <input required type="radio" asp-for="@Model.Order.Type" value=" Qua đêm" id="nightRadio" />
+                                                    <input  type="radio" asp-for="@Model.Order.Type" value=" Qua đêm" id="nightRadio" />
                                                 <label for="nightRadio">
                                                         <i class="far fa-moon" style="font-size:22px"></i>
                                                     Qua đêm
@@ -121,25 +127,31 @@
 
                                             </div>
                                             <input asp-for="@Model.Order.RoomId" hidden value="@Model.Room.Id" />
+                                            <input asp-for="@Model.Order.Status" hidden value="Wating" />
                                             <input hidden name="id" value="@Model.Room.Id" />
                                             <div class="form-group">
                                                 <label class="control-label">Tên</label>
-                                                <input required asp-for="@Model.Order.Name" class="form-control" />
+                                                <input  asp-for="@Model.Order.Name" class="form-control" />
                                                 <span asp-validation-for="@Model.Order.Name" class="text-danger"></span>
-
                                             </div>
 
 
                                             <div class="form-group">
                                                 <label class="control-label">Số điện thoại</label>
-                                                <input type="number" required asp-for="@Model.Order.Phone" class="form-control" />
+                                                <input type="number"  asp-for="@Model.Order.Phone" class="form-control" />
                                                 <span asp-validation-for="@Model.Order.Phone" class="text-danger"></span>
 
                                             </div>
                                             <div class="form-group">
                                                 <label class="control-label">Ngày Check in</label>
-                                                <input id="dateInput" type="date" required asp-for="@Model.Order.Date" class="form-control" />
-                                                <span asp-validation-for="@Model.Order.Date" class="text-danger"></span>
+                                                <input id="dateInput" type="date"  asp-for="@Model.Order.DayCheckIn" class="form-control" />
+                                                <span asp-validation-for="@Model.Order.DayCheckIn" class="text-danger"></span>
+
+                                            </div>
+                                            <div class="form-group">
+                                                <label class="control-label">Ngày Check out</label>
+                                                <input id="dateOutput" type="date"  asp-for="@Model.Order.DayCheckIn" class="form-control" />
+                                                <span asp-validation-for="@Model.Order.DayCheckIn" class="text-danger"></span>
 
                                             </div>
                                             <div class="form-group">
@@ -159,6 +171,11 @@
                                         </div>
 
                                     </form>
+                                    @section Scripts {
+                                        @{
+                                            await Html.RenderPartialAsync("_ValidationScriptsPartial");
+                                        }
+                                    }
                                 </div>
 
 
@@ -212,66 +229,257 @@
                                 </div>
                             }
                         </div>
-                       
+
                     </div>
-
-                    <h3 class="mb-2">Đánh giá :</h3>
-                    <div class="col-md-12 col-lg-12 room-single ftco-animate mb-5" style="border-top:0.2rem solid #ccc;padding:1rem">
-                       @*  start *@
-
-                       @if(Model.Comments!=null){
-                            foreach (var c in Model.Comments)
-                               
-                            {
-                                var img = $"~/images/{c.avatar}";
-                                <div  class="mb-1">
-                                    <div>
-                                        <div class="d-flex align-items-center ">
-                                            <img class="mr-3" style="width:50px;height:50px ; border-radius:50%" src="@Url.Content(img)" />
-                                            <div>
-                                                <p style="margin-bottom:0 ;font-weight:bold">@c.Name </p>
-                                                <p style="margin-bottom:0 ;font-weight:bold">
-                                                    @for (var i = 0; i <c.start; i++)
-                                                    {
-                                                        <i class="fa-solid fa-star" style="color:yellow" ></i>
-                                                    }
-                                                    @for (var i = 0;i<5-c.start; i++)
-                                                    {
-                                                        <i class="fa-solid fa-star"></i>
-                                                    }
-  
-                                                   
-                                                </p>
-                                            </div>
+                    
+                    @if (Model.Comments != null)
+                    {
+                        <!-- Reviews Section Begin -->
+                        <section class="reviews-section spad">
+                            <div class="container">
+                                <div class="row">
+                                    <div class="col-lg-12">
+                                        <div class="section-title">
+                                            <span>What Our Guests Say</span>
+                                            <h2>Customer Reviews</h2>
                                         </div>
-                                        <p>
-                                            @c.Content
-                                        </p>
                                     </div>
                                 </div>
+                                <div id="comments-container">
+                                    @foreach (var c in Model.Comments)
+                                    {
+                                        var img = $"~/images/{c.avatar}";
+                                        <div class="row comment-item" style="display: none;">
+                                            <!-- Review Item Begin -->
+                                            <div class="col-lg-4 col-md-6 mb-4">
+                                                <div class="review-item">
+                                                    <div class="review-avatar">
+                                                        <img src="@Url.Content(img)" alt="Customer Avatar">
+                                                    </div>
+                                                    <div class="review-content">
+                                                        <div class="review-header">
+                                                            <div class="review-stars">
+                                                                @for (var i = 0; i < c.start; i++)
+                                                                {
+                                                                    <i class="fa-solid fa-star" style="color:yellow"></i>
+                                                                }
+                                                                @for (var i = 0; i < 5 - c.start; i++)
+                                                                {
+                                                                    <i class="fa-solid fa-star"></i>
+                                                                }
+                                                            </div>
+                                                            <div class="review-author">
+                                                                <h5>@c.Name</h5>
+                                                                <span>@c.CreatedDate.ToString("dd/MM/yyyy")</span>
+                                                            </div>
+                                                        </div>
+                                                        <p class="review-text">
+                                                            @c.Content
+                                                        </p>
+                                                        <div class="review-footer" style="width:10%; float:right;">
+                                                            <div class="review-likes">
+                                                                <!-- Include data-comment-id for AJAX request -->
+                                                                <i class="fa fa-thumbs-up" onclick="toggleLike(this)" data-comment-id="@c.Id"></i> <span class="like-count">@c.like</span>
+                                                            </div>
+                                                            <div class="review-reply">
+                                                                <a href="#">Reply</a>
+                                                            </div>
+                                                        </div>
+                                                    </div>
+                                                </div>
+                                            </div>
+                                            <!-- Add more review items as needed -->
+                                        </div>
+                                    }
+                                </div>
+                                <div class="row">
+                                    <div class="col-lg-12 text-center">
+                                        <p>Comments <span id="count">0</span>/<span>@Model.Comments.Count</span></p>
+                                        <button id="show-more-btn" class="primary-btn" style="border:none; color:black">Show More</button>
+                                    </div>
+                                </div>
+                            </div>
+                        </section>
+                        <!-- Reviews Section End -->
+                    }
+
+                      <style>
+                            .reviews-section {
+                                padding: 50px 0;
+                                background-color: #f9f9f9;
+                                width: 80vw;
+                                margin:0 auto;
                             }
+
+                            .review-item {
+                                margin: 0 auto;
+                                background: #fff;
+                                padding: 20px;
+                                border-radius: 8px;
+                                box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1);
+                                display: flex;
+                                align-items: flex-start;
+                                width:70vw;
+                            }
+
+                        .review-image img {
+                            width: 100%;
+                            max-width: 300px;
+                            margin-top: 10px;
+                            border-radius: 5px;
                         }
-                        
-          
 
-                    </div>
+                        .review-avatar img {
+                                width: 60px;
+                                height: 60px;
+                                border-radius: 50%;
+                                margin-right: 15px;
+                            }
 
-                    @*    end *@
+                            .review-content {
+                                flex: 1;
+                            }
 
-                </div>
-            </div>
-        </div>
+                            .review-header {
+                                display: flex;
+                                justify-content: space-between;
+                                align-items: center;
+                                margin-bottom: 10px;
+                            }
 
-    </div>
+                            .review-stars i {
+                            color: #555; /* Màu vàng cho sao */
+                                margin-right: 2px;
+                            }
 
-</section>
+                            .review-author h5 {
+                                margin: 0;
+                                font-size: 16px;
+                                font-weight: bold;
+                            }
 
+                            .review-author span {
+                                display: block;
+                                font-size: 14px;
+                                color: #888;
+                            }
+
+                            .review-text {
+                                margin-bottom: 10px;
+                            }
+
+                            .review-footer {
+                                display: flex;
+                                justify-content: space-between;
+                                align-items: center;
+                            }
+
+                            .review-reply a {
+                                color: #007BFF;
+                                text-decoration: none;
+                                font-size: 14px;
+                            }
+
+                            .review-reply a:hover {
+                                text-decoration: underline;
+                            }
+
+                        .review-likes i {
+                            font-size: 20px;
+                            cursor: pointer;
+                            color: #555; /* Màu sắc mặc định */
+                            transition: color 0.3s;
+                        }
+
+                            .review-likes i.liked {
+                                color: #007BFF; /* Màu vàng khi được like */
+                            }
+                         </style>
+
+                    <script src="https://code.jquery.com/jquery-3.6.0.min.js"></script>
 <script>
     const dateInput = document.getElementById('dateInput');
+    const dateOutput = document.getElementById('dateOutput');
     const today = new Date();
     const year = today.getFullYear();
     const month = String(today.getMonth() + 1).padStart(2, '0'); // Months are 0-indexed.
     const day = String(today.getDate()).padStart(2, '0');
     const todayFormatted = `${year}-${month}-${day}`;
     dateInput.setAttribute('min', todayFormatted);
-</script>
+    dateOutput.setAttribute('min', todayFormatted);
+  
+    dateInput.addEventListener('change', () => {
+        const checkInDate = new Date(dateInput.value);
+        const checkInYear = checkInDate.getFullYear();
+        const checkInMonth = String(checkInDate.getMonth() + 1).padStart(2, '0');
+        const checkInDay = String(checkInDate.getDate()).padStart(2, '0');
+        const checkInFormatted = `${checkInYear}-${checkInMonth}-${checkInDay}`;
+        dateOutput.setAttribute('min', checkInFormatted);
+
+        // If dateOutput is earlier than dateInput, reset dateOutput to dateInput value
+        if (new Date(dateOutput.value) < new Date(dateInput.value)) {
+            dateOutput.value = dateInput.value;
+        }
+    });
+
+                        document.addEventListener('DOMContentLoaded', function () {
+                            const commentsContainer = document.getElementById('comments-container');
+                            const showMoreBtn = document.getElementById('show-more-btn');
+                            const comments = commentsContainer.getElementsByClassName('comment-item');
+                            const countElement = document.getElementById('count');
+                            let commentsShown = 2;
+
+                            function showComments(count) {
+                                let visibleComments = 0;
+                                for (let i = 0; i < comments.length; i++) {
+                                    if (i < count) {
+                                        comments[i].style.display = 'flex';
+                                        visibleComments++;
+                                    } else {
+                                        comments[i].style.display = 'none';
+                                    }
+                                }
+                                countElement.textContent = visibleComments;
+                            }
+
+                            showMoreBtn.addEventListener('click', function () {
+                                commentsShown += 5;
+                                showComments(commentsShown);
+                                if (commentsShown >= comments.length) {
+                                    showMoreBtn.style.display = 'none';
+                                }
+                            });
+
+                            showComments(commentsShown);
+
+                        });
+
+                        function toggleLike(element) {
+                            var commentId = $(element).data('comment-id');
+                            var likeStyle = $(element).hasClass('liked') ? 'unliked' : 'liked';
+                            var $likeCount = $(element).siblings('.like-count');
+                            console.log($likeCount)
+                            console.log(`Comment ID: ${commentId}, Like Style: ${likeStyle}`); // Debug log
+
+                            $.ajax({
+                                url: '/admin/comment/like',
+                                type: 'POST',
+                                data: {
+                                    commentId: commentId,
+                                    likeStyle: likeStyle
+                                },
+                                success: function (response) {
+                                    if (response.likes !== undefined && response.commentId !== undefined) {
+                                        $likeCount.text(response.likes);
+                                        $(element).toggleClass('liked');
+                                    } else {
+                                        console.error('Invalid response structure');
+                                    }
+                                },
+                                error: function (xhr, status, error) {
+                                    console.error('AJAX request failed:', status, error);
+                                }
+                            });
+                        }
+
+                    </script>

@@ -1,0 +1,151 @@
+﻿@model IEnumerable<Hotel.Models.Order>
+
+@{
+    ViewData["Title"] = "My Orders";
+}
+
+<h2 style="text-align:center; padding-top:30px;font-size:34px; font-weight:700;">My Orders</h2>
+
+@if (Model == null || !Model.Any())
+{
+    <p class="text-center" style="color:red; margin: 50px;" >Chưa có order nào.</p>
+}
+else
+{
+    @foreach (var order in Model)
+    {
+        var room = order.Room;
+        var imageUrl = room?.Images?.FirstOrDefault()?.Url;
+        <div class="container mt-5 mb-5">
+            <div class="d-flex justify-content-center row">
+                <div class="col-md-10">
+                    <div class="row p-2 bg-white border rounded">
+                        <div class="col-md-3 mt-1">
+                            <img class="img-fluid img-responsive rounded product-image" src="~/images/@imageUrl">
+                        </div>
+                        <div class="col-md-6 mt-1">
+                            <h5>@order.Room?.RoomType.Type</h5>
+                            <div class="d-flex flex-row">
+                                <div class="ratings mr-2">
+                                    @for (int i = 0; i < 5; i++)
+                                    {
+                                        <i class="fa fa-star @(i < 4 ? "text-warning" : "text-muted")"></i>
+                                    }
+                                </div>
+                                <span>5</span>
+                            </div>
+                            <div class="mt-1 mb-1 spec-1">
+                                <span class="dot"></span>
+                                Day: @order.DayCheckin.ToString("dd-MM-yyyy")
+                                - @order.DayCheckout.ToString("dd-MM-yyyy")
+                                <br />
+                            </div>
+                            <div class="mt-1 mb-1 spec-1">
+                                @if (order.Room?.Details != null)
+                                {
+                                    @foreach (var detail in order.Room.Details)
+                                    {
+                                        <span>@detail.Name</span>
+                                    }
+                                }
+                            </div>
+                        </div>
+                        <div class="align-items-center align-content-center col-md-3 border-left mt-1">
+                            <div class="d-flex justify-around">
+                                <div class="d-flex flex-row align-items-center">
+                                    <h4 class="mr-1">@string.Format("${0:N2}", 12)</h4>
+                                    <span class="strike-text">@string.Format("${0:N2}", 10)</span>
+                                </div>
+                                <div style="margin: 10px 0 0 20px;;">
+                                    @if (order.Status == "Wating")
+                                    {
+                                        <h6 style="color:orange">@order.Status</h6>
+                                    }
+                                    else if (order.Status == "Success")
+                                    {
+                                        <h6 style="color:green">@order.Status</h6>
+                                    }
+                                    else
+                                    {
+                                        <h6 style="color:black">@order.Status</h6>
+                                    }
+                                </div>
+                            </div>
+                            <div class="d-flex flex-column mt-4">
+                                <button class="btn btn-primary btn-sm" type="button">Details</button>
+                                <form asp-action="CancelOrder" asp-controller="SingleRoom" asp-route-id="@order.Id" method="post">
+                                    <button class="btn btn-outline-primary btn-sm mt-2 cancel-order-button" data-order-id="@order.Id" style="width:100%" type="button">Hủy đơn hàng</button>
+                                </form>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    }
+}
+<script src="https://cdnjs.cloudflare.com/ajax/libs/jquery/3.6.0/jquery.min.js"></script>
+<script>
+    $(document).ready(function () {
+        $('.cancel-order-button').on('click', function () {
+            var orderId = $(this).data('order-id');
+            if (confirm('Bạn có chắc muốn xóa đơn hàng này không?')) {
+                $.ajax({
+                    url: '@Url.Action("CancelOrder", "SingleRoom")',
+                    type: 'POST',
+                    data: { id: orderId },
+                    success: function (response) {
+                        alert('Đơn hàng đã được hủy thành công.');
+                        window.location.reload();
+                    },
+                    error: function (xhr, status, error) {
+                        alert('Có lỗi xảy ra khi hủy đơn hàng. Vui lòng thử lại sau.');
+                    }
+                });
+            }
+        });
+    });
+</script>
+    <style>
+    body {
+        background: #eee
+    }
+
+    .ratings i {
+        font-size: 16px;
+        color: red
+    }
+
+    .strike-text {
+        color: red;
+        text-decoration: line-through
+    }
+
+    .product-image {
+        width: 100%
+    }
+
+    .dot {
+        height: 7px;
+        width: 7px;
+        margin-left: 6px;
+        margin-right: 6px;
+        margin-top: 3px;
+        background-color: blue;
+        border-radius: 50%;
+        display: inline-block
+    }
+
+    .spec-1 {
+        color: #938787;
+        font-size: 15px
+    }
+
+    h5 {
+        font-weight: 400
+    }
+
+    .para {
+        font-size: 16px
+    }
+    </style>

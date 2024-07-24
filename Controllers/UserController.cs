@@ -82,6 +82,8 @@ namespace Hotel.Controllers
                     };
                     await HttpContext
                         .SignInAsync(CookieAuthenticationDefaults.AuthenticationScheme, new ClaimsPrincipal(claimsIdentity), properties);
+                    // Lưu userId vào session
+                    HttpContext.Session.SetInt32("UserId", check.Id);
                     return RedirectToAction("Index", "Home");
                 }
 

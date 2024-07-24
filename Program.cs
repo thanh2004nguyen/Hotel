@@ -31,6 +31,8 @@ builder.Services.AddAuthorization(options =>
 	options.AddPolicy("AdminOnly", policy => policy.RequireRole("admin"));
 });
 
+// Add session services
+builder.Services.AddSession();
 
 builder.Services.AddMvc(options =>
 {
@@ -56,7 +58,8 @@ app.UseRouting();
 
 app.UseAuthentication();
 app.UseAuthorization();
-
+// Use session middleware
+app.UseSession();
 app.MapControllerRoute(
 	name: "default",
 	pattern: "{controller=Home}/{action=Index}/{id?}");

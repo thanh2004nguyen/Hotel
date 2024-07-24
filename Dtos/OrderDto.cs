@@ -4,15 +4,20 @@ namespace Hotel.Dtos
 {
     public class OrderDto
     {
-
-        [Required(ErrorMessage = "Tên khách hàng không được để trống")]
+        [Required(ErrorMessage = "Please login")]
+        public int UserId { get; set; }
+        [Required(ErrorMessage = "Please enter name")]
         public string? Name { get; set; }
-        [Required(ErrorMessage = "Số điện thoại không được để trống")]
+        [Required(ErrorMessage = "please enter phone number")]
         public string? Phone { get; set; }
-        public int RoomId { get; set; }
+		public string? Status { get; set; }
+		public int RoomId { get; set; }
         public String? Message { get; set; }
-        [Required(ErrorMessage = " không được để trống")]
+        [Required(ErrorMessage = "please chooce type")]
         public string? Type { get; set; }
-        public DateTime Date {  get; set; }
+        [Required(ErrorMessage = "Please chooce day checkin")]
+        public DateTime DayCheckIn {  get; set; }
+        [Required(ErrorMessage = "Please chooce day checkout")]
+        public DateTime DayCheckOut { get; set; }
     }
 }

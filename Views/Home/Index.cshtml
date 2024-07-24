@@ -115,74 +115,7 @@
 
 
 
-<section class="ftco-section bg-light">
-    <div class="container">
-        <div class="row justify-content-center mb-5 pb-3">
-            <div class="col-md-7 heading-section text-center ftco-animate">
-                <h2 class="mb-4">Our Rooms</h2>
 
-            </div>
-        </div>
-        <div class="row">
-            @if (Model.Rooms != null)
-            {
-                foreach (var r in Model.Rooms)
-                {
-                    var rimg = $"~/images/{r.Images.ToArray()[0].Url}";
-                    <div class="col-sm col-md-6 col-lg-4 ftco-animate">
-                        <div class="room">
-                            <a asp-action="Index" asp-controller="SingleRoom" asp-route-id="@r.Id">
-
-                                <div class="img d-flex justify-content-center align-items-center" style="background-image: url('@Url.Content(rimg)')">
-                                    <div class="icon d-flex justify-content-center align-items-center">
-                                        <span class="icon-search2"></span>
-                                    </div>
-                                </div>
-
-                            </a>
-
-                            <div class="text p-3 ">
-                                <h3 class="mb-3 text-center" style="margin-left:auto; text-transform:uppercase">
-                                    <a asp-controller="SingleRoom" style="color:#8d703b;" asp-route-id="@r.Id">@r.RoomType.Type</a>
-                                </h3>
-
-                                <div class="d-flex justify-content-start align-items-center" style="width:100%; flex-flow: wrap">
-                                    @if (r.Details != null)
-                                    {
-                                        @foreach (var de in r.Details)
-                                        {
-                                            <div style="min-width:40%; width:fit-content ;margin-left:auto" class="mb-2 d-flex justify-content-start align-items-center">
-                                                <i class="@CommonMethod.CheckIcon(de.Name)" style="font-size:20px"></i>
-                                                <span class=" ml-2" style="font-size:16px">@de.Detail</span>
-                                            </div>
-                                        }
-                                    }
-                                </div>
-
-                                @if (r.IsFulled == true)
-                                {
-                                    <hr style="margin-bottom:0">
-                                    <p class=" bg bg-danger text-dark" style="height:100%;padding:16px 0;font-weight:bold">Tạm thời hết phòng</p>
-                                }
-                                else
-                                {
-                                    <hr>
-                                    <p class="pt-1"><a asp-action="Index" asp-controller="SingleRoom" asp-route-id="@r.Id" class="btn-custom">Xem Chi Tiết Phòng<span class="icon-long-arrow-right"></span></a></p>
-                                }
-
-
-                            </div>
-                        </div>
-                    </div>
-                }
-            }
-
-        </div>
-    </div>
-
-
-
-</section>
 @if (Model.Rooms != null)
 {
     <!-- Home Room Section Begin -->
@@ -202,10 +135,11 @@
                         <div class="col-lg-4 col-md-6 mb-4" >
                             <div class="hp-room-item position-relative"
                                  style="background-image: url('@Url.Content(rimg)'); height: 450px; width: 100%; background-size: cover; background-position: center;border-radius:8px;">
+                                 
                                 <div class="overlay" ></div>
                                 <div class="hr-text position-absolute text-center" style="margin-bottom: -80px;">
-                                    <h3>Double Room</h3>
-                                    <h2>199$<span>/Pernight</span></h2>
+                                    <h3>@r.RoomType.Type</h3>
+                                    <h2>@r.Price.ToString("0")<span>$/Pernight</span></h2>
                                     <table class="text-white">
                                         <tbody>
                                             <tr>
@@ -217,12 +151,30 @@
                                                 <td>Max person 5</td>
                                             </tr>
                                             <tr>
-                                                <td class="r-o">Bed:</td>
-                                                <td>King Beds</td>
+                                                <td class="r-o">Status:</td>
+                                                @if(r.IsFulled==true){
+                                                    <td style="color:red">Hết phòng</td>
+                                                }else{
+                                                    <td>Còn phòng</td>
+                                                }
                                             </tr>
                                             <tr>
                                                 <td class="r-o">Services:</td>
-                                                <td>Wifi, Television, Bathroom,...</td>
+                                                <td>
+                                                    @if (r.Unities != null && r.Unities.Any())
+                                                    {
+                                                        var services = r.Unities
+                                                        .Take(3)  // Chỉ lấy tối đa 10 tiện ích
+                                                        .Select(u => u.Name)
+                                                        .ToArray();
+
+                                                        @string.Join(", ", services)
+                                                        // Ghép các tiện ích với dấu phẩy
+                                                    }
+                                                    else
+                                                    {
+                                                        <div>No services available</div>
+                                                    }
                                             </tr>
                                         </tbody>
                                     </table>

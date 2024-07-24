@@ -14,12 +14,15 @@
 				</div>
 				<div class="col-lg-6">
 					<div class="tn-right">
-						<div class="top-social">
-							<a href="#"><i class="fa fa-facebook"></i></a>
-							<a href="#"><i class="fa fa-twitter"></i></a>
-							<a href="#"><i class="fa fa-tripadvisor"></i></a>
-							<a href="#"><i class="fa fa-instagram"></i></a>
+						<div class="top-social" style="font-size:20px;transform:translate(20px, 5px);">
+							<div class="d-flex" >
+								<a asp-controller="SingleRoom" asp-action="MyOrder"><i class="fa-solid fa-cart-shopping"></i></a>
+								<p id="order-count" style="transform:translate(2px, -15px)">0</p>
+							</div>
 						</div>
+						
+						
+
 						
 						<div class="language-option">
 							<img src="~/images/logo.jpg" alt="">
@@ -33,18 +36,18 @@
 						</div>
 						@if (User.Identity.IsAuthenticated)
 						{
-							<div class=" dropdown bk-btn" style="margin-left: 10px;background: none;">
-								<a class=" dropdown" href="#" id="navbarDropdown" role="button" data-bs-toggle="dropdown" aria-expanded="false">
+							<div class="dropdown bk-btn" style="margin-left: 10px; background: none;">
+								<a class="dropdown-toggle" href="#" id="navbarDropdown" role="button" aria-expanded="false" onclick="showActionAccount()">
 									<img src="~/images/logo-user.png" alt="Profile Picture" style="width: 60px; height: 60px;">
 								</a>
-								<ul class="dropdown-menu" aria-labelledby="navbarDropdown" style="transform: translate(-84px, 73px);">
+								<ul class="dropdown-menu" id="dropdownMenu" aria-labelledby="navbarDropdown" style="transform: translate(-4px, -3px);">
 									<li><a class="dropdown-item" href="#"><i class="fas fa-cog fa-fw"></i> Settings</a></li>
 									<li><a class="dropdown-item" asp-controller="User" asp-action="ChangePassword"><i class="fas fa-sliders-h fa-fw"></i> Change password</a></li>
-
 									<li><hr class="dropdown-divider"></li>
-									<li><a class="dropdown-item" asp-controller="user" class="nav-link text-white " asp-action="Logout"><i class="fas fa-sign-out-alt fa-fw"></i> Log Out</a></li>
+									<li><a class="dropdown-item" asp-controller="User" asp-action="Logout"><i class="fas fa-sign-out-alt fa-fw"></i> Log Out</a></li>
 								</ul>
 							</div>
+
 						}
 						else
 						{
@@ -127,6 +130,7 @@
 
 @if (User.Identity.IsAuthenticated)
 {
+
 	<script>
 
 		//play audio
@@ -194,5 +198,21 @@
 		$('.notice_newOrder').click(() => {
 			location.href = '/admin/order/index'
 		})
+		function showActionAccount() {
+			// Lấy các phần tử cần thiết từ DOM
+			var dropdownToggle = document.getElementById('navbarDropdown');
+			var dropdownMenu = document.getElementById('dropdownMenu');
+
+			// Kiểm tra nếu menu hiện đang được hiển thị
+			if (dropdownMenu.classList.contains('show')) {
+				// Nếu có, ẩn menu
+				dropdownMenu.classList.remove('show');
+			} else {
+				// Nếu không, hiển thị menu
+				dropdownMenu.classList.add('show');
+			}
+		}
+
+		
 	</script>
 }

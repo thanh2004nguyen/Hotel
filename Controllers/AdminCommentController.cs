@@ -5,6 +5,7 @@ using Hotel.Models.Shared;
 using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.EntityFrameworkCore;
+using System.Security.Claims;
 
 namespace Hotel.Controllers
 {
@@ -89,6 +90,60 @@ namespace Hotel.Controllers
           
             return View();
         }
+        [HttpPost]
+        public async Task<IActionResult> Like(int commentId, string likeStyle)
+        {
+            if (likeStyle != "liked" && likeStyle != "unliked")
+            {
+                return BadRequest(new { message = "Invalid likeStyle parameter" });
+            }
+
+            var claims = User.Claims.ToList();
+            var userIdClaim = claims.FirstOrDefault(c => c.Type == "id"); // Id user login
+            if (userIdClaim == null || !int.TryParse(userIdClaim.Value, out int userId))
+            {
+                return BadRequest(new { message = "Invalid user ID format in claims" });
+            }
+
+            var comment = await _context.Comments.FindAsync(commentId);
+            if (comment == null)
+            {
+                return NotFound(new { message = "Comment not found" });
+            }
+            var userCommentLike = await _context.UserCommentLikes
+                .FirstOrDefaultAsync(uc => uc.UserId == userId && uc.CommentId == commentId);
+
+            if (likeStyle == "liked")
+            {
+                if (userCommentLike != null)
+                {
+                    return BadRequest(new { message = "User has already liked this comment" });
+                }
+
+                var newUserCommentLike = new UserCommentLike
+                {
+                    UserId = userId,
+                    CommentId = commentId
+                };
+
+                await _context.UserCommentLikes.AddAsync(newUserCommentLike);
+                comment.like += 1;
+            }
+            else if (likeStyle == "unliked")
+            {
+                if (userCommentLike == null)
+                {
+                    return BadRequest(new { message = "User has not liked this comment yet" });
+                }
+
+                _context.UserCommentLikes.Remove(userCommentLike);
+                comment.like -= 1;
+            }
+
+            await _context.SaveChangesAsync();
+            return Json(new { commentId = comment.Id, likes = comment.like , likeStatus = likeStyle });
+        }
+
 
         public async Task<IActionResult> Delete(int id)
         {

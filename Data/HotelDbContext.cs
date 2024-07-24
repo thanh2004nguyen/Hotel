@@ -21,6 +21,7 @@ namespace Hotel.Data
         public DbSet<RoomPolicy> RoomPolicies { get; set; }
         public DbSet<HotelData> hotelDatas { get; set; }
         public DbSet<Comment>Comments  { get; set; }
+        public DbSet<UserCommentLike> UserCommentLikes { get; set; }
 
     }
 }

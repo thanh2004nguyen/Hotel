@@ -9,6 +9,7 @@ namespace Hotel.Models
         public string? Content { get; set; } 
         public string? avatar { get; set; }
         public  int start {  get; set; }
+        public int like { get; set; }
         [ForeignKey("Room")]
         public int RoomId { get; set; }
         [NotMapped]
