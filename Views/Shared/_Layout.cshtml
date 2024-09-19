@@ -1,4 +1,13 @@
-﻿<!DOCTYPE html>
+﻿@using Hotel.Filters;
+@using System.Security.Claims;
+@{
+    var userClaims = User.Identity as ClaimsIdentity;
+    var userId = userClaims?.FindFirst("id")?.Value;
+    var userName = userClaims?.FindFirst(ClaimTypes.NameIdentifier)?.Value;
+    var userRole = userClaims?.FindFirst(ClaimTypes.Role)?.Value;
+    var employeeId = userClaims?.FindFirst("empId")?.Value;
+}
+<!DOCTYPE html>
 <html lang="en">
 <head>
     <meta charset="utf-8" />
@@ -36,6 +45,11 @@
     <link href="https://fonts.googleapis.com/css?family=Poppins:200,300,400,500,600,700" rel="stylesheet">
     <link href="https://fonts.googleapis.com/css?family=Playfair+Display:400,400i,700,700i" rel="stylesheet">
     <script src="https://cdn.ckeditor.com/4.22.1/standard/ckeditor.js"></script>
+    
+    @*My css*@
+    <link href="~/forntend/css/css/my-css/chatbox.css" rel="stylesheet" />
+
+
 
     <link rel="stylesheet" href="~/ForntEnd/css/open-iconic-bootstrap.min.css">
     <link rel="stylesheet" href="~/ForntEnd/css/animate.css">
@@ -68,19 +82,67 @@
 </head>
 <body>
       @Html.Partial("Header")
+    <input type="hidden" value="@userRole" id="userRole" />
     <div style="background-color:#f2f2f2">
         <main role="main" class="" id="check-admin-margin-layout" style="background-color:white">
             @RenderBody()
         </main>
 
-        <a role="button" class=""  style="width:fit-content; position:fixed;bottom:100px;right:100px; z-index:1000; width:50px;height:50px; border-radius:10px"  href="tel:/02854338868">
-            <div class="btn btn-primary nav-link p-2" style="width:fit-content;">
-                <i class="fas fa-phone"></i>
-                <span class="phone-number text-dark">02854338868</span>
+        <a role="button" style="position:fixed;bottom:50px;right:100px; z-index:1000;">
+            <div class="btn btn-primary nav-link p-2" id="chatButton">
+                <span class="text-dark">Support chat</span>
             </div>
-           
         </a>
-       
+        @if (userRole == "user")
+        {
+            <!-- Chat Box HTML -->
+            <div id="chat-section">
+                <div id="chat-header">
+                    <h6 class="header-text">Employee Hotel</h6>
+                    <button id="closeChat" class="btn btn-danger btn-sm">×</button>
+                </div>
+                <div id="chat-box">
+                    <div id="messages"></div>
+                </div>
+                <div id="message-input">
+                    <input type="text" id="messageInput" placeholder="Enter message" />
+                    <button id="Send" type="button"><i class="fa-solid fa-paper-plane"></i></button>
+                </div>
+            </div>
+        }
+        else
+        {
+            <div id="wrapper-chat-emp">
+                <!-- Chat Box HTML -->
+
+                <div id="employee-chat-container">
+                    <div id="plist" class="people-list">
+                      <div id="employee-user-list">
+                            <h6>List user</h6>
+                            <div id="user-list">
+                                <!-- Danh sách người dùng sẽ được thêm vào đây -->
+                            </div>
+                        </div> 
+                    </div>
+                    
+                    <div id="employee-chat-section">
+                        <div id="employee-chat-header">
+                            <h6 id="employeeChatWith"></h6>
+                            <button id="closeChatEmp" class="btn btn-danger btn-sm" style="color: b">x</button>
+                        </div>
+                        <div id="employee-chat-box">
+                            <div id="employee-messages"></div>
+                        </div>
+                        <div id="employee-message-input">
+                            <input type="text" id="employeeMessageInput" placeholder="Enter message" />
+                            <button id="EmpSend" type="button"><i class="fa-solid fa-paper-plane"></i></button>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        }
+
+
         
     </div>
     @Html.Partial("Footer")
@@ -99,7 +161,10 @@
     <script src="~/ForntEnd/fonts/js-sano/owl.carousel.min.js"></script>
     @*script sano hotel end*@
 
+    @*Chat support js*@
+    <script src="~/js/signalr/dist/browser/signalr.js"></script>
 
+    <script src="~/ForntEnd/js/chat.js"></script>
     <!-- flatpickr JS -->
     <script src="https://code.jquery.com/jquery-1.10.2.min.js"></script>
     <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.2.0/dist/js/bootstrap.bundle.min.js"></script>
@@ -129,8 +194,6 @@
     <script src="~/ForntEnd/js/main.js"></script>
 
     <script>
-
- 
         $(document).ready(function () {
             $('#room_table').DataTable();
             $('#room_type').DataTable();

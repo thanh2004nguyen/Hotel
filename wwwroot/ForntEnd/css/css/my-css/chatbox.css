@@ -1,0 +1,271 @@
+﻿
+.flatpickr-calendar {
+    display: none;
+}
+
+#chat-section {
+    width: 350px;
+    height: 450px;
+    box-shadow: 0 2px 10px rgba(0,0,0,0.1);
+    border-radius: 10px;
+    box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1);
+    background-color: #f8f9fa;
+    position: fixed;
+    bottom: 20px;
+    right: 20px;
+    z-index: 1000;
+    display: flex;
+    flex-direction: column;
+    overflow: hidden;
+}
+#wrapper-chat-emp {
+    display: none;
+}
+#chat-header {
+    height: 15%;
+    background: #e9ecef;
+    padding: 5px;
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    border-top-left-radius: 10px;
+    border-top-right-radius: 10px;
+}
+    #chat-header  .header-text {
+        color: black;
+    }
+#chat-header h6 {
+    text-align: center;
+    margin: 0;
+    font-size: 16px;
+    color: white;
+    padding-left: 20px;
+}
+
+
+.user-list{
+    position:absolute;
+    width: 70px;
+    border: 1px solid red;
+    height: 440px;
+    transform: translateX(-80%);
+}
+
+
+
+#closeChat {
+    font-size:17px;
+    background-color: transparent;
+    color: gray;
+    margin: 10px 20px;
+    cursor: pointer;
+    border: none;
+}
+
+    #closeChat:hover {
+        color:black;
+    }
+
+#chat-box {
+    height: 72%;
+    flex-grow: 1;
+    display: flex;
+    flex-direction: column;
+    padding: 10px;
+    overflow-y: auto;
+    background-color: #fff;
+    width: 100%;
+}
+
+#messages {
+    display: flex;
+    flex-direction: column;
+    gap: 10px;
+}
+.message {
+    display: inline-block;
+    max-width: 70%; 
+    width: auto; 
+    padding: 5px 10px;
+    border-radius: 8px;
+    position: relative;
+    word-wrap: break-word; 
+    line-height: 1.4;
+}
+
+small {
+    color: gray;
+}
+
+#message-input {
+    display: flex;
+    margin-top: auto;
+}
+
+#messageInput {
+    width: 88%;
+    margin: 10px;
+    border: none;
+}
+
+#Send {
+    border: none;
+    width: 12%;
+    background-color: transparent;
+    margin: 10px 10px 10px 0;
+    border-radius: 3px;
+}
+
+
+
+
+
+
+
+
+
+
+/*Employee*/
+/* Container chính của employee chat */
+#employee-chat-container {
+    display: flex;
+    width: 600px; /* Bạn có thể điều chỉnh kích thước phù hợp */
+    height: 470px;
+    box-shadow: 0 2px 10px rgba(0,0,0,0.1);
+    border-radius: 10px;
+    background-color: #f8f9fa;
+    position: fixed;
+    bottom: 20px;
+    right: 20px;
+    z-index: 1000
+}
+
+/* Danh sách người dùng cho employee */
+#employee-user-list {
+    width: 200px;
+    background-color: #e9ecef;
+    padding: 10px;
+    border-right: 2px solid #dee2e6;
+    overflow-y: auto;
+}
+
+    #employee-user-list h6 {
+        margin: 0 0 10px 0;
+    }
+
+#employee-users {
+    list-style: none;
+    padding: 0;
+}
+
+    #employee-users li {
+        padding: 5px;
+        cursor: pointer;
+    }
+
+        #employee-users li:hover {
+            background-color: #dee2e6;
+        }
+
+/* Chat section cho employee */
+#employee-chat-section {
+    flex-grow: 1;
+    display: flex;
+    flex-direction: column;
+    padding: 10px;
+    overflow-y: auto;
+    background-color: #fff;
+    width: calc(100% - 200px); /* Điều chỉnh chiều rộng để không che phủ danh sách người dùng */
+}
+
+#employee-chat-header {
+    text-align:center;
+    font-size: 18px;
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    margin-bottom: 10px;
+}
+
+#employee-chat-box {
+    flex-grow: 1;
+    overflow-y: auto;
+}
+
+#employee-messages {
+    display: flex;
+    flex-direction: column;
+    gap: 10px;
+
+}
+
+#employee-message-input {
+    display: flex;
+    margin-top: auto;
+}
+
+#employeeMessageInput {
+    width: 80%;
+    margin: 10px;
+}
+
+#employeeSend {
+    width: 20%;
+    background-color: transparent;
+    margin: 10px 10px 10px 0;
+    border-radius: 3px;
+}
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+.people-list {
+    -moz-transition: .5s;
+    -o-transition: .5s;
+    -webkit-transition: .5s;
+    transition: .5s;
+    height: 470px;
+}
+#employee-user-list {
+    height: 100%;
+}
+
+.clearfix:hover {
+    background: #efefef;
+    cursor: pointer;
+}
+#user-list{
+    overflow-y: auto;
+}
+#user-list li.active {
+    background: #efefef
+}
+
+        #user-list li .name {
+            font-size: 15px
+        }
+
+    .people-list img {
+        float: left;
+        border-radius: 50%
+    }
+
+    .people-list .about {
+        float: left;
+        padding-left: 8px
+    }
+
+    .people-list .status {
+        color: #999;
+        font-size: 13px
+    }

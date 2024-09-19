@@ -50,7 +50,7 @@ namespace Hotel.Controllers
 
                 var check = await _context.Users
                     .Where(u => u.Username == data.Email)
-                    .FirstOrDefaultAsync();
+                    .FirstOrDefaultAsync(); 
 
                 if (check == null)
                 {
@@ -66,15 +66,20 @@ namespace Hotel.Controllers
                         ViewData["Error"] = "Tên đăng nhập hoặc mật khẩu không đúng vui lòng kiểm tra lại";
                         return View("Login");
                     }
-
-                    var claims = new List<Claim>()
+                    var employeeChat = await _context.Users
+					.Where(u => u.Role=="employeeChat")
+					.FirstOrDefaultAsync();
+					var claims = new List<Claim>()
                     {
                         new Claim(ClaimTypes.NameIdentifier,check.Username),
                          new Claim("id", check.Id.ToString()),
                          new Claim(ClaimTypes.Role,check.Role)
-
                     };
-                    var claimsIdentity = new ClaimsIdentity(claims, CookieAuthenticationDefaults.AuthenticationScheme);
+					if (employeeChat != null)
+					{
+						claims.Add(new Claim("empId", employeeChat.Id.ToString()));
+					}
+					var claimsIdentity = new ClaimsIdentity(claims, CookieAuthenticationDefaults.AuthenticationScheme);
                     var properties = new AuthenticationProperties()
                     {
                         AllowRefresh = true,
@@ -82,8 +87,11 @@ namespace Hotel.Controllers
                     };
                     await HttpContext
                         .SignInAsync(CookieAuthenticationDefaults.AuthenticationScheme, new ClaimsPrincipal(claimsIdentity), properties);
-                    // Lưu userId vào session
+                    
+                    // Lưu thông tin vào session
                     HttpContext.Session.SetInt32("UserId", check.Id);
+                    HttpContext.Session.SetString("UserName", check.Username);
+                    HttpContext.Session.SetString("UserRole", check.Role);
                     return RedirectToAction("Index", "Home");
                 }
 
