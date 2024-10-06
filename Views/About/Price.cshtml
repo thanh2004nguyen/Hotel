@@ -1,4 +1,4 @@
-﻿@model IEnumerable<Room>
+﻿@* @model IEnumerable<Room>
 @{
     var list = Model.ToArray();
     var data = list[0].Details.Where(p => p.Name.Contains("giá")).AsQueryable();
@@ -58,3 +58,4 @@
 
     
 </div>
+ *@

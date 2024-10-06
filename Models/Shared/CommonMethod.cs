@@ -25,8 +25,6 @@ namespace Hotel.Models.Shared
             {
                 return "false";
             }
-
-
         }
 
         public static string CheckIcon(string data)

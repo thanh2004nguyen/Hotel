@@ -95,7 +95,8 @@ namespace Hotel.Controllers.Api
                     .Select(m => new UserDto
                     {
                         Id = m.Id,
-                        Username = m.Username
+                        Username = m.Username,
+                        IsOnline = m.IsOnline
                     })
                     .ToListAsync();
 				Console.WriteLine($"{users.Count} users", users);

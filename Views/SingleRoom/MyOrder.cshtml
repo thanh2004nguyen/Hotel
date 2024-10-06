@@ -1,4 +1,4 @@
-﻿@model IEnumerable<Hotel.Models.Order>
+﻿@* @model IEnumerable<Hotel.Models.Booking>
 
 @{
     ViewData["Title"] = "My Orders";
@@ -8,7 +8,7 @@
 
 @if (Model == null || !Model.Any())
 {
-    <p class="text-center" style="color:red; margin: 50px;" >Chưa có order nào.</p>
+    <p class="text-center" style="color:red; margin: 50px;">Chưa có order nào.</p>
 }
 else
 {
@@ -84,7 +84,7 @@ else
         </div>
     }
 }
-<script src="https://cdnjs.cloudflare.com/ajax/libs/jquery/3.6.0/jquery.min.js"></script>
+
 <script>
     $(document).ready(function () {
         $('.cancel-order-button').on('click', function () {
@@ -106,7 +106,7 @@ else
         });
     });
 </script>
-    <style>
+<style>
     body {
         background: #eee
     }
@@ -148,4 +148,5 @@ else
     .para {
         font-size: 16px
     }
-    </style>
+</style>
+ *@

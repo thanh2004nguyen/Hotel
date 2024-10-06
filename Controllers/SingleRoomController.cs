@@ -1,4 +1,4 @@
-﻿using Hotel.Data;
+﻿/*using Hotel.Data;
 using Hotel.Dtos;
 using Hotel.Models;
 using Microsoft.AspNetCore.Authorization;
@@ -25,10 +25,15 @@ namespace Hotel.Controllers
                 ViewData["success"] = message;
             }
 
+			var bookedDates = await _context.Bookings
+	           .Where(o => o.RoomId == id)
+	           .Select(o => o.DayCheckin)
+	           .ToListAsync();
+            ViewBag.BookedDates = bookedDates;
 
 
 
-            string? error = TempData["error"] as string;
+			string? error = TempData["error"] as string;
             if (error != null)
             {
                 ViewData["error"] = error;
@@ -40,7 +45,6 @@ namespace Hotel.Controllers
                 .Include(a => a.Unities)
                 .Include(b => b.roomProperties)
                 .Include(c => c.Images)
-                .Include(d => d.Details)
                 .Include(e => e.RoomType)
                 .SingleOrDefaultAsync(x => x.Id == id);
 
@@ -65,46 +69,66 @@ namespace Hotel.Controllers
             });
         }
 
-        public async Task<IActionResult> HandleAddOrder(RoomDto data,int id) 
+        *//*public async Task<IActionResult> HandleAddOrder(RoomDto data, int id)
         {
-
-            if (ModelState.IsValid)
+            try
             {
-                AdminOrderController action = new AdminOrderController(_context);
-                var result =await action.Add(data.Order);
-                if (result == true)
+                var isDateBooked = await _context.Orders
+                .AnyAsync(o => o.RoomId == id && o.DayCheckin == data.Order.DayCheckIn);
+
+                if (isDateBooked)
                 {
-                    TempData["success"] = "Thông tin đã được gửi đi thành công. Nhân viên sẽ liên hệ để xác nhận thông tin sớm nhất có thể.Xin cảm ơn !";
-                    var room = await _context.Rooms.SingleOrDefaultAsync(r=>r.Id==id);
-                    if (room != null)
-                    {
-                        room.IsFulled = true;
-                        _context.Rooms.Update(room);
-                        await _context.SaveChangesAsync();
-                    }
+                    TempData["error"] = "Ngày này đã được đặt. Vui lòng chọn ngày khác.";
                     return RedirectToAction("Index", new { id = id });
                 }
-                else
+                if (ModelState.IsValid)
                 {
-                    TempData["error"] = "Có lỗi xảy ra vui lòng. nhập lại sau";
-                    return RedirectToAction("Index", new { id=id});
+                    AdminOrderController action = new AdminOrderController(_context);
+                    var result = await action.Add(data.Order);
+                    if (result == true)
+                    {
+                        TempData["success"] = "Thông tin đã được gửi đi thành công. Nhân viên sẽ liên hệ để xác nhận thông tin sớm nhất có thể. Xin cảm ơn!";
+
+                        var room = await _context.Rooms.SingleOrDefaultAsync(r => r.Id == id);
+                        if (room != null)
+                        {
+                            room.IsFulled = true;
+                            _context.Rooms.Update(room);
+                            await _context.SaveChangesAsync();
+                        }
+
+                        return RedirectToAction("Index", new { id = id });
+                    }
+                    else
+                    {
+                        TempData["error"] = "Có lỗi xảy ra, vui lòng nhập lại sau.";
+                        return RedirectToAction("Index", new { id = id });
+                    }
                 }
 
+                // Ghi các lỗi vào console để kiểm tra
+                foreach (var modelState in ModelState)
+                {
+                    var errors = modelState.Value.Errors;
+                    foreach (var error in errors)
+                    {
+                        Console.WriteLine($"Error in {modelState.Key}: {error.ErrorMessage}");
+                    }
+                }
+
+                TempData["error"] = "Vui lòng nhập đủ tên và địa chỉ.";
+                return RedirectToAction("Index", new { id = id });
             }
-            // Ghi các lỗi vào console để kiểm tra
-            foreach (var modelState in ModelState)
+            catch (Exception ex)
             {
-                var errors = modelState.Value.Errors;
-                foreach (var error in errors)
-                {
-                    Console.WriteLine($"Error in {modelState.Key}: {error.ErrorMessage}");
-                }
+                // Log ngoại lệ và hiển thị thông báo lỗi cụ thể ra view
+                Console.WriteLine($"Exception: {ex.Message}");
+                TempData["error"] = $"Đã xảy ra lỗi: {ex.Message}. Vui lòng thử lại sau.";
+                return RedirectToAction("Index", new { id = id });
             }
-            TempData["error"] = "Vui lòng nhập đủ tên và địa chỉ";
-            return RedirectToAction("Index", new { id = id });
-
         }
 
+*//*
         public async Task<IActionResult> MyOrder(int id)
         {
             // Assuming User is authenticated and has an ID
@@ -116,7 +140,7 @@ namespace Hotel.Controllers
             }
 
             // Get all orders for the current user, including Room and Room.Images
-            var userOrders = await _context.Orders
+            var userOrders = await _context.Bookings
                 .Include(o => o.Room).ThenInclude(r => r.RoomType)
                 .Include(o => o.Room).ThenInclude(r => r.Details)
                 .Include(o => o.Room).ThenInclude(r => r.Images ) // Bao gồm hình ảnh liên kết với phòng
@@ -148,7 +172,7 @@ namespace Hotel.Controllers
             }
 
             // Find the order to delete
-            var order = await _context.Orders
+            var order = await _context.Bookings
                 .Include(o => o.Room)
                 .SingleOrDefaultAsync(o => o.Id == id && o.UserId == userId);
 
@@ -160,18 +184,11 @@ namespace Hotel.Controllers
             var room = order.Room;
 
             // Remove the order
-            _context.Orders.Remove(order);
+            _context.Bookings.Remove(order);
             await _context.SaveChangesAsync();
-
-            if (room != null)
-            {
-                room.IsFulled = false;
-                _context.Rooms.Update(room);
-                await _context.SaveChangesAsync();
-            }
-
             TempData["success"] = "Order deleted successfully.";
             return RedirectToAction("MyOrder");
         }
     }
 }
+*/

@@ -1,0 +1,79 @@
+﻿@model IEnumerable<IconClass>
+@{
+    Layout = "~/Views/Shared/LayoutAdmin.cshtml";
+    ViewData["Title"] = "Index";
+}
+<!-- ============================================================== -->
+<!-- icon material  -->
+<!-- ============================================================== -->
+<style>
+    .m-icon {
+        display: flex;
+        align-items: center;
+        justify-content: space-between;
+        width: 100%;
+    }
+
+        .m-icon i {
+            width: 5%;
+            margin-right: 10px;
+        }
+
+        .m-icon span {
+            width: 95%;
+            text-align: left;
+            padding-bottom: 2px;
+        }
+</style>
+
+<div class="col-xl-12 col-lg-12 col-md-12 col-sm-12 col-12">
+    <div class="card">
+        <div class="card-header">
+            <h4 class="card-title">Material Icons</h4>
+            <h6 class="card-subtitle">you can use any icon with class of <code class="m-r-10">mdi mdi-</code>name of icon</h6> 
+            <a href="/admin/icon/create"  class="text-decoration-none custom-link">Create Icon</a>
+        </div>
+
+        <div class="card-body">
+            <div class="material-icon-list-demo">
+                <div class="row icons" id="icons">
+                    @if (Model != null && Model.Any())
+                        @foreach (var icon in Model)
+                        {
+                            <div class="col-md-4 d-flex justify-content-around">
+                                <div class="m-icon text-center" style="width: 100%;">
+                                    @Html.Raw(icon.Icon)
+                                    <span></span>
+                                </div>
+                            </div>
+                        }else
+                        {
+                        <div class="col-md-12 d-flex justify-content-around">
+                            <div class="m-icon text-center" style="width: 100%;margin: 0 auto">
+                                <code class="m-r-10">Chưa có icon nào</code>
+                            </div>
+                        </div>
+                        }
+                </div>
+            </div>
+        </div>
+
+
+
+    </div>
+</div>
+<!-- ============================================================== -->
+<!-- end icon material  -->
+<!-- ============================================================== -->
+<script>
+    document.addEventListener("DOMContentLoaded", function () {
+        const icons = document.querySelectorAll("#icons i");
+
+        // Lặp qua từng thẻ i
+        icons.forEach(function (icon) {
+            const className = icon.className;
+            const span = icon.nextElementSibling;
+            span.textContent = className;
+        });
+    });
+</script>

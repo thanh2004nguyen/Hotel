@@ -1,42 +1,171 @@
-﻿
+﻿@model Room
 @{
+    Layout = "~/Views/Shared/LayoutAdmin.cshtml";
     ViewData["Title"] = "Create";
 }
-
-@model Room
-<div class="container" style="min-height:100vh;min-height:40vh;background-color:white;padding:2rem">
-    <h1 >Tạo phòng mới </h1>
-<form asp-action="Create" method="post" enctype="multipart/form-data">
-
-    @for (int i = 0; i < Model.roomProperties!.Count; i++)
-    {
-        var propertyList = Model.roomProperties.ToList();
-        <div class="form-control">
-            <label class="form-check-label">@propertyList[i].Name</label>
-            <input hidden  name="PropertyId[@i]" value="@propertyList[i].Id">
-            <input type="text" name="PropertyDetail[@i]" required>
-             
-        </div>
+<style>
+    input[type="checkbox"] {
+        padding: 20px;
+        cursor: pointer;
     }
-
-    <div class="form-group">
-        <label class="control-label">Loại Phòng</label>
-        <select asp-for="RoomTypeID" class="form-control" asp-items="ViewBag.RoomTypeId"></select>
-    </div>
-
-    <label>Tiện Ích</label>
-    @foreach (var unity in Model.Unities!)
-    {
-        <div class="form-check">
-            <input type="checkbox" class="form-check-input" name="Unities" value="@unity.Id">
-            <label class="form-check-label">@unity.Name</label>
+</style>
+<div class="container-create-room">
+    <h2 class="create-room-title">Create Room</h2>
+    <form id="createRoomForm" asp-action="Create" method="post" enctype="multipart/form-data">
+        <div class="mb-3 d-flex">
+            <div style="width: 30%; margin-right: 15px;">
+                <label for="roomNumber" class="form-label">Room number</label>
+                <input type="int" class="form-control create-room-input" id="roomNumber" name="roomNumber" required>
+            </div>
+            <div style="width: 70%">
+                <label for="roomName" class="form-label">Room Name</label>
+                <input type="text" class="form-control create-room-input" id="roomName" name="roomName" required>
+            </div>
         </div>
-    }
 
-    <label class="control-label mt-3">Hinh Anh</label>
-    <input type="file" id="ImageFile" name="ImageFile" class="form-control-file" multiple />
+        <div class="mb-3">
+            <label for="roomType" class="form-label">Room Type</label>
+            <select class="form-select create-room-select" id="roomType" name="RoomTypeId" asp-items="ViewBag.RoomTypeId" required>
+                <!-- Room types will be populated here -->
+            </select>
+        </div>
 
-    <button type="submit" class="btn btn-primary mt-5">Create Room</button>
-</form>
+        <div class="mb-3">
+            <label for="price" class="form-label">Price 1 night</label>
+            <input type="number" class="form-control create-room-input" id="price" name="price" step="10" required>
+        </div>
 
+        <div class="mb-3">
+            <label for="description" class="form-label">Description</label>
+            <textarea class="form-control create-room-input" id="description" name="description" rows="3" required></textarea>
+        </div>
+
+        <div class="mb-3">
+            <label for="ImageFile" class="form-label">Upload Images</label>
+            <input type="file" class="form-control" id="ImageFile" name="ImageFile" multiple required />
+        </div>
+
+        <div class="create-room-row mb-3">
+            <div class="create-room-col">
+                <label for="discount" class="form-label">Discount</label>
+                <input type="number" class="form-control create-room-input" id="discount" name="discount" step="5" min="0" value="0">
+            </div>
+            <div class="create-room-col">
+                <label for="maxAdults" class="form-label">Max Adults</label>
+                <input type="number" class="form-control create-room-input" id="maxAdults" name="maxAdults" min="0" value="2" required>
+            </div>
+            <div class="create-room-col">
+                <label for="maxChildren" class="form-label">Max Children</label>
+                <input type="number" class="form-control create-room-input" id="maxChildren" name="maxChildren" min="0" value="2" required>
+            </div>
+        </div>
+
+        <div class="mb-3">
+            <label for="roomProperties" class="form-label">Room Properties</label>
+            <select class="form-select create-room-select2 select2" id="roomProperties" name="PropertyIds" multiple="multiple" required>
+                @foreach (var property in ViewBag.roomProperties)
+                {
+                    <option value="@property.Id">@Html.Raw(property.Name)</option>
+                }
+            </select>
+        </div>
+
+
+        <div id="propertyDetailsContainer" class="mb-3" style="display: none;">
+            <h4>Property Details</h4>
+            <div id="propertyDetails"></div>
+        </div>
+
+        <div class="mb-3">
+            <label for="amenitiesThemes" class="form-label">Amenities Themes</label>
+            <input type="checkbox" id="selectAllAmenitiesThemes">
+            Select All AmenitiesThemes
+            <select class="form-select create-room-select2 select2" id="amenitiesThemes" name="selectedAmenitiesThemes" multiple="multiple">
+                @foreach (var theme in ViewBag.AmenitiesThemes)
+                {
+                    <option value="@theme.Value">@theme.Text</option>
+                }
+            </select>
+        </div>
+
+        <div class="mb-3" id="amenitiesContainer" style="display: none;">
+            <label for="amenities" class="form-label">Amenities</label>
+            <input type="checkbox" id="selectAllAmenities">
+            Select All Amenities
+            <select class="form-select create-room-select2 select2" id="amenities" name="selectedAmenities" multiple="multiple">
+                <!-- Options will be populated dynamically -->
+            </select>
+        </div>
+
+
+        <div class="form-check mb-3">
+            <input type="checkbox"  id="status" name="Status" value="true">
+            <label class="form-check-label create-room-checkbox-label" for="status">Đưa vào hoạt động</label>
+        </div>
+
+        <button type="submit" class="btn btn-primary w-100 btn-create-room">Create Room</button>
+    </form>
 </div>
+@section Scripts {
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/select2/4.0.13/js/select2.min.js"></script>
+    <script>
+        $(document).ready(function () {
+            $('#roomProperties').select2({
+                placeholder: "Select Room Properties",
+                width: '100%' // Adjust width as needed
+            });
+
+            $('#amenitiesThemes').select2({
+                placeholder: "Select Amenities",
+                width: '100%' // Adjust width as needed
+            });
+            $('#amenities').select2({
+                placeholder: "Select Amenities Themes",
+                allowClear: true
+            });
+            $('#amenitiesThemes').change(function () {
+                var selectedThemeIds = $(this).val(); // Get selected theme IDs
+
+                // Check if any theme is selected
+                if (selectedThemeIds.length > 0) {
+                    $('#amenitiesContainer').show();
+                } else {
+                    $('#amenitiesContainer').hide();
+                    $('#amenities').empty();
+                    $('#amenities').select2("destroy").empty(); // Destroy Select2 for amenities
+                    return;
+                }
+
+                // Gọi Ajax để lấy danh sách amenities dựa trên themeIds
+                $.ajax({
+                    url: '/admin/room/GetAmenitiesByThemes',
+                    type: 'GET',
+                    data: { themeIds: selectedThemeIds.join(',') }, // Chuyển thành chuỗi
+                    success: function (response) {
+                        console.log("Received amenities: ", response);
+                        $('#amenities').empty();
+
+                        // show danh sách Amenities có themeId trùng ra
+                        $.each(response, function (index, amenity) {
+                            $('#amenities').append(
+                                $('<option>', {
+                                    value: amenity.id,
+                                    text: amenity.name
+                                }),
+                            );
+                        });
+                        // khởi tạo lại select2
+                        $('#amenities').select2({
+                            placeholder: 'Select amenities',
+                            allowClear: true
+                        });
+                    },
+                    error: function (error) {
+                        console.error("Error fetching amenities:", error);
+                    }
+                });
+            });
+
+        });
+    </script>
+}

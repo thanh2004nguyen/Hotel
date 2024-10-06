@@ -16,81 +16,71 @@ namespace Hotel.Controllers
 
 		public async Task<IActionResult> Index()
         {
-            var properties = await _context.RoomProperties.ToListAsync();
+            var properties = await _context.RoomProperties.Include(i=>i.IconClass).ToListAsync();
 
             return View(properties);
         }
-        public IActionResult Create()
+        public async Task<IActionResult> Create()
         {
+            var icons = await _context.IconClasses.ToListAsync();
+            ViewBag.IconList = icons;
             return View();
         }
         [HttpPost]
-        public async Task<IActionResult> Create(RoomProperty pro)
+        public async Task<IActionResult> Create(RoomProperty pro, int? selectedIconId)
         {
             if (ModelState.IsValid)
             {
+                pro.IconClassId = selectedIconId;
                 _context.Entry(pro).State = EntityState.Added;
                 await _context.SaveChangesAsync();
-
-                var rooms = await _context.Rooms.ToListAsync();
-                foreach (var r in rooms)
-                {
-                    var prodetail = new RoomPropertyDetail
-                    {
-                        Detail = "NO DATA",
-                        RoomPropertyId = pro.Id,
-                        RoomId = r.Id
-
-                    };
-
-                    _context.Entry(prodetail).State = EntityState.Added;
-                    await _context.SaveChangesAsync();
-
-                }
                 return RedirectToAction("Index");
             }
             return View(pro);
         }
 
-        public async Task<IActionResult> Delete(int id)
-        {
-            var pro = await _context.RoomProperties.FindAsync(id);
-
-            _context.Entry(pro).State = EntityState.Deleted;
-                await _context.SaveChangesAsync();
-                return RedirectToAction("Index");
-
-        }
-
         public async Task<IActionResult> Edit(int id)
         {
-            var type = await _context.RoomProperties.SingleOrDefaultAsync(a => a.Id == id);
-            return View(type);
+            var property = await _context.RoomProperties.SingleOrDefaultAsync(a => a.Id == id);
+            if (property == null)
+            {
+                return NotFound();
+            }
+
+            var icons = await _context.IconClasses.ToListAsync();
+            ViewBag.IconList = icons;
+            return View(property);
         }
 
         [HttpPost]
-        public async Task<IActionResult> Edit(RoomProperty Rtype)
+        public async Task<IActionResult> Edit(RoomProperty property, int? selectedIconId)
         {
-            if(ModelState.IsValid) 
+            if (ModelState.IsValid)
             {
-                _context.Entry(Rtype).State = EntityState.Modified;
+                property.IconClassId = selectedIconId;
+                _context.Entry(property).State = EntityState.Modified;
                 await _context.SaveChangesAsync();
-                return Redirect("Index");
-
+                return RedirectToAction("Index");
             }
 
-            else
-            {
-                var U = await _context.RoomProperties.AsNoTracking().SingleOrDefaultAsync(a => a.Id == Rtype.Id);
-                if (Rtype.Name == U.Name)
-                {
-                    return Redirect("Index");
-
-                }
-                return View(Rtype);
-            }
+            var icons = await _context.IconClasses.ToListAsync();
+            ViewBag.IconList = icons;
+            return View(property);
         }
 
+        public async Task<IActionResult> Delete(int id)
+        {
+            var property = await _context.RoomProperties.FindAsync(id);
+
+            if (property == null)
+            {
+                return NotFound();
+            }
+
+            _context.Entry(property).State = EntityState.Deleted;
+            await _context.SaveChangesAsync();
+            return RedirectToAction("Index");
+        }
 
     }
 }

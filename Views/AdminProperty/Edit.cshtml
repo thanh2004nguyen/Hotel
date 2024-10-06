@@ -1,24 +1,42 @@
 ﻿@model Hotel.Models.RoomProperty
 @{
+    Layout = "~/Views/Shared/LayoutAdmin.cshtml";
     ViewData["Title"] = "Edit RoomProperty";
 }
 <body>
     <div class="container" style="min-height:100vh;background-color:white;padding:2rem">
         <div style="display:flex;justify-content:space-between;align-items:center">
-        <h1 class="mb-3">Sửa Mô Tả Phòng</h1>
-    <div>
-        <a asp-action="Index" class="btn btn-secondary" role="button">Trở lại danh sách</a>
-    </div>
+            <h1 class="mb-3">Sửa Mô Tả Phòng</h1>
+            <div>
+                <a asp-action="Index" class="btn btn-secondary" role="button">Trở lại danh sách</a>
+            </div>
         </div>
         <div class="col-md-5">
-            <form asp-action="Edit">
+            <form asp-action="Edit" method="post">
                 <div asp-validation-summary="ModelOnly" class="text-danger"></div>
                 <input hidden asp-for="Id" value="@Model.Id" />
+
                 <div class="form-group">
                     <label asp-for="Name" class="control-label">Tên</label>
                     <input asp-for="Name" class="form-control" />
                     <span asp-validation-for="Name" class="text-danger"></span>
                 </div>
+
+                <div class="form-group">
+                    <label>Chọn Icon</label>
+                    <select name="selectedIconId" class="js-example-placeholder-single form-control" style="width: 100%;">
+                        <option value="">--Chọn Icon--</option>
+                        @foreach (var icon in ViewBag.IconList as List<IconClass>)
+                        {
+                            var selected = Model.IconClassId == icon.Id ? "selected" : "";
+                            <option value="@icon.Id" data-icon="@icon.Id" selected>@icon.Icon</option>
+                        }
+                    </select>
+                </div>
+
+
+
+
                 <div class="form-group">
                     <input type="submit" value="Xong" class="btn btn-primary" />
                 </div>
@@ -27,11 +45,19 @@
     </div>
 
     @section Scripts {
+        <script src="https://cdnjs.cloudflare.com/ajax/libs/jquery/3.6.0/jquery.min.js"></script>
+        <script src="https://cdnjs.cloudflare.com/ajax/libs/select2/4.0.13/js/select2.min.js"></script>
+        <link href="https://cdnjs.cloudflare.com/ajax/libs/select2/4.0.13/css/select2.min.css" rel="stylesheet" />
+
+        <script>
+            $(".js-example-placeholder-single").select2({
+                placeholder: "Chọn Icon",
+                allowClear: true
+            });
+        </script>
+
         @{
             await Html.RenderPartialAsync("_ValidationScriptsPartial");
         }
     }
 </body>
-
-
-

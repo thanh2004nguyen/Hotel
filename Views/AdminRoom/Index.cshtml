@@ -1,78 +1,150 @@
 ﻿@model IEnumerable<Room>
 @{
+    Layout = "~/Views/Shared/LayoutAdmin.cshtml";
     ViewData["Title"] = "Index";
-}
+}<div class="app-container">
+    <div class="app-content">
+        <div class="app-content-header">
+            <h1 class="app-content-headerText">Rooms</h1>
+            <button class="mode-switch" title="Switch Theme">
+                <svg class="moon" fill="none" stroke="currentColor" stroke-linecap="round" stroke-linejoin="round" stroke-width="2" width="24" height="24" viewBox="0 0 24 24">
+                    <defs></defs>
+                    <path d="M21 12.79A9 9 0 1111.21 3 7 7 0 0021 12.79z"></path>
+                </svg>
+            </button>
+            <a href="/admin/room/create"><button class="app-content-headerButton">Add Room</button></a>
+        </div>
+        <div class="app-content-actions">
+            <input class="search-bar" id="search-room" placeholder="Search..." type="text">
+            <div class="app-content-actions-wrapper">
+                <div class="filter-button-wrapper">
+                    <button class="action-button filter jsFilter"><span>Filter</span><svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" class="feather feather-filter"><polygon points="22 3 2 3 10 12.46 10 19 14 21 14 12.46 22 3" /></svg></button>
+                    <div class="filter-menu">
+                        <label>Category</label>
+                        <select>
+                            <option>All Categories</option>
+                            <option>Furniture</option>
+                            <option>Decoration</option>
+                            <option>Kitchen</option>
+                            <option>Bathroom</option>
+                        </select>
+                        <label>Status</label>
+                        <select>
+                            <option>All Status</option>
+                            <option>Active</option>
+                            <option>Disabled</option>
+                        </select>
+                        <div class="filter-menu-buttons">
+                            <button class="filter-button reset">
+                                Reset
+                            </button>
+                            <button class="filter-button apply">
+                                Apply
+                            </button>
+                        </div>
+                    </div>
+                </div>
+                <button class="action-button list active" title="List View">
+                    <svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" class="feather feather-list"><line x1="8" y1="6" x2="21" y2="6" /><line x1="8" y1="12" x2="21" y2="12" /><line x1="8" y1="18" x2="21" y2="18" /><line x1="3" y1="6" x2="3.01" y2="6" /><line x1="3" y1="12" x2="3.01" y2="12" /><line x1="3" y1="18" x2="3.01" y2="18" /></svg>
+                </button>
+                <button class="action-button grid" title="Grid View">
+                    <svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" class="feather feather-grid"><rect x="3" y="3" width="7" height="7" /><rect x="14" y="3" width="7" height="7" /><rect x="14" y="14" width="7" height="7" /><rect x="3" y="14" width="7" height="7" /></svg>
+                </button>
+            </div>
+        </div>
+        <div class="products-area-wrapper tableView" id="roomList">
+            <div class="products-header">
 
+                <div class="product-cell image">
+                    Items
+                    <button class="sort-button">
+                        <svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" viewBox="0 0 512 512"><path fill="currentColor" d="M496.1 138.3L375.7 17.9c-7.9-7.9-20.6-7.9-28.5 0L226.9 138.3c-7.9 7.9-7.9 20.6 0 28.5 7.9 7.9 20.6 7.9 28.5 0l85.7-85.7v352.8c0 11.3 9.1 20.4 20.4 20.4 11.3 0 20.4-9.1 20.4-20.4V81.1l85.7 85.7c7.9 7.9 20.6 7.9 28.5 0 7.9-7.8 7.9-20.6 0-28.5zM287.1 347.2c-7.9-7.9-20.6-7.9-28.5 0l-85.7 85.7V80.1c0-11.3-9.1-20.4-20.4-20.4-11.3 0-20.4 9.1-20.4 20.4v352.8l-85.7-85.7c-7.9-7.9-20.6-7.9-28.5 0-7.9 7.9-7.9 20.6 0 28.5l120.4 120.4c7.9 7.9 20.6 7.9 28.5 0l120.4-120.4c7.8-7.9 7.8-20.7-.1-28.5z" /></svg>
+                    </button>
+                </div>
+                <div class="product-cell number">
+                    Number<button class="sort-button">
+                        <svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" viewBox="0 0 512 512"><path fill="currentColor" d="M496.1 138.3L375.7 17.9c-7.9-7.9-20.6-7.9-28.5 0L226.9 138.3c-7.9 7.9-7.9 20.6 0 28.5 7.9 7.9 20.6 7.9 28.5 0l85.7-85.7v352.8c0 11.3 9.1 20.4 20.4 20.4 11.3 0 20.4-9.1 20.4-20.4V81.1l85.7 85.7c7.9 7.9 20.6 7.9 28.5 0 7.9-7.8 7.9-20.6 0-28.5zM287.1 347.2c-7.9-7.9-20.6-7.9-28.5 0l-85.7 85.7V80.1c0-11.3-9.1-20.4-20.4-20.4-11.3 0-20.4 9.1-20.4 20.4v352.8l-85.7-85.7c-7.9-7.9-20.6-7.9-28.5 0-7.9 7.9-7.9 20.6 0 28.5l120.4 120.4c7.9 7.9 20.6 7.9 28.5 0l120.4-120.4c7.8-7.9 7.8-20.7-.1-28.5z" /></svg>
+                    </button>
+                </div>
+                <div class="product-cell category">
+                    Category<button class="sort-button">
+                        <svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" viewBox="0 0 512 512"><path fill="currentColor" d="M496.1 138.3L375.7 17.9c-7.9-7.9-20.6-7.9-28.5 0L226.9 138.3c-7.9 7.9-7.9 20.6 0 28.5 7.9 7.9 20.6 7.9 28.5 0l85.7-85.7v352.8c0 11.3 9.1 20.4 20.4 20.4 11.3 0 20.4-9.1 20.4-20.4V81.1l85.7 85.7c7.9 7.9 20.6 7.9 28.5 0 7.9-7.8 7.9-20.6 0-28.5zM287.1 347.2c-7.9-7.9-20.6-7.9-28.5 0l-85.7 85.7V80.1c0-11.3-9.1-20.4-20.4-20.4-11.3 0-20.4 9.1-20.4 20.4v352.8l-85.7-85.7c-7.9-7.9-20.6-7.9-28.5 0-7.9 7.9-7.9 20.6 0 28.5l120.4 120.4c7.9 7.9 20.6 7.9 28.5 0l120.4-120.4c7.8-7.9 7.8-20.7-.1-28.5z" /></svg>
+                    </button>
+                </div>
+                <div class="product-cell status-cell">
+                    Status<button class="sort-button">
+                        <svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" viewBox="0 0 512 512"><path fill="currentColor" d="M496.1 138.3L375.7 17.9c-7.9-7.9-20.6-7.9-28.5 0L226.9 138.3c-7.9 7.9-7.9 20.6 0 28.5 7.9 7.9 20.6 7.9 28.5 0l85.7-85.7v352.8c0 11.3 9.1 20.4 20.4 20.4 11.3 0 20.4-9.1 20.4-20.4V81.1l85.7 85.7c7.9 7.9 20.6 7.9 28.5 0 7.9-7.8 7.9-20.6 0-28.5zM287.1 347.2c-7.9-7.9-20.6-7.9-28.5 0l-85.7 85.7V80.1c0-11.3-9.1-20.4-20.4-20.4-11.3 0-20.4 9.1-20.4 20.4v352.8l-85.7-85.7c-7.9-7.9-20.6-7.9-28.5 0-7.9 7.9-7.9 20.6 0 28.5l120.4 120.4c7.9 7.9 20.6 7.9 28.5 0l120.4-120.4c7.8-7.9 7.8-20.7-.1-28.5z" /></svg>
+                    </button>
+                </div>
+                <div class="product-cell sales">
+                    Sales<button class="sort-button">
+                        <svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" viewBox="0 0 512 512"><path fill="currentColor" d="M496.1 138.3L375.7 17.9c-7.9-7.9-20.6-7.9-28.5 0L226.9 138.3c-7.9 7.9-7.9 20.6 0 28.5 7.9 7.9 20.6 7.9 28.5 0l85.7-85.7v352.8c0 11.3 9.1 20.4 20.4 20.4 11.3 0 20.4-9.1 20.4-20.4V81.1l85.7 85.7c7.9 7.9 20.6 7.9 28.5 0 7.9-7.8 7.9-20.6 0-28.5zM287.1 347.2c-7.9-7.9-20.6-7.9-28.5 0l-85.7 85.7V80.1c0-11.3-9.1-20.4-20.4-20.4-11.3 0-20.4 9.1-20.4 20.4v352.8l-85.7-85.7c-7.9-7.9-20.6-7.9-28.5 0-7.9 7.9-7.9 20.6 0 28.5l120.4 120.4c7.9 7.9 20.6 7.9 28.5 0l120.4-120.4c7.8-7.9 7.8-20.7-.1-28.5z" /></svg>
+                    </button>
+                </div>
+                <div class="product-cell price">
+                    Price<button class="sort-button">
+                        <svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" viewBox="0 0 512 512"><path fill="currentColor" d="M496.1 138.3L375.7 17.9c-7.9-7.9-20.6-7.9-28.5 0L226.9 138.3c-7.9 7.9-7.9 20.6 0 28.5 7.9 7.9 20.6 7.9 28.5 0l85.7-85.7v352.8c0 11.3 9.1 20.4 20.4 20.4 11.3 0 20.4-9.1 20.4-20.4V81.1l85.7 85.7c7.9 7.9 20.6 7.9 28.5 0 7.9-7.8 7.9-20.6 0-28.5zM287.1 347.2c-7.9-7.9-20.6-7.9-28.5 0l-85.7 85.7V80.1c0-11.3-9.1-20.4-20.4-20.4-11.3 0-20.4 9.1-20.4 20.4v352.8l-85.7-85.7c-7.9-7.9-20.6-7.9-28.5 0-7.9 7.9-7.9 20.6 0 28.5l120.4 120.4c7.9 7.9 20.6 7.9 28.5 0l120.4-120.4c7.8-7.9 7.8-20.7-.1-28.5z" /></svg>
+                    </button>
+                </div>
+                <div class="product-cell active">
+                    Active<button class="sort-button">
+                        <svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" viewBox="0 0 512 512"><path fill="currentColor" d="M496.1 138.3L375.7 17.9c-7.9-7.9-20.6-7.9-28.5 0L226.9 138.3c-7.9 7.9-7.9 20.6 0 28.5 7.9 7.9 20.6 7.9 28.5 0l85.7-85.7v352.8c0 11.3 9.1 20.4 20.4 20.4 11.3 0 20.4-9.1 20.4-20.4V81.1l85.7 85.7c7.9 7.9 20.6 7.9 28.5 0 7.9-7.8 7.9-20.6 0-28.5zM287.1 347.2c-7.9-7.9-20.6-7.9-28.5 0l-85.7 85.7V80.1c0-11.3-9.1-20.4-20.4-20.4-11.3 0-20.4 9.1-20.4 20.4v352.8l-85.7-85.7c-7.9-7.9-20.6-7.9-28.5 0-7.9 7.9-7.9 20.6 0 28.5l120.4 120.4c7.9 7.9 20.6 7.9 28.5 0l120.4-120.4c7.8-7.9 7.8-20.7-.1-28.5z" /></svg>
+                    </button>
+                </div>
+            </div>
+            @foreach (var item in Model)
 
-
-<h1 class="mb-3 text-center">Quản lý phòng</h1>
-@if (ViewData.ContainsKey("success"))
-{
-    <p class="alert alert-success" role="alert">@ViewData["success"]</p>
-}
-
-@if (ViewData.ContainsKey("error"))
-{
-    <p class="alert alert-" role="alert">@ViewData["error"]</p>
-}
-<div class="container" style="min-height:100vh;background-color:white;box-shadow: rgba(0, 0, 0, 0.24) 0px 3px 8px; padding:1rem;padding-bottom:1rem">
-
-    <a asp-action="Create" asp-controller="AdminRoom" class="btn btn-warning mb-3" role="button" >Tạo Phòng Mới</a>
-
-<table id="room_table" class="table table-hover table-striped table-bordered">
-    <thead class="thead-dark">
-        <tr>
-                <th class="text-center"> Id</th>
-                <th class="text-center">Loại Phòng</th>
-                <th class="text-center">Tiện Ích</th>
-                <th class="text-center">Mô Tả Phòng</th>
-                <th class="text-center">Action</th>
-        </tr>
-    </thead>
-    <tbody>
-        @foreach (var item in Model)
-               
             {
-                string show = item.IsFulled == true ? "Còn Phòng" : "Hết Phòng";
-            <tr>
-                <td class="text-center">@Html.DisplayFor(a=>item.Id)</td>
-                    <td class="text-center">
-                     @Html.DisplayFor(a=>item.RoomType!.Type)
-                </td>
-                    <td class="text-center">
-                    @foreach(var u in item.Unities!)
+                <div class="products-row" id="room">
+                    <button class="cell-more-button">
+                        <svg xmlns="http://www.w3.org/2000/svg" width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" class="feather feather-more-vertical"><circle cx="12" cy="12" r="1" /><circle cx="12" cy="5" r="1" /><circle cx="12" cy="19" r="1" /></svg>
+                    </button>
+                    <div class="product-cell image">
+                        <img src="@(item.Images != null && item.Images.Any() ? Url.Content("~/images/" + item.Images.First().Url) : "footer-logo.png")"
+                             alt="Room Image">
+                        <span class="roomName">@Html.DisplayFor(a => item.RoomName)</span>
+                    </div>
+                    <div class="product-cell stock"><span class="cell-label">Room:</span>@Html.DisplayFor(a => item.RoomNumber)</div>
+                    <div class="product-cell category"><span class="cell-label">Room type:</span>@Html.DisplayFor(a => item.RoomType!.Type)</div>
+                    @if (item.Status)
                     {
-                        @u.Name @Html.Raw("&nbsp;") @Html.Raw("&nbsp;")
-
-                        @Html.Raw("&nbsp;")
+                        <div class="product-cell status-cell">
+                            <span class="cell-label">Status:</span>
+                            <span class="status active">Active</span>
+                        </div>
                     }
+                    else
+                    {
+                        <div class="product-cell status-cell">
+                            <span class="cell-label">Status:</span>
+                            <span class="status disabled">Disabled</span>
+                        </div>
+                    }
+                    <div class="product-cell sales"><span class="cell-label">Sales:</span>@Html.DisplayFor(a => item.Discount)</div>
 
-                </td>
-                    <td class="text-center">
-                        <ul>
-                            @foreach (var property in ViewBag.RoomPropertyList.Items)
-                            {
-                                <li style="list-style:none">
-                                    @property.Name :       
-                                    @foreach (var detail in property.Details)
-                                    {
-                                        if (detail.RoomId == item.Id)
-                                        {
-                                            @detail.Detail
-                                        }
-                                       
-                                    }
-                                </li>
-                            }
+                    <div class="product-cell price"><span class="cell-label">Price:</span>@Html.DisplayFor(a => item.Price)VND</div>
+                    <div class="product-cell active">
+                        <span class="cell-label"> Active: </span>
+                        <ul class="list-inline mb-0">
+                            <li class="list-inline-item dropdown">
+                                <a href="javascript:void(0);" data-bs-toggle="tooltip" data-bs-placement="top" title="Detail" class="px-2 text-secondary">
+                                    <i class="bx bx-detail font-size-18"></i>
+                                </a>
+                            </li>
+                            <li class="list-inline-item">
+                                <a href="javascript:void(0);" data-bs-toggle="tooltip" data-bs-placement="top" title="Edit" class="px-2 text-primary">
+                                    <i class="bx bx-pencil font-size-18"></i>
+                                </a>
+                            </li>
+                            <li class="list-inline-item room-item-@item.Id">
+                                <a href="javascript:void(0);" class="px-2 text-danger delete-room" data-room-id="@item.Id">
+                                    <i class="bx bx-trash-alt font-size-18" data-bs-toggle="tooltip" title="Delete"></i>
+                                </a>
+                            </li>
                         </ul>
-                </td>     
-                    <td class="text-center">
-                    <a class="btn btn-info" role="button"  asp-action="Edit" asp-route-id="@item.Id" >Sửa</a> |
-                    <a class="btn btn-danger" role="button" asp-action="SetRoomStament" asp-route-id="@item.Id">@show</a>
-                </td>
-            </tr>
-        }
-    </tbody>
-</table>
+                    </div>
+                </div>
+            }
+        </div>
+    </div>
 </div>
-

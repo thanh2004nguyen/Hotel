@@ -7,5 +7,9 @@ namespace Hotel.Models
     {
         [Required(ErrorMessage = "Nội dung không được để trống")]
         public string? Content { get; set; }
+
+        // Khóa ngoại đến IconClass
+        public int? IconClassId { get; set; }
+        public virtual IconClass? IconClass { get; set; }
     }
 }

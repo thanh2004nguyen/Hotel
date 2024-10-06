@@ -10,12 +10,15 @@ namespace Hotel.Dtos
         [Required(ErrorMessage = "Mật khẩu không được để trống")]
         [RegularExpression(@"^(?=.*\d)(?=.*[A-Z])(?=.*\W).+$", ErrorMessage = "Mật khẩu phải có ít nhât 1 số, 1 kí tự hoa và 1 kí tự đặc biệt")]
         public string? Pass { get; set; }
-        [Required(ErrorMessage = "ui lòng chọn role để trống")]
+        [Required(ErrorMessage = "vui lòng chọn role để trống")]
         public string? Role { get; set; }
         [RegularExpression(@"^(?=.*\d)(?=.*[A-Z])(?=.*\W).+$", ErrorMessage = "Mật khẩu phải có ít nhât 1 số, 1 kí tự hoa và 1 kí tự đặc biệt")]
         [Compare("Pass", ErrorMessage = "xác nhận mật khẩu không đúng")]
         [Required(ErrorMessage = "xác nhận mật khẩu không được để trống")]
         public string? ConfirmPassword {  get; set; }
+        [Required(ErrorMessage = "Email không được để trống")]
+        [RegularExpression(@"^[^@\s]+@[^@\s]+\.[^@\s]+$", ErrorMessage = "Địa chỉ email không hợp lệ")]
+        public string? Email { get; set; }
 
     }
 }

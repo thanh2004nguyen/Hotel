@@ -71,7 +71,7 @@ namespace Hotel.Controllers
 					.FirstOrDefaultAsync();
 					var claims = new List<Claim>()
                     {
-                        new Claim(ClaimTypes.NameIdentifier,check.Username),
+                         new Claim(ClaimTypes.NameIdentifier,check.Username),
                          new Claim("id", check.Id.ToString()),
                          new Claim(ClaimTypes.Role,check.Role)
                     };
@@ -92,7 +92,15 @@ namespace Hotel.Controllers
                     HttpContext.Session.SetInt32("UserId", check.Id);
                     HttpContext.Session.SetString("UserName", check.Username);
                     HttpContext.Session.SetString("UserRole", check.Role);
-                    return RedirectToAction("Index", "Home");
+                    // Redirect based on user role
+                    if (check.Role == "user")
+                    {
+                        return RedirectToAction("Index", "Home");
+                    }
+                    else if (check.Role == "admin" || check.Role == "employeeChat")
+                    {
+                        return RedirectToAction("Index", "AdminDashboard");
+                    }
                 }
 
             }
@@ -136,13 +144,15 @@ namespace Hotel.Controllers
                 {
                     Username = info.Name,
                     Password = BCrypt.Net.BCrypt.HashPassword(info.Pass),
-                    Role = info.Role
+                    Role = info.Role,
+                    Email = info.Email,
                 };
 
                 await _context.AddAsync(data);
                 await _context.SaveChangesAsync();
-                TempData["success"] = "Đăng ký thành công. vui lòng đăng nhập để sử dụng";
-                return RedirectToAction("Login");
+                TempData["success"] = "Đăng ký tài khoản thành công";
+                var userRoleClaim = User.FindFirst(ClaimTypes.Role)?.Value;
+                return userRoleClaim == "admin" ? RedirectToAction("Index", "AdminDashboard") : RedirectToAction("Login");
             }
             return View("Register");
         }

@@ -5,23 +5,23 @@
     Author URI: https://colorlib.com
     Version: 1.0
     Created: Colorlib
----------------------------------------------------------  */
+---------------------------------------------------------  *//*
 
 'use strict';
 
 (function ($) {
 
-    /*------------------
+    *//*------------------
         Preloader
-    --------------------*/
+    --------------------*//*
     $(window).on('load', function () {
         $(".loader").fadeOut();
         $("#preloder").delay(200).fadeOut("slow");
     });
 
-    /*------------------
+    *//*------------------
         Background Set
-    --------------------*/
+    --------------------*//*
     $('.set-bg').each(function () {
         var bg = $(this).data('setbg');
         $(this).css('background-image', 'url(' + bg + ')');
@@ -49,17 +49,17 @@
         });
     });
 
-    /*------------------
+    *//*------------------
 		Navigation
-	--------------------*/
+	--------------------*//*
     $(".mobile-menu").slicknav({
         prependTo: '#mobile-menu-wrap',
         allowParentLinks: true
     });
 
-    /*------------------
+    *//*------------------
         Hero Slider
-    --------------------*/
+    --------------------*//*
    $(".hero-slider").owlCarousel({
         loop: true,
         margin: 0,
@@ -73,9 +73,9 @@
         mouseDrag: false
     });
 
-    /*------------------------
+    *//*------------------------
 		Testimonial Slider
-    ----------------------- */
+    ----------------------- *//*
     $(".testimonial-slider").owlCarousel({
         items: 1,
         dots: false,
@@ -86,24 +86,24 @@
         navText: ["<i class='arrow_left'></i>", "<i class='arrow_right'></i>"]
     });
 
-    /*------------------
+    *//*------------------
         Magnific Popup
-    --------------------*/
+    --------------------*//*
     $('.video-popup').magnificPopup({
         type: 'iframe'
     });
 
-    /*------------------
+    *//*------------------
 		Date Picker
-	--------------------*/
+	--------------------*//*
     $(".date-input").datepicker({
         minDate: 0,
         dateFormat: 'dd MM, yy'
     });
 
-    /*------------------
+    *//*------------------
 		Nice Select
-	--------------------*/
+	--------------------*//*
     $("select").niceSelect();
 
-})(jQuery);
+})(jQuery);*/

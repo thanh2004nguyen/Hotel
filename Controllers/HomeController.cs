@@ -6,14 +6,13 @@ using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.AspNetCore.Mvc.Rendering;
 using Microsoft.EntityFrameworkCore;
+using Microsoft.EntityFrameworkCore.Metadata.Internal;
 using Microsoft.EntityFrameworkCore.Migrations;
 using System.Diagnostics;
 
 namespace Hotel.Controllers
 {
     [AllowAnonymous]
-   
-	
 	public class HomeController : MyBaseController
     {
 		public HomeController(HotelDbContext context) : base(context)
@@ -27,32 +26,33 @@ namespace Hotel.Controllers
                 .Take(5)
                 .OrderByDescending(x => x.CreatedDate)
                 .ToListAsync();
-
             var rooms = await _context.Rooms
-                .Include(r => r.Unities)
+                .Include(r => r.RoomAmenities)
+                    .ThenInclude(a=>a.Amenities)
+                        .ThenInclude(b=>b.AmenitiesTheme)
+                            .ThenInclude(at=>at.IconClass)
+                .Include(r => r.roomProperties)
                 .Include(r => r.RoomType)
                 .Include(r => r.Images)
-                .Include(r => r.Details).OrderBy(d=>d.UpdatedDate)
                 .ToListAsync();
 
+            // Lấy các RoomProperty có RoomId trùng với phòng
+            foreach (var room in rooms)
+            {
+                room.roomProperties = await _context.RoomProperties
+                    .Where(rp => rp.Id == room.Id) 
+                    .Include(rp => rp.IconClass) 
+                    .ToListAsync();
+            }
+            var iconClasses = await _context.IconClasses.ToListAsync();
             var hotel= await _context.hotelDatas
                 .ToListAsync();
-
-            foreach (var data in rooms)
-            {
-                foreach (var detail in data.Details)
-                {
-                    var s = await _context.RoomProperties.FindAsync(detail.RoomPropertyId);
-                    detail.Name = s!.Name;
-                }
-            }
-
-
             return View(new HomeDto()
             {
                 Banners = banner,
                 Rooms = rooms,
-                hotelDatas= hotel,
+                IconClasses = iconClasses,
+                hotelDatas = hotel,
                 comments=comment
             });
 

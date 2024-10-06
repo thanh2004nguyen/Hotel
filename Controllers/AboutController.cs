@@ -23,13 +23,12 @@ namespace Hotel.Controllers
 
             return View(data);
         }
-        [Route("price")]
+        /*[Route("price")]
         public  async Task<IActionResult> Price()
         {
             var data = await _context.Rooms
                 .Include(r => r.RoomType)
                 .Include(r => r.roomProperties)
-                .Include(r=>r.Details)
                 .ToListAsync();
 
             foreach(var i in data)
@@ -44,7 +43,7 @@ namespace Hotel.Controllers
 
             return View("Price",data);
         }
-
+*/
 		
 	}
 }

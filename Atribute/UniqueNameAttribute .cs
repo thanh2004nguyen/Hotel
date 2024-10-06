@@ -14,7 +14,7 @@ public class UniqueNameAttribute : ValidationAttribute
     {
         var dbContext = (HotelDbContext)validationContext.GetService(typeof(HotelDbContext));
 
-        var existingEntity = dbContext.Set<RoomUnity>()
+        var existingEntity = dbContext.Set<Amenities>()
             .FirstOrDefault(r => r.Name!.ToLower() == (string)value);
 
 

@@ -1,0 +1,64 @@
+﻿@model Amenities
+
+@{
+    Layout = "~/Views/Shared/LayoutAdmin.cshtml";
+    ViewData["Title"] = "Create Amenities";
+}
+
+@if (!string.IsNullOrEmpty(ViewData["Err"] as string))
+{
+    <div class="alert alert-danger">@ViewData["Err"]</div>
+}
+
+<div class="container" style="min-height:40vh;background-color:white;">
+    <div style="display:flex;justify-content:space-between;align-items:center;">
+        <h1 class="mb-3">Tạo Tiện Ích Mới</h1>
+        <div>
+            <a asp-action="Index" role="button" class="btn btn-secondary">Trở lại danh sách</a>
+        </div>
+    </div>
+    <div class="col-md-5">
+        <form asp-action="Create" method="post">
+            <div asp-validation-summary="ModelOnly" class="text-danger"></div>
+            
+            <!-- Select for Icon -->
+            <div class="form-group d-flex align-items-center">
+                <label style="min-width: 100px; margin-right: 10px;">Chọn Icon</label>
+                <select name="IconClassId" class="js-example-placeholder-single form-control" style="width: 300px;">
+                    <option value="">--Chọn Icon--</option>
+                    @foreach (var icon in ViewBag.IconList as List<IconClass>)
+                    {
+                        <option value="@icon.Id" data-icon="@icon.Id">@icon.Icon</option>
+                    }
+                </select>
+            </div>
+
+            <!-- Select for Amenities Theme -->
+            <div class="form-group d-flex align-items-center mt-3">
+                <label style="min-width: 100px; margin-right: 10px;">Chọn Chủ Đề</label>
+                <select name="AmenitiesThemeId" class="js-example-placeholder-single form-control" style="width: 300px;">
+                    <option value="">--Chọn Chủ Đề--</option>
+                    @foreach (var theme in ViewBag.ThemeList as List<AmenitiesTheme>)
+                    {
+                        <option value="@theme.Id" data-icon="@theme.Id">@theme.Name</option>
+                    }
+                </select>
+            </div>
+
+            <!-- Input for Name -->
+            <div class="form-group mt-3">
+                <label class="control-label">Tên Tiện Ích</label>
+                <input asp-for="Name" class="form-control" />
+                <span asp-validation-for="Name" class="text-danger"></span>
+            </div>
+
+            <div class="form-group mt-3">
+                <input type="submit" value="Tạo" class="btn btn-primary" />
+            </div>
+        </form>
+    </div>
+</div>
+
+                       
+
+

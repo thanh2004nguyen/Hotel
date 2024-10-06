@@ -12,31 +12,55 @@ namespace YourNamespace.Hubs
     {
         private readonly HotelDbContext _context;
         private static readonly ConcurrentDictionary<int, HashSet<string>> userConnections = new ConcurrentDictionary<int, HashSet<string>>();
+        
         public ChatHub(HotelDbContext context)
         {
             _context = context;
         }
-        public override Task OnConnectedAsync()
+        public override async Task OnConnectedAsync()
         {
             var senderIdClaim = Context.User?.FindFirst("id");
             if (senderIdClaim != null && int.TryParse(senderIdClaim.Value, out var senderId))
             {
+                // Use a temporary variable to hold the connection information
                 var connections = userConnections.GetOrAdd(senderId, _ => new HashSet<string>());
                 lock (connections)
                 {
                     connections.Add(Context.ConnectionId);
                 }
+
                 Console.WriteLine($"User {senderId} connected with connectionId {Context.ConnectionId}");
+
+                // Update user's online status in the database
+                await SetUserOnlineStatus(senderId, true);
             }
             else
             {
                 Console.WriteLine("SenderId not found or invalid on connection.");
             }
 
-            return base.OnConnectedAsync();
+            await base.OnConnectedAsync();
         }
 
-        public override Task OnDisconnectedAsync(Exception? exception)
+        private async Task SetUserOnlineStatus(int userId, bool isOnline)
+        {
+            var user = await _context.Users.FindAsync(userId); 
+            if (user != null)
+            {
+                user.IsOnline = isOnline; 
+                await _context.SaveChangesAsync();
+                Console.WriteLine($"User {userId} online status set to {isOnline}.");
+
+                await Clients.All.SendAsync("UserStatusChanged", userId, isOnline);
+            }
+            else
+            {
+                Console.WriteLine($"User with ID {userId} not found.");
+            }
+        }
+
+
+        public override async Task OnDisconnectedAsync(Exception exception)
         {
             var senderIdClaim = Context.User?.FindFirst("id");
             if (senderIdClaim != null && int.TryParse(senderIdClaim.Value, out var senderId))
@@ -46,20 +70,21 @@ namespace YourNamespace.Hubs
                     lock (connections)
                     {
                         connections.Remove(Context.ConnectionId);
-                        if (connections.Count == 0)
+                        if (!connections.Any()) 
                         {
-                            userConnections.TryRemove(senderId, out _);
+                            userConnections.TryRemove(senderId, out _); 
                         }
                     }
-                    Console.WriteLine($"User {senderId} disconnected from connectionId {Context.ConnectionId}");
+                    await SetUserOnlineStatus(senderId, false);
                 }
+                Console.WriteLine($"User {senderId} disconnected.");
             }
             else
             {
                 Console.WriteLine("SenderId not found or invalid on disconnection.");
             }
 
-            return base.OnDisconnectedAsync(exception);
+            await base.OnDisconnectedAsync(exception);
         }
         public async Task SendMessage(int receiverId, string content)
         {
@@ -93,7 +118,7 @@ namespace YourNamespace.Hubs
             {
                 await _context.SaveChangesAsync();
                 Console.WriteLine("Message saved to database.");
-            }   
+            }
             catch (Exception ex)
             {
                 Console.WriteLine($"Error saving message to database: {ex.Message}");
@@ -121,7 +146,7 @@ namespace YourNamespace.Hubs
             }
 
         }
-
+       
 
     }
 }

@@ -1,0 +1,35 @@
+﻿@model Hotel.Dtos.IconCreateDTO
+@{
+    Layout = "~/Views/Shared/LayoutAdmin.cshtml";
+    ViewData["Title"] = "Create";
+}
+<style>
+    .custom-link {color: inherit;font-weight: bold;}
+    .btn-link {font-size: 12px;}
+    .library {font-size: 12px; padding-top: 6px;}
+</style>
+
+<div class="container">
+    <h2>Thêm Biểu Tượng Mới</h2>
+    <div>
+        @if (TempData["ErrorMessage"] != null)
+        {
+            <div class="alert alert-danger">
+                @TempData["ErrorMessage"]
+            </div>
+        }
+    </div>
+    <form asp-action="Create" method="post">
+        <div class="mb-3"> 
+                
+            <label for="icon" class="form-label">Nhập Thẻ Icon (ví dụ: <code>&lt;i class="mdi mdi-account"&gt;&lt;/i&gt;</code>)</label><br />
+            <label for="icon" class="form-label">Thư viện icon (ví dụ: <code>
+                    <a href="https://fontawesome.com/icons" target="_blank" class="text-decoration-none custom-link">Fontawesome</a> or
+                    <a href="https://materialdesignicons.com/" target="_blank" class="text-decoration-none custom-link">Material</a> </code>)
+            </label>
+            
+            <textarea class="form-control" id="icon" name="Icon" rows="3" required>@Model.Icon</textarea>
+        </div>
+        <button type="submit" class="btn btn-primary">Thêm Biểu Tượng</button>
+    </form>
+</div>

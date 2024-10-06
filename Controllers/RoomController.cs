@@ -24,9 +24,7 @@ namespace Hotel.Controllers
                 .ToListAsync();
 
 
-            var RoomPro = await _context.RoomProperties
-                 .Include(a => a.Details)
-                 .ToListAsync();
+            var RoomPro = await _context.RoomProperties.ToListAsync();
 
             return View(new RoomViewDto()
             {

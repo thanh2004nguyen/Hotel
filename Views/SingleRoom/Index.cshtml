@@ -1,10 +1,10 @@
-﻿@using Hotel.Models.Shared;
+﻿@* @using Hotel.Models.Shared;
+@using System.Security.Claims;
 @model Hotel.Dtos.RoomDto
 @{
-    var disable = Model.Room.IsFulled ? "disabled" : "";
-    var disableColor = Model.Room.IsFulled ? "btn-secondary" : "btn-primary";
+    var userClaims = User.Identity as ClaimsIdentity;
 
-    var userId = Context.Session.GetInt32("UserId");
+    var userId = userClaims?.FindFirst("id")?.Value;
 }
 <style>
     /* Hide the radio buttons */
@@ -49,9 +49,6 @@
     .radio-option input[type="radio"]:checked + label {
         color: blue; /* Change the label text color to blue when selected */
     }
-
-
-
 </style>
 
 
@@ -92,82 +89,71 @@
 
                                 <div class="sidebar-box ftco-animate" style="border:0.1rem solid #ccc;box-shadow: rgba(0, 0, 0, 0.16) 0px 1px 4px; ">
                                     <form asp-action="HandleAddOrder" method="post">
-
-                                        @if (Model.Room.IsFulled == false)
-                                        {
+                                        
                                             <input asp-for="@Model.Order.UserId" value="@userId" hidden />
 
                                             <div class="d-flex ">
                                                 <p style="margin-right: 20%">Thời gian đặt phòng</p>
                                             </div>
-                                        <div class="d-flex justify-content-around">
-                                            <div class="radio-option">
+                                            <div class="d-flex justify-content-around">
+                                                <div class="radio-option">
                                                     <input type="radio" asp-for="@Model.Order.Type" value="Theo ngày" id="dayRadio" />
-                                                <label for="dayRadio">
-                                                    <i class="far fa-sun" style="font-size:22px"></i>
-                                                    Theo ngày
-                                                </label>
-                                            </div>
+                                                    <label for="dayRadio">
+                                                        <i class="far fa-sun" style="font-size:22px"></i>
+                                                        Theo ngày
+                                                    </label>
+                                                </div>
 
-                                            <div class="radio-option">
-                                                    <input  type="radio" asp-for="@Model.Order.Type" value="Theo giờ" id="hourRadio" />
-                                                <label for="hourRadio">
+                                                <div class="radio-option">
+                                                    <input type="radio" asp-for="@Model.Order.Type" value="Theo giờ" id="hourRadio" />
+                                                    <label for="hourRadio">
                                                         <i class="far fa-clock" style="font-size:22px"></i>
-                                                    Theo giờ
-                                                </label>
-                                            </div>
+                                                        Theo giờ
+                                                    </label>
+                                                </div>
 
-                                            <div class="radio-option">
-                                                    <input  type="radio" asp-for="@Model.Order.Type" value=" Qua đêm" id="nightRadio" />
-                                                <label for="nightRadio">
+                                                <div class="radio-option">
+                                                    <input type="radio" asp-for="@Model.Order.Type" value="Qua đêm" id="nightRadio" />
+                                                    <label for="nightRadio">
                                                         <i class="far fa-moon" style="font-size:22px"></i>
-                                                    Qua đêm
-                                                </label>
-                                            </div>
-
+                                                        Qua đêm
+                                                    </label>
+                                                </div>
                                             </div>
                                             <input asp-for="@Model.Order.RoomId" hidden value="@Model.Room.Id" />
                                             <input asp-for="@Model.Order.Status" hidden value="Wating" />
                                             <input hidden name="id" value="@Model.Room.Id" />
                                             <div class="form-group">
                                                 <label class="control-label">Tên</label>
-                                                <input  asp-for="@Model.Order.Name" class="form-control" />
+                                                <input asp-for="@Model.Order.Name" class="form-control" />
                                                 <span asp-validation-for="@Model.Order.Name" class="text-danger"></span>
                                             </div>
 
 
                                             <div class="form-group">
                                                 <label class="control-label">Số điện thoại</label>
-                                                <input type="number"  asp-for="@Model.Order.Phone" class="form-control" />
+                                                <input type="number" asp-for="@Model.Order.Phone" class="form-control" />
                                                 <span asp-validation-for="@Model.Order.Phone" class="text-danger"></span>
 
                                             </div>
                                             <div class="form-group">
                                                 <label class="control-label">Ngày Check in</label>
-                                                <input id="dateInput" type="date"  asp-for="@Model.Order.DayCheckIn" class="form-control" />
+                                                <input id="dateInput" type="date" asp-for="@Model.Order.DayCheckIn" class="form-control" />
                                                 <span asp-validation-for="@Model.Order.DayCheckIn" class="text-danger"></span>
-
                                             </div>
                                             <div class="form-group">
                                                 <label class="control-label">Ngày Check out</label>
-                                                <input id="dateOutput" type="date"  asp-for="@Model.Order.DayCheckIn" class="form-control" />
-                                                <span asp-validation-for="@Model.Order.DayCheckIn" class="text-danger"></span>
-
+                                                <input id="dateOutput" type="date" asp-for="@Model.Order.DayCheckOut" class="form-control" />
+                                                <span asp-validation-for="@Model.Order.DayCheckOut" class="text-danger"></span>
                                             </div>
                                             <div class="form-group">
                                                 <label class="control-label">Ghi chú</label>
                                                 <input asp-for="@Model.Order.Message" class="form-control" />
 
                                             </div>
-                                        }
-                                        else
-                                        {
-                                            <div class=" d-fex align-items-center justify-content-center" style=" width:100%; height:40vh">
-                                                <p class="h1 text-danger text-center">Hết Phòng</p>
-                                            </div>
-                                        }
+                                        
                                         <div class="form-group">
-                                            <input type="submit" value="Gửi" class="btn @disableColor" @disable />
+                                            <input type="submit" value="Gửi" class="btn"/>
                                         </div>
 
                                     </form>
@@ -231,7 +217,7 @@
                         </div>
 
                     </div>
-                    
+
                     @if (Model.Comments != null)
                     {
                         <!-- Reviews Section Begin -->
@@ -303,24 +289,24 @@
                         <!-- Reviews Section End -->
                     }
 
-                      <style>
-                            .reviews-section {
-                                padding: 50px 0;
-                                background-color: #f9f9f9;
-                                width: 80vw;
-                                margin:0 auto;
-                            }
+                    <style>
+                        .reviews-section {
+                            padding: 50px 0;
+                            background-color: #f9f9f9;
+                            width: 80vw;
+                            margin: 0 auto;
+                        }
 
-                            .review-item {
-                                margin: 0 auto;
-                                background: #fff;
-                                padding: 20px;
-                                border-radius: 8px;
-                                box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1);
-                                display: flex;
-                                align-items: flex-start;
-                                width:70vw;
-                            }
+                        .review-item {
+                            margin: 0 auto;
+                            background: #fff;
+                            padding: 20px;
+                            border-radius: 8px;
+                            box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1);
+                            display: flex;
+                            align-items: flex-start;
+                            width: 70vw;
+                        }
 
                         .review-image img {
                             width: 100%;
@@ -330,55 +316,55 @@
                         }
 
                         .review-avatar img {
-                                width: 60px;
-                                height: 60px;
-                                border-radius: 50%;
-                                margin-right: 15px;
-                            }
+                            width: 60px;
+                            height: 60px;
+                            border-radius: 50%;
+                            margin-right: 15px;
+                        }
 
-                            .review-content {
-                                flex: 1;
-                            }
+                        .review-content {
+                            flex: 1;
+                        }
 
-                            .review-header {
-                                display: flex;
-                                justify-content: space-between;
-                                align-items: center;
-                                margin-bottom: 10px;
-                            }
+                        .review-header {
+                            display: flex;
+                            justify-content: space-between;
+                            align-items: center;
+                            margin-bottom: 10px;
+                        }
 
-                            .review-stars i {
+                        .review-stars i {
                             color: #555; /* Màu vàng cho sao */
-                                margin-right: 2px;
-                            }
+                            margin-right: 2px;
+                        }
 
-                            .review-author h5 {
-                                margin: 0;
-                                font-size: 16px;
-                                font-weight: bold;
-                            }
+                        .review-author h5 {
+                            margin: 0;
+                            font-size: 16px;
+                            font-weight: bold;
+                        }
 
-                            .review-author span {
-                                display: block;
-                                font-size: 14px;
-                                color: #888;
-                            }
+                        .review-author span {
+                            display: block;
+                            font-size: 14px;
+                            color: #888;
+                        }
 
-                            .review-text {
-                                margin-bottom: 10px;
-                            }
+                        .review-text {
+                            margin-bottom: 10px;
+                        }
 
-                            .review-footer {
-                                display: flex;
-                                justify-content: space-between;
-                                align-items: center;
-                            }
+                        .review-footer {
+                            display: flex;
+                            justify-content: space-between;
+                            align-items: center;
+                        }
 
-                            .review-reply a {
-                                color: #007BFF;
-                                text-decoration: none;
-                                font-size: 14px;
-                            }
+                        .review-reply a {
+                            color: #007BFF;
+                            text-decoration: none;
+                            font-size: 14px;
+                        }
 
                             .review-reply a:hover {
                                 text-decoration: underline;
@@ -394,33 +380,32 @@
                             .review-likes i.liked {
                                 color: #007BFF; /* Màu vàng khi được like */
                             }
-                         </style>
+                    </style>
 
-                    <script src="https://code.jquery.com/jquery-3.6.0.min.js"></script>
-<script>
-    const dateInput = document.getElementById('dateInput');
-    const dateOutput = document.getElementById('dateOutput');
-    const today = new Date();
-    const year = today.getFullYear();
-    const month = String(today.getMonth() + 1).padStart(2, '0'); // Months are 0-indexed.
-    const day = String(today.getDate()).padStart(2, '0');
-    const todayFormatted = `${year}-${month}-${day}`;
-    dateInput.setAttribute('min', todayFormatted);
-    dateOutput.setAttribute('min', todayFormatted);
-  
-    dateInput.addEventListener('change', () => {
-        const checkInDate = new Date(dateInput.value);
-        const checkInYear = checkInDate.getFullYear();
-        const checkInMonth = String(checkInDate.getMonth() + 1).padStart(2, '0');
-        const checkInDay = String(checkInDate.getDate()).padStart(2, '0');
-        const checkInFormatted = `${checkInYear}-${checkInMonth}-${checkInDay}`;
-        dateOutput.setAttribute('min', checkInFormatted);
+                    <script>
+                        const dateInput = document.getElementById('dateInput');
+                        const dateOutput = document.getElementById('dateOutput');
+                        const today = new Date();
+                        const year = today.getFullYear();
+                        const month = String(today.getMonth() + 1).padStart(2, '0'); // Months are 0-indexed.
+                        const day = String(today.getDate()).padStart(2, '0');
+                        const todayFormatted = `${year}-${month}-${day}`;
+                        dateInput.setAttribute('min', todayFormatted);
+                        dateOutput.setAttribute('min', todayFormatted);
 
-        // If dateOutput is earlier than dateInput, reset dateOutput to dateInput value
-        if (new Date(dateOutput.value) < new Date(dateInput.value)) {
-            dateOutput.value = dateInput.value;
-        }
-    });
+                        dateInput.addEventListener('change', () => {
+                            const checkInDate = new Date(dateInput.value);
+                            const checkInYear = checkInDate.getFullYear();
+                            const checkInMonth = String(checkInDate.getMonth() + 1).padStart(2, '0');
+                            const checkInDay = String(checkInDate.getDate()).padStart(2, '0');
+                            const checkInFormatted = `${checkInYear}-${checkInMonth}-${checkInDay}`;
+                            dateOutput.setAttribute('min', checkInFormatted);
+
+                            // If dateOutput is earlier than dateInput, reset dateOutput to dateInput value
+                            if (new Date(dateOutput.value) < new Date(dateInput.value)) {
+                                dateOutput.value = dateInput.value;
+                            }
+                        });
 
                         document.addEventListener('DOMContentLoaded', function () {
                             const commentsContainer = document.getElementById('comments-container');
@@ -451,6 +436,23 @@
                             });
 
                             showComments(commentsShown);
+
+                            const bookedDates = @Html.Raw(Json.Serialize(ViewBag.BookedDates));
+
+                            console.log("Booked Dates:", bookedDates); // Debug log
+
+                            bookedDates.forEach(date => {
+                                const formattedDate = new Date(date).toISOString().split('T')[0]; // Chuyển đổi sang định dạng yyyy-mm-dd
+                                console.log("Checking date:", formattedDate); // Debug log
+
+                                const input = document.querySelector(`input[type="date"][value="${formattedDate}"]`);
+                                if (input) {
+                                    input.style.backgroundColor = 'red'; // Đánh dấu ngày đã đặt bằng màu đỏ
+                                    input.setAttribute('disabled', 'true'); // Không cho phép chọn ngày đã đặt
+                                    console.log(`Date ${formattedDate} is booked and disabled`); // Debug log
+                                }
+                            });
+
 
                         });
 
@@ -483,3 +485,4 @@
                         }
 
                     </script>
+ *@

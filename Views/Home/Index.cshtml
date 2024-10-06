@@ -18,28 +18,47 @@
 
 
    <section class="home-slider owl-carousel banner-bg-home" style="height:fit-content;" >
+       @if(Model.Banners.Count() > 0){
+            @foreach (var b in Model.Banners)
+            {
+                var img = $"~/images/{b.Image}";
+                <div class="slider-item " style="background-image: url('@Url.Content(img)'); background-position:center; background-position:center;background-size:100%;height:81vh">
+                    <div class="overlay"></div>
+                    <div class="container" style="height:100%">
+                        <div class="row no-gutters slider-text align-items-start justify-content-center" style="height:100%">
+                            <div class="col-lg-6" style="height:100%">
+                                <div class="text mb-5 pb-3"style="margin-top:200px;">
+                                    <h1 class="mb-3">@Html.DisplayFor(i=>b.Title)</h1>
+                                    <h2 >@Html.DisplayFor(i=>b.Content)</h2>
+                                </div>
+                            </div>
+                       
+                        </div>
+                    </div>
+                </div>
+            }
 
-        @foreach (var b in Model.Banners)
+        }
+        else
         {
-            var img = $"~/images/{b.Image}";
-            <div class="slider-item " style="background-image: url('@Url.Content(img)'); background-position:center; background-position:center;background-size:100%;height:81vh">
+            <div class="slider-item " style="background-image: url('https://img.pikbest.com/backgrounds/20210920/booking-luxury-hotel-banner-background-eps_6126596.jpg!bw700'); background-position:center; background-position:center;background-size:100%;height:81vh">
                 <div class="overlay"></div>
                 <div class="container" style="height:100%">
                     <div class="row no-gutters slider-text align-items-start justify-content-center" style="height:100%">
                         <div class="col-lg-6" style="height:100%">
-                            <div class="text mb-5 pb-3"style="margin-top:200px;">
-                                <h1 class="mb-3">@Html.DisplayFor(i=>b.Title)</h1>
-                                <h2 >@Html.DisplayFor(i=>b.Content)</h2>
+                            <div class="text mb-5 pb-3" style="margin-top:200px;">
+                                <h1 class="mb-3">Sona Hotel</h1>
+                                <h2>Employee support 24/7</h2>
                             </div>
                         </div>
-                       
+
                     </div>
                 </div>
             </div>
         }
     </section>
     <div class="col-xl-4 col-lg-4 offset-xl-2 offset-lg-1"
-         style="position: absolute; top: 9%; right: 10%; margin-top:165px;">
+         style="position: absolute; top: 9%; right: 10%; margin-top:165px;bottom: 9%;">
         <div class="booking-form">
             <h3>Booking Your Hotel</h3>
             <form action="#">
@@ -131,58 +150,89 @@
                 <div class="row">
                     @foreach (var r in Model.Rooms)
                     {
-                        var rimg = $"~/images/{r.Images.ToArray()[0].Url}";
-                        <div class="col-lg-4 col-md-6 mb-4" >
+                        foreach (var amenity in r.RoomAmenities)
+                        {
+                            Console.WriteLine($"{amenity.Amenities.Name}, Icon: {amenity.Amenities.IconClass}");
+                        }
+                        var rimg = $"~/images/{r.Images?.ToArray()[0].Url}";
+                        <div class="col-lg-4 col-md-6 mb-4">
                             <div class="hp-room-item position-relative"
-                                 style="background-image: url('@Url.Content(rimg)'); height: 450px; width: 100%; background-size: cover; background-position: center;border-radius:8px;">
-                                 
-                                <div class="overlay" ></div>
+                                 style="background-image: url('@Url.Content(rimg)'); height: 450px; width: 100%; background-size: cover; background-position: center; border-radius:8px;">
+
+                                <div class="overlay"></div>
                                 <div class="hr-text position-absolute text-center" style="margin-bottom: -80px;">
-                                    <h3>@r.RoomType.Type</h3>
-                                    <h2>@r.Price.ToString("0")<span>$/Pernight</span></h2>
+                                    <h3>@r.RoomName</h3>
+                                    <h2>@r.Price.ToString("0")<span>vnd/Pernight</span></h2>
                                     <table class="text-white">
                                         <tbody>
                                             <tr>
-                                                <td class="r-o">Size:</td>
-                                                <td>30 ft</td>
+                                                <td class="r-o">Specifications:</td>
+                                                @if (r.roomProperties != null && r.roomProperties.Any())
+                                                {
+                                                    foreach (var property in r.roomProperties)
+                                                    {
+                                                        <td style="max-width: 200px; overflow: hidden; text-overflow: ellipsis; white-space: nowrap; display: block;">@Html.Raw(@property.IconClass?.Icon)  @property.Name</td>
+                                                    }
+                                                }
                                             </tr>
                                             <tr>
                                                 <td class="r-o">Capacity:</td>
-                                                <td>Max person 5</td>
+                                                <td>
+                                                    <i class="fa-solid fa-person"></i>
+                                                    Adults: @r.MaxAdults - Children: @r.MaxChildren
+                                                </td>
                                             </tr>
                                             <tr>
                                                 <td class="r-o">Status:</td>
-                                                @if(r.IsFulled==true){
-                                                    <td style="color:red">Hết phòng</td>
-                                                }else{
-                                                    <td>Còn phòng</td>
-                                                }
+                                                <td><i class="fa-solid fa-check"></i>  @(r.Status ? "Còn phòng" : "Hết phòng")</td>
                                             </tr>
                                             <tr>
                                                 <td class="r-o">Services:</td>
                                                 <td>
-                                                    @if (r.Unities != null && r.Unities.Any())
+                                                    @if (r.RoomAmenities != null && r.RoomAmenities.Any())
                                                     {
-                                                        var services = r.Unities
-                                                        .Take(3)  // Chỉ lấy tối đa 10 tiện ích
-                                                        .Select(u => u.Name)
-                                                        .ToArray();
+                                                        var amenitiesByTheme = r.RoomAmenities.GroupBy(ra => ra.Amenities?.AmenitiesTheme?.Name).Take(1)
+                                                        .Select(g => new
+                                                        {
+                                                            Theme = g.Key,
+                                                            Amenities = g
+                                                        .Select(a => new
+                                                        {
+                                                            a.Amenities.Name,
+                                                            IconClassId = a.Amenities.IconClassId // Chỉ lấy IconClassId
+                                                        }).ToList()
+                                                        }).ToList();
 
-                                                        @string.Join(", ", services)
-                                                        // Ghép các tiện ích với dấu phẩy
+                                                        foreach (var theme in amenitiesByTheme)
+                                                        {
+                                                            foreach (var amenity in theme.Amenities)
+                                                            {
+                                                                var iconClass = Model.IconClasses?.FirstOrDefault(ic => ic.Id == amenity.IconClassId);
+                                                                if (iconClass != null)
+                                                                {
+                                                                    <div style="max-width: 200px; overflow: hidden; text-overflow: ellipsis; white-space: nowrap; display: block;">
+                                                                    <span style="margin-right: 10px">@Html.Raw(@iconClass.Icon)</span> @amenity.Name
+                                                                    <br />
+                                                                    </div>
+                                                                }
+                                                            }
+                                                        }
                                                     }
                                                     else
                                                     {
                                                         <div>No services available</div>
                                                     }
+
+                                                </td>
                                             </tr>
                                         </tbody>
                                     </table>
-                                    <a asp-action="Index" asp-controller="SingleRoom" asp-route-id="@r.Id" style="background-color:white; padding: 10px;border-radius:5px;font-weight:700">More Details</a>
+                                    <a asp-action="Index" asp-controller="SingleRoom" asp-route-id="@r.Id" style="background-color:white; padding: 10px; border-radius:5px; font-weight:700">More Details</a>
                                 </div>
                             </div>
                         </div>
                     }
+
                 </div>
             </div>
         </div>
@@ -299,13 +349,3 @@
 
 </div>
 
-
-
-
-<script type='text/javascript' id='flatsome-js-js-extra'>
-
-    /* <![CDATA[ */
-    var flatsomeVars = { "ajaxurl": "https:\/\/miahotelvungtau.com\/wp-admin\/admin-ajax.php", "rtl": "", "sticky_height": "70", "lightbox": { "close_markup": "<button title=\"%title%\" type=\"button\" class=\"mfp-close\"><svg xmlns=\"http:\/\/www.w3.org\/2000\/svg\" width=\"28\" height=\"28\" viewBox=\"0 0 24 24\" fill=\"none\" stroke=\"currentColor\" stroke-width=\"2\" stroke-linecap=\"round\" stroke-linejoin=\"round\" class=\"feather feather-x\"><line x1=\"18\" y1=\"6\" x2=\"6\" y2=\"18\"><\/line><line x1=\"6\" y1=\"6\" x2=\"18\" y2=\"18\"><\/line><\/svg><\/button>", "close_btn_inside": false }, "user": { "can_edit_pages": false }, "i18n": { "mainMenu": "Main Menu" }, "options": { "cookie_notice_version": "1" } };
-    /* ]]> */
-</script>
-<script type='text/javascript' src='https://miahotelvungtau.com/wp-content/themes/flatsome/assets/js/flatsome.js?ver=3.13.0' id='flatsome-js-js'></script>

@@ -13,7 +13,9 @@
     <meta charset="utf-8" />
     <meta name="viewport" content="width=device-width, initial-scale=1.0" />
     <title>@ViewData["Title"] - Hotel</title>
-   
+    <!--link lịch -->
+    <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/flatpickr/dist/flatpickr.min.css">
+    <link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/4.5.2/css/bootstrap.min.css">
     <!--css link my order-->
     <link href="https://stackpath.bootstrapcdn.com/bootstrap/4.4.1/css/bootstrap.min.css" rel="stylesheet" />
     <link href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/4.7.0/css/font-awesome.min.css" rel="stylesheet" />
@@ -31,21 +33,22 @@
     <link rel="stylesheet" href="~/ForntEnd/css/css-sano/owl.carousel.min.css">
     <link rel="stylesheet" href="~/ForntEnd/css/css-sano/slicknav.min.css">
     <link rel="stylesheet" href="~/ForntEnd/css/css-sano/style.css">
+    <link href="~/Forntend/css/css/my-css/chatbox.css" rel="stylesheet" />
     @* link sano hotel start *@
 
     <!-- flatpickr CSS -->
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/MaterialDesign-Webfont/5.3.45/css/materialdesignicons.css" integrity="sha256-NAxhqDvtY0l4xn+YVa6WjAcmd94NNfttjNsDmNatFVc=" crossorigin="anonymous" />
     <link href="https://unpkg.com/boxicons@2.1.4/css/boxicons.min.css" rel="stylesheet">
     <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.1.3/dist/css/bootstrap.min.css" rel="stylesheet">
-   
+
 
 
     @* link sano hotel end *@
-   
+
     <link href="https://fonts.googleapis.com/css?family=Poppins:200,300,400,500,600,700" rel="stylesheet">
     <link href="https://fonts.googleapis.com/css?family=Playfair+Display:400,400i,700,700i" rel="stylesheet">
     <script src="https://cdn.ckeditor.com/4.22.1/standard/ckeditor.js"></script>
-    
+
     @*My css*@
     <link href="~/forntend/css/css/my-css/chatbox.css" rel="stylesheet" />
 
@@ -72,16 +75,16 @@
 
 
     <link rel="stylesheet" href="~/ForntEnd/css/style.css">
-    <link rel="stylesheet" href="cdn.datatables.net/1.13.6/css/jquery.dataTables.min.css">
+    @* <link rel="stylesheet" href="cdn.datatables.net/1.13.6/css/jquery.dataTables.min.css"> *@
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.2/css/all.min.css" integrity="sha512-z3gLpd7yknf1YoNbCzqRKc4qyor8gaKU1qmn+CShxbuBusANI9QpRohGBreCFkKxLhei6S9CQXFEbbKuqLg0DA==" crossorigin="anonymous" referrerpolicy="no-referrer" />
-    
 
 
-  
+
+
     @* link font end *@
 </head>
 <body>
-      @Html.Partial("Header")
+    @Html.Partial("Header")
     <input type="hidden" value="@userRole" id="userRole" />
     <div style="background-color:#f2f2f2">
         <main role="main" class="" id="check-admin-margin-layout" style="background-color:white">
@@ -117,14 +120,14 @@
 
                 <div id="employee-chat-container">
                     <div id="plist" class="people-list">
-                      <div id="employee-user-list">
+                        <div id="employee-user-list">
                             <h6>List user</h6>
                             <div id="user-list">
                                 <!-- Danh sách người dùng sẽ được thêm vào đây -->
                             </div>
-                        </div> 
+                        </div>
                     </div>
-                    
+
                     <div id="employee-chat-section">
                         <div id="employee-chat-header">
                             <h6 id="employeeChatWith"></h6>
@@ -143,9 +146,12 @@
         }
 
 
-        
+
     </div>
     @Html.Partial("Footer")
+
+    <!--js lịch -->
+    <script src="https://cdn.jsdelivr.net/npm/flatpickr"></script>
 
     <!--css link my order-->
     <script src="https://stackpath.bootstrapcdn.com/bootstrap/4.4.1/js/bootstrap.bundle.min.js"></script>
@@ -163,8 +169,8 @@
 
     @*Chat support js*@
     <script src="~/js/signalr/dist/browser/signalr.js"></script>
-
     <script src="~/ForntEnd/js/chat.js"></script>
+    <script src="~/ForntEnd/js/notification.js"></script>
     <!-- flatpickr JS -->
     <script src="https://code.jquery.com/jquery-1.10.2.min.js"></script>
     <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.2.0/dist/js/bootstrap.bundle.min.js"></script>
@@ -186,11 +192,11 @@
     <script src="~/ForntEnd/js/aos.js"></script>
     <script src="~/ForntEnd/js/jquery.animateNumber.min.js"></script>
     <script src="~/ForntEnd/js/bootstrap-datepicker.js"></script>
-    <script src="~/ForntEnd/js/jquery.timepicker.min.js"></script>
+    @*     <script src="~/ForntEnd/js/jquery.timepicker.min.js"></script> *@
     <script src="~/ForntEnd/js/scrollax.min.js"></script>
     <script src="https://maps.googleapis.com/maps/api/js?key=AIzaSyBVWaKrjvy3MaE7SQ74_uJiULgl1JY0H2s&sensor=false"></script>
     <script src="~/ForntEnd/js/google-map.js"></script>
-    
+    <script src="~/ForntEnd/js/calendar.js"></script>
     <script src="~/ForntEnd/js/main.js"></script>
 
     <script>
@@ -208,7 +214,7 @@
                 dateFormat: "d-m-Y",
                 minDate: "today"
             });
-           
+
         });
     </script>
 
@@ -217,6 +223,11 @@
     <script src="https://cdn.datatables.net/1.13.6/js/jquery.dataTables.js"></script>
 
     @*  FontENd JS *@
+    @if (User.Identity.IsAuthenticated)
+    {
+
+        <script src="~/ForntEnd/js/audio-order/audio-order.js"></script>
+    }
 
     @await RenderSectionAsync("Scripts", required: false)
     <script src="~/ForntEnd/js/modal_delete.js"></script>

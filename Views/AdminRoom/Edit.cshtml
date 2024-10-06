@@ -35,7 +35,7 @@
     <label>Tiện Ích</label>
     @foreach (var unity in @ViewBag.RoomUnitiesList.Items)
     {
-        var isChecked = Model.Unities != null && Model.Unities.Any(u => u.Name == unity.Name);
+            var isChecked = Model.RoomAmenities != null && Model.RoomAmenities.Any(u => u.Amenities.Name == unity.Name);
         <div class="form-check">
             <input type="checkbox" class="form-check-input" name="Unities" value="@unity.Id" @(isChecked ? "checked" : "")>
             <label class="form-check-label">@unity.Name</label>

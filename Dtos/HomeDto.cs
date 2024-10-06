@@ -6,6 +6,7 @@ namespace Hotel.Dtos
     {
         public List<Banner>? Banners {  get; set; }
         public List<Room>? Rooms { get; set; }
+        public List<IconClass>? IconClasses { get; set; } 
         public List<HotelData>? hotelDatas { get; set; }
         public List<Comment>? comments { get; set; }
        

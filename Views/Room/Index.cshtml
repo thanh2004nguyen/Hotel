@@ -1,4 +1,4 @@
-﻿﻿@using Hotel.Models.Shared;
+﻿@* ﻿@using Hotel.Models.Shared;
 @model Hotel.Dtos.RoomViewDto
 
 
@@ -37,17 +37,11 @@
                                     </div>
 
                                     <div class="col-lg-4 text p-3 text-center ">
-                                        @if (r.IsFulled == true)
-                                        {
-                                            <div style="width: 90%; height: 100%; position: absolute; z-index: 100" class="bg bg-white flex-column d-flex justify-content-center align-items-center">
-                                                <h2 class="mb-3"><a asp-controller="SingleRoom" asp-action="Index" asp-route-id="@r.Id" style="font-size: 35px; font-weight: bold">@r.RoomType.Type</a></h2>
-                                                <p class="h1 text-danger">Hết Phòng</p>
-                                            </div>
-                                        }
+                                        
 
                                         <h2 class="mb-3"><a asp-controller="SingleRoom" asp-action="Index" asp-route-id="@r.Id" style="font-size: 35px; font-weight: bold">@r.RoomType.Type</a></h2>
 
-                                        @* Price *@
+                                        
 
                                         @if (Model.ListProperty != null)
                                         {
@@ -99,4 +93,4 @@
 			</div>
 		</div>
 	</div>
-</section>
+</section> *@
