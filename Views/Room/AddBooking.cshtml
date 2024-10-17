@@ -1,0 +1,708 @@
+﻿@using Hotel.Models.Shared;
+
+@model Hotel.Models.Room
+
+@{
+    ViewData["Title"] = "Room Details";
+    var mainImage = Model.Images?.FirstOrDefault();
+    var smallImages = Model.Images?.Skip(1).Take(1).ToList();
+    var roomProperties = Model.RoomWithRoomProperties.Select(rwp => rwp.RoomProperty).FirstOrDefault();
+    var originalPrice = Model.Price; // Giá gốc
+    var discount = Model.Discount; // Tỷ lệ giảm giá
+    var discountedPrice = originalPrice - (originalPrice * discount / 100); // Giá đã giảm
+    var discountAmount = (originalPrice * discount / 100); // Tính giá giảm
+}
+
+<input type="hidden" name="id" value="@Model.Id" id="room_id" />
+<span style="display:none" id="totalpricediscount"></span>
+
+<header>
+    <nav class="steps-container" style="margin-left:20%;">
+        <ul class="steps">
+            <li class="active">
+                <span class="step-number">1</span>
+                <span class="step-title">Thông tin khách hàng</span>
+            </li>
+            <li id="payment">
+                <span class="step-number">2</span>
+                <span class="step-title">Chi tiết thanh toán</span>
+            </li>
+            <li id="success">
+                <span class="step-number">3</span>
+                <span class="step-title">Đã xác nhận đặt phòng!</span>  
+            </li>
+        </ul>
+        <div class="progress-bar" style=" background-color: gray;">
+            <div class="progress" style="width: 33%;"></div> <!-- Update width based on current step -->
+        </div>
+    </nav>
+</header>
+
+<div class="countdown" id="countdown">
+    <span>Chúng tôi đang giữ giá cho quý khách...</span>
+    <div id="timer">00:10:00</div>
+</div>
+<div class="content-booking">
+    <fieldset style="border: none" id="step1">
+        <div class="form-container">
+            <div class="left-section">
+                <div class="info-customer">
+                    <h3 class="whatyourname">Thông tin khách hàng</h3>
+                    <div class="form-group">
+                        <input type="text" id="customerName" class="ip" placeholder="Name">
+                        <label for="name" class="lb">Tên *</label>
+                    </div>
+                    <div class="form-group">
+                        <input type="text" id="customerEmail" class="ip" placeholder="Email">
+                        <label for="name" class="lb">Email *</label>
+                    </div>
+                    <div class="form-group">
+                        <input type="tel" id="customerPhone" class="ip" placeholder="Số điện thoại">
+                        <label for="name" class="lb">Số điện thoại *</label>
+                    </div>
+                </div>
+
+                <!-- select request -->
+                <div class="select-request">
+                    <legend>Yêu cầu đặc biệt</legend>
+                    <p>Chọn lựa chọn của quý khách. Phụ thuộc vào tình trạng thực tế.</p>
+
+                    <!-- Quy định hút thuốc -->
+                    <div class="request-preferences">
+                        <div class="smoking-preferences">
+                            <legend>Quy định hút thuốc (nếu có phòng):</legend>
+                            <div class="smokings">
+                                <label class="custom-radio">
+                                    <input type="radio" name="smoking" value="no_smoking"> <p>Phòng không hút thuốc</p>
+                                </label>
+                                <label class="custom-radio">
+                                    <input type="radio" name="smoking" value="smoking"> <p>Phòng hút thuốc</p>
+                                </label>
+                            </div>
+                        </div>
+
+                        <!-- Chọn loại giường -->
+                        <div class="bed-preferences">
+                            <legend>Quy định hút thuốc (nếu có phòng):</legend>
+                            <div class="beds">
+                                <label class="custom-radio">
+                                    <input type="radio" name="bed" value="king_bed"> <p>Tôi muốn lấy giường lớn</p>
+                                </label>
+                                <label class="custom-radio">
+                                    <input type="radio" name="bed" value="twin_bed"> <p>Tôi muốn lấy phòng 2 giường</p>
+                                </label>
+                            </div>
+                        </div>
+                    </div>
+
+                    <!-- Dropdown để hiển thị yêu cầu đặc biệt -->
+                    <div class="special-request-dropdown">
+                        <button id="toggleSpecialRequest"><a>Thêm yêu cầu đặc biệt</a></button>
+                        <div id="specialRequestContent" style="display: none;">
+                            <p>Vui lòng lưu ý tất cả các yêu cầu chỉ được đáp ứng tùy theo khách sạn.</p>
+                            <div class="special-request-container">
+                                <label>
+                                    <input type="checkbox" name="high_floor"> <p>Tôi muốn lấy phòng tầng cao</p>
+                                </label>
+                                <label>
+                                    <input type="checkbox" name="quiet_room"> <p> Tôi muốn lấy phòng yên tĩnh</p>
+                                </label>
+                                <label>
+                                    <input type="checkbox" name="baby_crib"> <p> Tôi muốn có nôi trẻ em </p>
+                                </label>
+                                <label>
+                                    <input type="checkbox" name="airport_transfer"> <p> Tôi muốn đăng ký đưa đón sân bay</p>
+                                </label>
+                            </div>
+                            <label for="specialRequestMessage">Vui lòng nhập nội dung lời nhắn bằng tiếng Anh hoặc tiếng Ý:</label>
+                            <textarea id="specialRequestMessage" class="specialRequestMessage" rows="4" placeholder="Nhập lời nhắn của bạn..."></textarea>
+                        </div>
+                    </div>
+                </div>
+                <div class="AgreementText" style="color: #333;margin: 16px 20px;font-size: 14px; font-weight: 200; line-height: 18px;">
+                    Thực hiện bước tiếp theo đồng nghĩa với việc quý khách chấp nhận tuân theo quy định của Hotel.
+                </div>
+                <section id="nextStepSection">
+                    <div class="next-step-container">
+                        <button id="nextStepButton" type="button">KẾ TIẾP: BƯỚC CUỐI CÙNG</button>
+                        <p class="confirmation-message">Có liền xác nhận đặt phòng!</p>
+                    </div>
+                </section>
+            </div>
+            <!-- Thêm nội dung cho phần 40% ở đây nếu cần -->
+            <div class="right-section">
+                <!-- info-check-int -->
+                <div class="property-info">
+                    <div class="property-discount">
+                        <p style="color: white;text-align: center;font-size: 16px; font-weight: 400; margin-bottom: -5px">@Model.Discount%</p>
+                        <p style="color: white;text-align: center;font-size: 16px; font-weight: 400;">GIẢM GIÁ</p>
+                    </div>
+
+                    <div class="hotel-info">
+                        <div class="hotel-image" style="width: 84px;">
+                            <img src="~/images/@mainImage.Url" alt="Hotel" style="min-height: 112px;">
+                        </div>
+
+                        <div class="hotel-details">
+                            <button class="wifi-badge">Wi-Fi miễn phí</button>
+                            <h3 class="hotel-name">@Model.RoomName</h3>
+                            <div class="hotel-rating">
+                                @{
+                                    double rating = Model.Rating;
+                                    int fullStars = (int)rating;
+                                    bool halfStar = (rating - fullStars) >= 0.5;
+                                }
+
+                                @for (var i = 0; i < 5; i++)
+                                {
+                                    if (i < fullStars)
+                                    {
+                                        <i class="fa fa-star" style="color: orange;"></i> <!-- Full star -->
+                                    }
+                                    else if (i == fullStars && halfStar)
+                                    {
+                                        <i class="fa fa-star-half-alt" style="color: orange"></i> <!-- Half star -->
+                                    }
+                                    else
+                                    {
+                                        <i class="fa fa-star" style="color: lightgray;"></i> <!-- Empty star -->
+                                    }
+                                }
+                                <span class="ms-1">@rating</span>
+                            </div>
+                            <div class="review-info">
+                                <span>8,6</span>
+                                <span>Tuyệt vời</span>
+                                <p>2993 bài</p>
+                            </div>
+                            <div class="hotel-address">
+                                <span>15 Cavour Street, Termini Central Station, Rome, Lazio, Ý, 00184</span>
+                            </div>
+                        </div>
+                    </div>
+
+
+                    <div class="checkin-info">
+                        <div class="checkin-date" id="checkinDate">
+                            <h3 id="day-checkin">T7, tháng 10 12</h3>
+                            <span><i class="fa-regular fa-calendar-days"></i>-Nhận phòng</span>
+                        </div>
+                        <p>-></p>
+                        <div class="checkout-date" id="checkoutDate">
+                            <h3 id="day-checkout">T7, tháng 10 12</h3>
+                            <span><i class="fa-regular fa-calendar-days"></i>-Trả phòng</span>
+                        </div>
+                        <div class="count-pernight">
+                            <h3 id="totalNights">2</h3>
+                            <span>Đêm</span>
+                        </div>
+                    </div>
+                    <!-- Lịch ẩn ban đầu -->
+                    <div class="row">
+                        <div class="col-lg-6 mb-4" id="checkin-calendar" style="display: none;">
+                            <div id="inline_cal_from"></div>
+                        </div>
+                        <div class="col-lg-6 mb-4" id="checkout-calendar" style="display: none;">
+                            <div id="inline_cal_to"></div>
+                        </div>
+                    </div>
+
+
+                    <!-- Hidden input fields for the date values -->
+
+                    <div class="support-info">
+                        <p><i class="fa-solid fa-person-walking-luggage"></i> Có giữ hành lý</p>
+                        <span> <i class="fa-solid fa-shield-halved"></i> Không hỗ trợ hoàn tiền</span>
+                    </div>
+                </div>
+
+
+
+                <!-- Thông tin phòng -->
+                <section class="room-info">
+                    <div class="room-header">
+                        <div class="room-image" style="width: 84px; min-width: 84px; height: 63px;">
+                            <img width="100%" alt="Room Image" src="~/images/@mainImage.Url" loading="lazy" class="room-image">
+                        </div>
+                        <div class="room-details"style="display:block">
+                            <h1 class="room-title">@Model.RoomName</h1>
+                            <div class="room-specs">
+                                <span class="room-size">@roomProperties.Name</span> <br/>
+                                <span class="room-adult">Tối đa: @Model.MaxAdults người lớn</span>
+                                <span class="room-child">Tối đa: @Model.MaxChildren trẻ em</span>
+                            </div>
+                        </div>
+                    </div>
+                    <div class="room-separator"></div>
+                    <div class="room-amenities" style="width: 100%;">
+                        <div class="room-amenity">
+                            <i class="fa-solid fa-clock" style="color: #DF5505"></i>
+                            <span>Nhanh lên! Phòng cuối cùng của chúng tôi ở mức giá này cho ngày bạn chọn</span>
+                        </div>
+                        <div class="room-amenity-first">
+                            <i class="fa-solid fa-wifi"></i>
+                            <span>WiFi miễn phí</span>
+                        </div>
+                    </div>
+                </section>
+
+                <section class="price-section">
+                    <!-- Giá phòng 1 đêm lưu vào thẻ hidden để JavaScript sử dụng -->
+                    <input type="hidden" id="pricePerNight" value="@Model.Price" />
+
+                    <div class="price-breakdown">
+                        <!-- Hiển thị ribbon giảm giá -->
+                        <div class="offers-ribbon">
+                            <span class="ribbon discount">GIẢM <span id="discount-price">@Model.Discount</span>% HÔM NAY</span>
+                        </div><br>
+
+                        <!-- Thông tin về giá gốc (giá gốc không thay đổi, chỉ hiển thị) -->
+                        <div class="breakdown-item">
+                            <span class="item-label">Giá gốc&nbsp;(1 phòng x <span id="total-nights">0</span> đêm)</span>
+                            <span class="item-price crossed-out" id="old-price">25.313.959 ₫</span>
+                        </div>
+
+                        <!-- Thông tin về giá phòng sau khi giảm giá -->
+                        <div class="breakdown-item">
+                            <span class="item-label">Giá phòng&nbsp;(1 phòng x <span id="total-nights-price">0</span> đêm)</span>
+                            <span class="item-price" id="room-price3">22.612.112 ₫</span>
+                        </div>
+                    </div>
+
+                    <!-- Hiển thị thông tin thuế -->
+                    <div class="charges">
+                        <span class="included-charge">Giá đã bao gồm: Thuế 10%</span>
+                    </div>
+
+                    <!-- Thông tin khớp giá -->
+                    <div class="price-match">
+                        <span class="price-match-text">Chúng tôi khớp giá. Tìm được giá nào thấp hơn thì chúng tôi sẽ khớp giá đó!</span>
+                    </div>
+
+                    <!-- Thông báo bạn đã tiết kiệm được bao nhiêu -->
+                    <div class="you-saved">Lựa chọn khôn khéo! Bạn tiết kiệm được <span id="duocgiam"></span> </div>
+                </section>
+            </div>
+        </div>
+    </fieldset>
+
+    <fieldset id="step2" style="display:none;">
+        <div class="form-container-payment">
+            <div class="left-section">
+
+                <div class="payment-card">
+                    <a id="backToStep1" style="padding: 10px;"><i class="fa-solid fa-backward"></i> Quay lại</a>
+                    <!-- Thanh toán an toàn -->
+                    <div class="card-wrapper">
+                        <div class="icon-header">
+                            <i class="fa-solid fa-shield-halved icon-payment"></i>
+                            <span class="header-text">Thanh toán an toàn</span>
+                        </div>
+                        <span class="sub-header">Tất cả thông tin thẻ đều được mã hóa hoàn toàn, an toàn và được bảo vệ.</span>
+                    </div>
+
+
+                    <!-- Thẻ tín dụng và ghi nợ -->
+                    <div class="accordion-container custom-cursor">
+                        <div class="accordion-content custom-cursor">
+                            <label class="radio-label">
+                                <input name="selectedItem" type="radio" class="radio-input" checked>
+                                <span class="radio-span"></span>
+                            </label>
+                        </div>
+                        <div class="accordion-body custom-cursor">
+                            <div class="accordion-header">
+                                <div class="accordion-title-text">
+                                    <span class="payment-method">THẺ TÍN DỤNG/GHI NỢ</span>
+                                </div>
+                                <div class="payment-methods">
+                                    <ul class="card-list">
+                                        <li class="card-item">
+                                            <img src="https://cdn6.agoda.net/images/mvc/default/ic_visa@2x_v3.png" alt="Visa" class="card-img" style="width:100px;height:25px; object-fit:cover">
+                                        </li>
+                                        <li class="card-item">
+                                            <img src="https://cdn6.agoda.net/images/mvc/default/ic_master_2.png" alt="Mastercard" class="card-img" style="width:100px;height:25px; object-fit:cover">
+                                        </li>
+                                        <li class="card-item">
+                                            <img src="https://cdn6.agoda.net/images/mvc/default/ic_americanexpress.png" alt="American Express" class="card-img" style="width:100px;height:25px; object-fit:cover">
+                                        </li>
+                                        <li class="card-item">
+                                            <img src="https://cdn6.agoda.net/images/mvc/default/ic_jcb.png" alt="JCB" class="card-img" style="width:100px;height:25px; object-fit:cover">
+                                        </li>
+                                        <li class="card-item">
+                                            <img src="https://cdn6.agoda.net/images/mvc/default/ic_card_unionpay.png" alt="UnionPay - Creditcard" class="card-img" style="width:100px;height:25px; object-fit:cover">
+                                        </li>
+                                    </ul>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+
+
+                    <!-- Hình thức thanh toán -->
+                    <div class="payment-wrapper">
+                        <span class="payment-title">Hình thức thanh toán <span class="required">*</span></span>
+                        <div class="payment-method-dropdown">
+                            <div class="payment-method-selected">
+                                <img src="https://cdn6.agoda.net/images/mvc/default/ic_cards.png" alt="Payment Icon" class="payment-icon">
+                                <p>Visa / Mastercard / Amex / JCB</p>
+                            </div>
+                        </div>
+                        <span class="annotation-message">Bước cuối cùng, gần xong rồi đó!</span>
+                        <div class="credit-card-preview">
+                            <div class="card-input">
+                                <div class="input-item">
+                                    <label for="cardHolderName" class="label">
+                                        Tên trên thẻ<span class="required">*</span>
+                                    </label>
+                                    <input id="cardHolderName" name="cardHolderName" type="text" maxlength="64" required>
+                                </div>
+                                <div class="input-item">
+                                    <label for="cardNumber" class="label">
+                                        Số thẻ tín dụng/thẻ ghi nợ<span class="required">*</span>
+                                    </label>
+                                    <input id="cardNumber" name="cardNumber" type="text" pattern="\d*" required>
+                                </div>
+                                <div class="dateAndcode">
+                                    <div class="input-item">
+                                        <label for="expiryDate" class="label">
+                                            Ngày hết hạn<span class="required">*</span>
+                                        </label>
+                                        <input id="expiryDate" name="expiryDate" type="text" placeholder="MM/YY" required>
+                                    </div>
+                                    <div class="input-item">
+                                        <label for="cvv" class="label">
+                                            Mã bảo mật CVC<span class="required">*</span>
+                                        </label>
+                                        <input id="cvv" name="cvv" type="text" required>
+                                    </div>
+                                    <img data-element="cvv-icon" srcset="https://cdn6.agoda.net/images/new-bf/cvv-icon.png 1x, https://cdn6.agoda.net/images/new-bf/cvv-icon@2x.png 2x" src="https://cdn6.agoda.net/images/new-bf/cvv-icon.png" alt="3-digit security code on back of your card">
+                                </div>
+                            </div>
+                            <div class="card-preview">
+                                <div class="credit-card">
+                                    <div class="card-logo">
+                                        <!-- Thêm các logo thẻ ở đây -->
+                                    </div>
+                                    <div class="card-front">
+                                        <div class="card-number">**** **** **** ****</div>
+                                        <div class="card-holder-name">Tên chủ thẻ</div>
+                                        <div class="card-expiry">MM/YY</div>
+                                    </div>
+                                    <div class="card-back">
+                                        <div class="card-cvc">***</div>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+
+
+
+                    <!-- chính sách -->
+                    <div data-component="InfoSection" class="info-section">
+                        <div data-component="NewsletterSubscriptionMessage" class="newsletter-subscription">
+                            <input id="NewsletterSubscribed" data-element-name="mob-bf-news-letter-subscription" type="checkbox" class="checkbox-input">
+                            <span class="checkbox-span">
+                                <div class="checkbox-text">
+                                    <span class="text-content">
+                                        Tôi đồng ý nhận thông tin cập nhật và chương trình khuyến mại về Agoda và các chi nhánh hoặc đối tác kinh doanh của Agoda thông qua nhiều kênh, bao gồm WhatsApp. Có thể ngừng nhận thông tin bất cứ lúc nào. Đọc thêm trong Chính sách Quyền riêng tư.
+                                    </span>
+                                </div>
+                            </span>
+                        </div>
+                        <div class="agreement-text">
+                            Thực hiện bước tiếp theo đồng nghĩa với việc quý khách chấp nhận tuân theo mọi quy định của Hotel.
+                        </div>
+                    </div>
+                </div>
+                <section id="nextStepSection">
+                    <div class="next-step-container">
+                        <button id="confirmPaymentButton" type="button">Xác nhận thanh toán</button>
+                        <p class="confirmation-message">Có liền xác nhận đặt phòng!</p>
+                        <div id="paypal-button-container" style="width: 100%; "></div>
+                        
+                    </div>
+                </section>
+            </div>
+            <!-- Thêm nội dung cho phần 40% ở đây nếu cần -->
+            <div class="right-section">
+                <!-- info-check-int -->
+                <div class="property-info">
+                    <div class="property-discount">
+                        <p>8%</p>
+                        <p>GIẢM GIÁ</p>
+                    </div>
+
+                    <div class="hotel-info">
+                        <div class="hotel-image" style="width: 84px;">
+                            <img src="https://pix8.agoda.net/hotelImages/63373/-1/fe1e5e0a2412fbfc72e9d798be6ee0ef.jpg?s=414x232" alt="Hotel" style="min-height: 112px;">
+                        </div>
+
+                        <div class="hotel-details">
+                            <button class="wifi-badge">Wi-Fi miễn phí</button>
+                            <h3 class="hotel-name">Bettoja Mediterraneo Hotel</h3>
+                            <div class="hotel-rating">
+                                <span>4 sao trên 5</span>
+                            </div>
+                            <div class="review-info">
+                                <span>8,6</span>
+                                <span>Tuyệt vời</span>
+                                <p>2993 bài</p>
+                            </div>
+                            <div class="hotel-address">
+                                <span>15 Cavour Street, Termini Central Station, Rome, Lazio, Ý, 00184</span>
+                            </div>
+                        </div>
+                    </div>
+
+                    <div class="checkin-info">
+                        <div class="checkin-date">
+                            <h3 id="checkin-payment">T7, tháng 10 12</h3>
+                            <span><i class="fa-regular fa-calendar-days"></i>-Nhận phòng</span>
+                        </div>
+                        <p>-></p>
+                        <div class="checkout-date">
+                            <h3 id="checkout-payment">T7, tháng 10 12</h3>
+                            <span><i class="fa-regular fa-calendar-days"></i>-Trả phòng</span>
+                        </div>
+                        <div class="count-pernight">
+                            <h3 id="pernight-payment">2</h3>
+                            <span>Đêm</span>
+                        </div>
+                    </div>
+                    <div class="support-info">
+                        <p><i class="fa-solid fa-person-walking-luggage"></i> Có giữ hành lý</p>
+                        <span> <i class="fa-solid fa-shield-halved"></i> Không hỗ trợ hoàn tiền</span>
+                    </div>
+                </div>
+
+
+
+                <!-- Thông tin phòng -->
+                <section class="room-info">
+                    <div class="room-header">
+                        <div class="room-image" style="width: 84px; min-width: 84px; height: 63px;">
+                            <img width="100%" alt="Room Image" src="https://pix8.agoda.net/hotelImages/63373/-1/bebc444d2cc69313017648a0377d6e23.jpg" loading="lazy" class="room-image">
+                        </div>
+                        <div class="room-details">
+                            <h1 class="room-title">1 x Phòng cổ điển cao cấp</h1>
+                            <div class="room-specs">
+                                <span class="room-size">22 m²</span>
+                                <span class="room-adult">Tối đa: 2 người lớn</span>
+                                <span class="room-child">Tối đa: 2 trẻ em</span>
+                            </div>
+                        </div>
+                    </div>
+                    <div class="room-separator"></div>
+                    <div class="room-amenities">
+                        <div class="room-amenity">
+                            <i class="fa-solid fa-clock"></i>
+                            <span>Nhanh lên! Phòng cuối cùng của chúng tôi ở mức giá này cho ngày bạn chọn</span>
+                        </div>
+                        <div class="room-amenity-first">
+                            <i class="fa-solid fa-wifi"></i>
+                            <span>WiFi miễn phí</span>
+                        </div>
+                    </div>
+                </section>
+
+                <section class="price-section">
+                    <!-- Giá phòng 1 đêm lưu vào thẻ hidden để JavaScript sử dụng -->
+                    <input type="hidden" id="pricePerNight" value="@Model.Price" />
+
+                    <div class="price-breakdown">
+                        <!-- Hiển thị ribbon giảm giá -->
+                        <div class="offers-ribbon">
+                            <span class="ribbon discount">GIẢM <span id="discount-price">@Model.Discount</span>% HÔM NAY</span>
+                        </div><br>
+
+                        <!-- Thông tin về giá gốc (giá gốc không thay đổi, chỉ hiển thị) -->
+                        <div class="breakdown-item">
+                            <span class="item-label">Giá gốc&nbsp;(1 phòng x <span id="total-nights1">0</span> đêm)</span>
+                            <span class="item-price crossed-out"id="old-price1">25.313.959 ₫</span>
+                        </div>
+
+                        <!-- Thông tin về giá phòng sau khi giảm giá -->
+                        <div class="breakdown-item">
+                            <span class="item-label">Giảm còn&nbsp;(1 phòng x <span id="total-nights-price1">0</span> đêm)</span>
+                            <span class="item-price" id="room-price2">22.612.112 ₫</span>
+                        </div>
+                    </div>
+
+                    <!-- Hiển thị thông tin thuế -->
+                    <div class="charges">
+                        <span class="included-charge">Giá đã bao gồm: Thuế 10%</span>
+                    </div>
+
+                    <!-- Thông tin khớp giá -->
+                    <div class="price-match">
+                        <span class="price-match-text">Chúng tôi khớp giá. Tìm được giá nào thấp hơn thì chúng tôi sẽ khớp giá đó!</span>
+                    </div>
+
+                    <!-- Thông báo bạn đã tiết kiệm được bao nhiêu -->
+                    <div class="you-saved">Lựa chọn khôn khéo! Bạn tiết kiệm được <span id="duocgiam1"></span></div>
+                </section>
+
+
+
+
+                <!-- support -->
+                <section class="support-section">
+                    <div class="support-breakdown">
+                        <div class="offers-support">
+                            <span class="title">Hotel hỗ trợ trực tuyến</span>
+                            <span class="discount">bao gồm</span>
+                        </div>
+                        <div class="support-item">
+                            <i class="fa-solid fa-check"></i><span class="item-label">Hỗ trợ trực tuyến 24/7</span>
+                        </div>
+                        <div class="support-item">
+                            <i class="fa-solid fa-check"></i><span class="item-label">hỗ trợ nhanh hơn cho quý khách</span>
+                        </div>
+                    </div>
+                </section>
+            </div>
+        </div>
+    </fieldset>
+
+    <fieldset id="step3" style="display:none;">
+        <div class="success-payment">
+            <div style="border-radius:200px; height:200px; width:200px; background: #F8FAF5; margin:0 auto;">
+                <i class="checkmark">✓</i>
+            </div>
+            <h1 class="title-success">Success</h1>
+            <p class="content-succuess">We received your purchase request;<br /> we'll be in touch shortly!</p>
+        </div>
+    </fieldset>
+</div>
+@section Scripts {
+    
+    <script src="https://www.paypal.com/sdk/js?client-id=AdZq_txH3owZBWeskvHk6OqAG98oNAdx-rYHyGN4YCTrUZkCLkDNt1jWVFToE4w3n4p3f8CJTnjAs5BA"></script>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/moment.js/2.29.4/moment.min.js"></script>
+    <script>
+        let smokingValue = '';
+        let bedValue = '';
+        let message = '';
+        const exchangeRate = 0.000042;
+        
+        // Khai báo biến bookingData ở phạm vi toàn cục
+        let bookingData = {};
+
+        $("input[name='smoking']").on('change', function () {
+            smokingValue = $("input[name='smoking']:checked").val();
+        });
+
+        $("input[name='bed']").on('change', function () {
+            bedValue = $("input[name='bed']:checked").val();
+        });
+
+        $("#specialRequestMessage").on('input', function () {
+            message = $(this).val();
+        });
+
+        $('#nextStepButton').on('click', function () {
+
+            const checkinDate = $('#checkinDate h3').text(); // Ví dụ: "Th 6, 25 tháng 10"
+            const checkoutDate = $('#day-checkout').text(); // Ví dụ: "Th 5, 31 tháng 10"
+            const totalNights = $('#totalNights').text();
+            var roomId = $('#room_id').val();
+            // Kiểm tra thông tin khách hàng
+            const CustomerName = $('#customerName').val();
+            const CustomerEmail = $('#customerEmail').val();
+            const CustomerPhone = $('#customerPhone').val();
+
+            const totalPriceText = $('#totalpricediscount').text(); // Lấy giá trị từ thẻ
+            const totalPriceVND = parseFloat(totalPriceText.replace(/[₫.]/g, '').replace(/\s+/g, '')); // Chuyển đổi sang số
+            const totalPriceUSD = (totalPriceVND * exchangeRate).toFixed(2); // Tính toán giá trị USD
+            // Chuyển đổi ngày vào đúng định dạng
+            function parseVietnameseDate(dateStr) {
+                const [dayOfWeek, dayMonth] = dateStr.split(', ');
+                const [day, month] = dayMonth.split(' tháng ');
+
+                // Create a date object
+                const year = new Date().getFullYear(); // Use the current year
+                return moment(`${year}-${month}-${day}`, "YYYY-M-D").add(1, 'days'); 
+            }
+
+            // Use the function to get a valid date
+            const parsedDate = parseVietnameseDate(checkoutDate);
+            const formattedCheckoutDate = parsedDate.toISOString().slice(0, 10); // Format as YYYY-MM-DD
+
+
+            const parsedDatecheckin = parseVietnameseDate(checkinDate);
+            const formattedCheckinDate = parsedDatecheckin.toISOString().slice(0, 10); // Format as YYYY-MM-DD
+
+            console.log('Formatted Checkout Date:', formattedCheckoutDate);
+
+            // Cập nhật dữ liệu Booking
+            bookingData = {
+                CustomerName: CustomerName,
+                CustomerEmail: CustomerEmail,
+                CustomerPhone: CustomerPhone,
+                SmokingPreference: smokingValue,
+                BedPreference: bedValue,
+                SpecialRequest: message,
+                Price: totalPriceUSD, // Giá lưu bằng USD để khớp với PayPal
+                CheckinDate: formattedCheckinDate,
+                CheckoutDate: formattedCheckoutDate,
+                TotalNights: parseInt(totalNights, 10),
+                RoomId: roomId,
+                bookingId: null
+            };
+
+            console.log(bookingData); // Xem dữ liệu bookingData
+        });
+
+        // Giả sử bạn đã có biến bookingData chứa thông tin đặt phòng
+        paypal.Buttons({
+            style: {
+                layout: 'vertical',
+                color: 'silver',
+                tagline: 'false'
+            },
+            createOrder: (data, actions) => {
+                return fetch("@Url.Action("Order")", {
+                    method: "POST",
+                    headers: {
+                        'Content-Type': 'application/json'
+                    },
+                    body: JSON.stringify(bookingData) // bookingData chứa thông tin đặt phòng
+                }).then((response) => {
+                    if (!response.ok) {
+                        return response.json().then(error => { throw error; });
+                    }
+                    return response.json();
+                }).then((order) => {
+                    // Đảm bảo bạn đang lưu bookingId vào bookingData
+                    bookingData.bookingId = order.bookingId; // Lưu bookingId từ phản hồi
+                    return order.id;
+                }).catch(error => alert(error.message));
+            },
+            onApprove: (data, actions) => {
+                // Khi thanh toán thành công, gửi bookingId và orderId đến phương thức Capture
+                return fetch(`@Url.Action("Capture")?orderId=${data.orderID}&bookingId=${bookingData.bookingId}`, {
+                    method: "post",
+                }).then((response) => {
+                    if (!response.ok) {
+                        return response.json().then(error => { throw error; });
+                    }
+
+                    // Xử lý giao diện người dùng sau khi thanh toán thành công
+                    var step2 = document.getElementById('step2');
+                    var step3 = document.getElementById('step3');
+                    var countdown = document.getElementById('countdown');
+                    if (step2 && step3) {
+                        step2.style.display = 'none'; // Ẩn fieldset thanh toán
+                        step3.style.display = 'block'; // Hiện fieldset thành công
+                        countdown.style.display = 'none';
+                        $('.progress').css('width', '100%');
+
+                    }
+                }).catch(error => alert(error.message));
+            }
+        }).render('#paypal-button-container');
+
+    </script>
+
+}

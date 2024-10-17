@@ -1,9 +1,4 @@
-document.addEventListener("DOMContentLoaded", function () {
-    const currentPath = window.location.pathname;
-    const targetPath = "/admin/room/index";
-    if (currentPath !== targetPath) {
-        return;
-    }
+
     document.querySelector(".jsFilter").addEventListener("click", function () {
         document.querySelector(".filter-menu").classList.toggle("active");
     });
@@ -29,5 +24,4 @@ document.addEventListener("DOMContentLoaded", function () {
         document.documentElement.classList.toggle('light');
         modeSwitch.classList.toggle('active');
     });
-
-});
+    

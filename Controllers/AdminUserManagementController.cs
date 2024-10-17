@@ -23,7 +23,6 @@ namespace Hotel.Controllers
         {
             int userId = int.Parse(User.FindFirst("id")?.Value ?? "0");
             var accounts = await _context.Users.Where(u => u.Id != userId).ToListAsync();
-            Console.WriteLine("Count account", accounts.Count);
             return View(accounts);
         }
     }

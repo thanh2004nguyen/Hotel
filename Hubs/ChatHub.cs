@@ -60,7 +60,7 @@ namespace YourNamespace.Hubs
         }
 
 
-        public override async Task OnDisconnectedAsync(Exception exception)
+        public override async Task OnDisconnectedAsync(Exception? exception)
         {
             var senderIdClaim = Context.User?.FindFirst("id");
             if (senderIdClaim != null && int.TryParse(senderIdClaim.Value, out var senderId))

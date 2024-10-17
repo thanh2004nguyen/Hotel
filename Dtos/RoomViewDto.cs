@@ -4,7 +4,12 @@ namespace Hotel.Dtos
 {
 	public class RoomViewDto
 	{
-		public List<Room?> ListRoom { get; set; }
-		public List<RoomProperty> ListProperty { get; set; }
-	}
+		public List<Room>? ListRooms { get; set; }
+		public List<RoomProperty>? ListPropertys { get; set; }
+        public List<RoomTypeCountDto>? RoomTypeCounts { get; set; }
+        public int CurrentPage { get; set; }
+        public int TotalPages { get; set; }
+        public int roomsCount { get; set; }
+        public FilterRoomData FilterRoomData { get; set; }
+    }
 }

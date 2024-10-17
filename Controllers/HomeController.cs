@@ -31,19 +31,13 @@ namespace Hotel.Controllers
                     .ThenInclude(a=>a.Amenities)
                         .ThenInclude(b=>b.AmenitiesTheme)
                             .ThenInclude(at=>at.IconClass)
-                .Include(r => r.roomProperties)
                 .Include(r => r.RoomType)
                 .Include(r => r.Images)
+                .Include(r => r.RoomWithRoomProperties)
+                    .ThenInclude(rp => rp.RoomProperty)
                 .ToListAsync();
 
-            // Lấy các RoomProperty có RoomId trùng với phòng
-            foreach (var room in rooms)
-            {
-                room.roomProperties = await _context.RoomProperties
-                    .Where(rp => rp.Id == room.Id) 
-                    .Include(rp => rp.IconClass) 
-                    .ToListAsync();
-            }
+
             var iconClasses = await _context.IconClasses.ToListAsync();
             var hotel= await _context.hotelDatas
                 .ToListAsync();

@@ -13,6 +13,17 @@
     <meta charset="utf-8" />
     <meta name="viewport" content="width=device-width, initial-scale=1.0" />
     <title>@ViewData["Title"] - Hotel</title>
+    <link href="https://fonts.googleapis.com/css?family=Roboto:300,400&display=swap" rel="stylesheet">
+    <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/icomoon@1.0.0/style.min.css">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.6.0/css/all.min.css" integrity="sha512-Kc323vGBEqzTmouAECnVceyQqyqdsSiqLQISBL29aUW4U/M7pSPA/gEUZQqv1cwx4OnYxTxve5UMg5GT6L4JJg==" crossorigin="anonymous" referrerpolicy="no-referrer" />
+    <link href="~/Forntend/css/css/my-css/rome.css" rel="stylesheet" />
+    <!-- maps api-->
+    <link rel="stylesheet" type="text/css" href="https://api.tomtom.com/maps-sdk-for-web/cdn/6.x/6.25.0/maps/maps.css" />
+    <!--Icon-->
+    <link href="~/dashboard/css/materialdesignicons/materialdesignicons.min.css" rel="stylesheet" />
+    <link href="https://cdnjs.cloudflare.com/ajax/libs/flag-icon-css/7.2.3/css/flag-icons.min.css" rel="stylesheet" />
+    <!-- MDBootstrap CSS -->
+    <link href="https://cdnjs.cloudflare.com/ajax/libs/mdb-ui-kit/6.4.0/mdb.min.css" rel="stylesheet">
     <!--link lịch -->
     <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/flatpickr/dist/flatpickr.min.css">
     <link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/4.5.2/css/bootstrap.min.css">
@@ -32,8 +43,10 @@
     <link rel="stylesheet" href="~/ForntEnd/css/css-sano/nice-select.css">
     <link rel="stylesheet" href="~/ForntEnd/css/css-sano/owl.carousel.min.css">
     <link rel="stylesheet" href="~/ForntEnd/css/css-sano/slicknav.min.css">
+    <link rel="stylesheet" href="~/ForntEnd/css/booking.css">
     <link rel="stylesheet" href="~/ForntEnd/css/css-sano/style.css">
     <link href="~/Forntend/css/css/my-css/chatbox.css" rel="stylesheet" />
+    <link href="~/Forntend/css/css/my-css/addbooking.css" rel="stylesheet" />
     @* link sano hotel start *@
 
     <!-- flatpickr CSS -->
@@ -150,6 +163,13 @@
     </div>
     @Html.Partial("Footer")
 
+
+    <script src="https://sandbox.paypal.com/sdk/js?client-id=@(ViewBag.PaypalClientId)&currency=USD"></script>
+
+    <!-- maps api-->
+    <script src="https://api.tomtom.com/maps-sdk-for-web/cdn/6.x/6.25.0/maps/maps-web.min.js"></script>
+    <!-- MDBootstrap JavaScript -->
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/mdb-ui-kit/6.4.0/mdb.min.js"></script>
     <!--js lịch -->
     <script src="https://cdn.jsdelivr.net/npm/flatpickr"></script>
 
@@ -198,7 +218,11 @@
     <script src="~/ForntEnd/js/google-map.js"></script>
     <script src="~/ForntEnd/js/calendar.js"></script>
     <script src="~/ForntEnd/js/main.js"></script>
-
+    <script src="~/ForntEnd/js/room.js"></script>
+    <script src="~/dashboard/js/booking.js"></script>
+    <script src="~/ForntEnd/js/addbooking.js"></script>
+    <!--date checkin checkouts-->
+    <script src="~/Forntend/js/rome.js"></script>
     <script>
         $(document).ready(function () {
             $('#room_table').DataTable();
@@ -223,7 +247,7 @@
     <script src="https://cdn.datatables.net/1.13.6/js/jquery.dataTables.js"></script>
 
     @*  FontENd JS *@
-    @if (User.Identity.IsAuthenticated)
+    @if (User.Identity!.IsAuthenticated)
     {
 
         <script src="~/ForntEnd/js/audio-order/audio-order.js"></script>

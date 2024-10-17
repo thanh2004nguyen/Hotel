@@ -11,5 +11,6 @@ namespace Hotel.Models
 
         [Required(ErrorMessage = "Cần Nhập Description")]
         public string? Description { get; set; }
+
     }
 }

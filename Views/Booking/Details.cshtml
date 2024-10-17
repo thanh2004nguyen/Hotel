@@ -1,0 +1,45 @@
+﻿@model dynamic 
+
+<h2>Booking Details</h2>
+
+<div>
+    <h4>Room Information</h4>
+    <img src="@Model.Booking.Room.Images.FirstOrDefault()?.Url" alt="Room Image" />
+    <p>Room Name: @Model.Booking.Room.Name</p>
+    <p>Room Type: @Model.Booking.Room.Type</p>
+    <p>Price: @Model.Booking.Room.Price.ToString("C")</p>
+</div>
+
+<div>
+    <h4>Booking Information</h4>
+    <p>Customer Name: @Model.Booking.CustomerName</p>
+    <p>Order Type: @Model.Booking.OrderType</p>
+    <p>Order Date: @Model.Booking.OrderDate.ToString("MM/dd/yyyy")</p>
+    <p>Status: @Model.Booking.Status</p>
+</div>
+
+<div>
+    <h4>Payments</h4>
+    <ul>
+        @foreach (var payment in Model.Payments)
+        {
+            <li>
+                Amount: @payment.Amount.ToString("C") - Date: @payment.PaymentDate.ToString("MM/dd/yyyy") - Transaction ID: @payment.TransactionId
+            </li>
+        }
+    </ul>
+</div>
+
+<div>
+    <h4>Review</h4>
+    <form method="post" action="@Url.Action("SubmitReview", "Booking")">
+        <input type="hidden" name="BookingId" value="@Model.Booking.Id" />
+        <label for="rating">Rating (1-5):</label>
+        <input type="number" name="Rating" min="1" max="5" required />
+        <label for="comment">Comment:</label>
+        <textarea name="Comment" required></textarea>
+        <button type="submit">Submit Review</button>
+    </form>
+</div>
+
+<a href="@Url.Action("Index")">Back to Booking List</a>

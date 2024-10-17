@@ -14,6 +14,8 @@ namespace Hotel.Models
         // Khóa ngoại đến IconClass
         public int? IconClassId { get; set; }
         public virtual IconClass? IconClass { get; set; }
+        // Thiết lập quan hệ nhiều-nhiều với Room thông qua bảng trung gian
+        public ICollection<RoomWithRoomProperty>? RoomRoomProperties { get; set; }
     }
 }
 //AmenitiesTheme

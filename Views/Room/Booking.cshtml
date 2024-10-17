@@ -1,0 +1,356 @@
+﻿@using Hotel.Models.Shared;
+
+@model Hotel.Models.Room
+
+@{
+    ViewData["Title"] = "Room Details";
+    var Id = Model.Id;
+    var mainImage = Model.Images?.FirstOrDefault(); 
+    var smallImages = Model.Images?.Skip(1).Take(6).ToList(); 
+    var firstAmenitiesPerTheme = new List<dynamic>();
+    var amenitiesThemes = Model.RoomAmenities.Select(ra => ra.Amenities.AmenitiesTheme).Distinct().ToList();
+    foreach (var theme in amenitiesThemes)
+    {
+        var firstAmenity = theme.Amenities.FirstOrDefault();
+        if (firstAmenity != null)
+        { firstAmenitiesPerTheme.Add(new {AmenityName = firstAmenity.Name, IconClass = firstAmenity.IconClass?.Icon});}
+    }
+
+    var amenitiesList = amenitiesThemes
+        .Where(theme => theme.Name == "Tiện nghi")
+        .SelectMany(theme => theme.Amenities)
+        .ToList();
+
+
+    var relatedRooms = ViewBag.RelatedRooms as List<Hotel.Models.Room>;
+}
+
+
+<div class=" mt-4" style="width: 87%; margin: 0 auto">
+    <div class="image-gallery">
+        <div class="main-image">
+            <img src="~/images/@mainImage.Url" alt="Main Hotel Image">
+            <button class="view-details-btn" onclick="showOverlay()">Xem tất cả ảnh</button>
+        </div>
+        <div class="small-images">
+            @foreach (var image in smallImages)
+            {
+                <img src="~/images/@image.Url" alt="Small Image 1">
+            }
+        </div>
+    </div>
+    <!-- New Info Bar Section Below Images -->
+    <div class="info-bar" id="infoBar"> 
+        <a onclick="scrollToSection('.overlay')">Tổng quan</a>
+        <a onclick="scrollToSection('.featured-highlights')">Tiện nghi</a>
+        <a onclick="scrollToSection('.wrap-related-rooms')">Các phòng tương tự</a>
+        <span onclick="scrollToSection('.mapLocation')">Vị trí</span>
+        <span>Chính sách</span>
+        <span class="price">@Model.Price.ToString("N0").Replace(",", ".")đ</span>
+        <a class="view-price-btn" href="@Url.Action("AddBooking", "Room", new { id = @Id })">Đặt ngay</a>
+    </div>
+</div>
+
+
+<!-- Overlay Structure -->
+<div id="imageOverlay" class="overlay">
+    <!-- Sidebar Section -->
+    <div class="overlay-sidebar" style="width: 100%; height: 60px; background-color: #fff; color: gray; display: flex; align-items: center; justify-content: space-between; padding: 0 20px;
+  border-top-left-radius: 13px;border-top-right-radius: 13px;">
+        <div class="sidebar-title">
+            <h3>Danh sách hình ảnh và Tiện ích</h3>
+        </div>
+        <button class="close-btn" style="background-color: transparent; border: none; color: black; font-size: 24px; padding: 20px" onclick="closeOverlay()">
+            <i class="fa-solid fa-xmark"></i>
+        </button>
+    </div>
+    <div class="overlay-content">
+        <!-- Image List Section (Left) -->
+        <div class="overlay-images" style="padding: 20px;background-color: white;box-shadow: inset 0px 10px 20px rgba(0, 0, 0, 0.15);border-bottom-left-radius: 13px;">
+            <div class="scrollable-images">
+                @foreach(var image in Model.Images)
+                {
+                    <img src="~/images/@image.Url" alt="Image 1" style="border: 2px solid gray;border-radius: 3px;">
+                }
+            </div>
+        </div>
+
+        <!-- AmenitiesThemes and amenities -->
+        <div class="overlay-details" style="padding: 20px; background-color: white; box-shadow: inset 0px 10px 20px rgba(0, 0, 0, 0.15);border-bottom-right-radius: 13px;">
+                <h3>Đặc điểm yêu thích</h3>
+            @foreach (var theme in Model.RoomAmenities.Select(a => a.Amenities.AmenitiesTheme).Distinct())
+            {
+                <h4>@Html.Raw(theme.IconClass?.Icon) @theme.Name</h4>
+            <ul>
+                    @foreach (var amenity in Model.RoomAmenities
+                   .Where(a => a.Amenities.AmenitiesThemeId == theme.Id))
+                    {
+                        <li>
+                            @Html.Raw(amenity.Amenities.IconClass?.Icon)
+                            @amenity.Amenities.Name 
+                        </li>
+                    }
+            </ul>
+            }
+        </div>
+    </div>
+</div>
+<!-- Room Information Section -->
+<!-- Room Information Section -->
+<!-- Room Details Section -->
+<div class="room-details">
+    <!-- Left Content (60%) -->
+    <div class="left-content">
+        <!-- Part 1: Room Name, Rating, and Map Location -->
+        <div class="room-info ">
+            <div class="d-flex room-name">
+                <h2 id="room-name-marker">@Model.RoomName</h2>
+                <div class="stars" id="room-starts-marker">
+                    <!-- Room Rating and Bookings -->
+                    <div class="d-flex flex-row">
+                        <div class="text-warning mb-1 me-2" style="font-size: 14px; padding: 5px;">
+                            <!-- Assuming you calculate an average rating for the room -->
+                            @{
+                                double rating = Model.Rating;
+                                int fullStars = (int)rating;
+                                bool halfStar = (rating - fullStars) >= 0.5;
+                            }
+
+                            @for (var i = 0; i < 5; i++)
+                            {
+                                if (i < fullStars)
+                                {
+                                    <i class="fa fa-star" style="color: orange;"></i> <!-- Full star -->
+                                }
+                                else if (i == fullStars && halfStar)
+                                {
+                                    <i class="fa fa-star-half-alt" style="color: orange"></i> <!-- Half star -->
+                                }
+                                else
+                                {
+                                    <i class="fa fa-star" style="color: lightgray;"></i> <!-- Empty star -->
+                                }
+                            }
+                            <span class="ms-1">@rating</span> <!-- Display the average rating -->
+                        </div>
+                    </div>
+
+                </div>
+                <p>Vị trí: <a href="#map">Xem trên bản đồ</a></p>
+            </div>
+            <!-- Part 2: Room Description -->
+            <div class="room-description">
+                <p id="description" class="limit-three-words">
+                    @Model.Description
+                    <span id="showMoreText" style="display:none;"> @Model.Description.Substring(3)</span> <!-- Chỗ này có thể cần điều chỉnh để đảm bảo hiển thị văn bản thực tế -->
+                    <h6 onclick="showMoreDescription()" class="showmore" id="showmore">Xem thêm</h6>
+                </p>
+                
+            </div>
+        </div>
+
+
+
+        <!-- Part 3:  Điểm nổi bật nhất AmenitiesThemes-->
+        <div class="featured-highlights" style="border: 1px solid gainsboro; padding: 0 10px; border-radius: 10px">
+            <h3>Đặc điểm nổi bật</h3> <!-- Added title for the highlights -->
+            <div class="highlights-list d-flex">
+                @if (firstAmenitiesPerTheme.Any())
+                {
+                    foreach (var item in firstAmenitiesPerTheme)
+                    {
+                        <div class="feature-item">
+                            @Html.Raw(item.IconClass) <p>@item.AmenityName</p>
+                        </div>
+                    }
+                }
+            </div>
+        </div>
+
+        <!-- Part 4: Full Amenities List -->
+        <div class="amenities" style="border: 1px solid gainsboro;padding: 0 10px; border-radius: 10px">
+            <h3>Tiện nghi</h3>
+            <div class="amenities-list d-flex">
+                @foreach (var amenity in amenitiesList)
+                {
+                    <div class="amenity-item">
+                        <p> @Html.Raw(amenity.IconClass.Icon)</p> @amenity.Name
+                    </div>
+                }
+            </div>
+        </div>
+    </div>
+
+    <!-- Right Content (40%) -->
+    <div class="right-content">
+        <!-- Review Section -->
+        <div class="review-section">
+            <div class="d-flex review">
+                <div class="count-rating">
+                    <h4>8.0 Tuyệt vời</h4>
+                    <a class="count-reviews">300 bài đánh giá</a>
+                </div>
+                <a class="view-reviews">Xem tất cả đánh giá</a>
+            </div>
+            <div class="ratings">
+                <p>Dịch vụ: 8.0</p>
+                <p>Đáng đồng tiền: 7.0</p>
+            </div>
+        </div>
+
+        <!-- Map Section -->
+        <div id="map-section">
+            <h4>Vị trí trên bản đồ</h4>
+            <div id="mapLocation" class="mapLocation    "></div> <!-- Placeholder for map -->
+        </div>
+
+        <!-- Nearby Locations -->
+        <!-- Nearby Locations -->
+        <div class="nearby-locations">
+            <ul id="locations-list">
+                <!-- Địa điểm sẽ được thêm vào đây -->
+            </ul>
+            <div class="show-all-locations">
+                <a id="show-all-btn">Xem tất cả địa điểm</a>
+            </div>
+        </div>
+
+        <div id="all-locations-modal" class="modal">
+            <div class="modal-content">
+                <div style="display:flex; justify-content: space-between;">
+                    <h2>Tất cả địa điểm gần nhất</h2>
+                    <span class="close">&times;</span>
+                </div>
+                <div class="d-flex">
+                    <ul id="all-locations-list" class="locations-lists">
+                    </ul>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+
+
+
+
+<!-- Part 5: Related Rooms -->
+<div class="wrap-related-rooms mt-4">
+    <div class="related-rooms d-flex">
+        <!-- Room Name -->
+        <div class="room-name" style="width: 100%; padding-bottom: 10px;">
+            <h3>Các phòng tương tự</h3>
+        </div>
+
+        <!-- Action Bar -->
+        <div class="action-bar d-flex" style="width: 100%; justify-content: space-between; ">
+            <div class="action-item" style="width: 20%;">Ảnh phòng</div>
+            <div class="action-item" style="width: 20%;">Lợi ích</div>
+            <div class="action-item" style="width: 7%; transform: translateX(40%);">Sức chứa</div>
+            <div class="action-item" style="width: 20%; transform: translateX(-20%);">Giá phòng/đêm</div>
+            <div class="action-item" style="width: 30%;transform: translateX(-30%);">Đặt nhiều nhất</div>
+        </div>
+
+
+        <!-- Part 1: Room Image -->
+        <!-- Part 2: Room Information -->
+        @foreach (var rooms in relatedRooms)
+        {
+            <div class="room-info-related d-flex" style="width: 100%;">
+                <div class="room-image" style="width: 20%;box-shadow: 0 2px 8px rgba(0, 0, 0, 0.1);">
+                    <img src="~/images/@rooms.Images.FirstOrDefault().Url" alt="Room Image" style="width: 100%; height: auto;" />
+                <div class="additional-images" style="display: flex; gap: 3px; margin-top: 3px;">
+                        @if (rooms.Images.Count > 1)
+                        {
+                            <div class="additional-images" style="display: flex; gap: 3px; margin-top: 3px;">
+                                @foreach (var image in rooms.Images.Skip(1).Take(2))
+                                {
+                                    <img src="~/images/@image.Url" alt="Additional Image" style="width: 49%; height: auto;" />
+                                }
+                            </div>
+                        }
+                </div>
+                <a class="btn-view-all">Xem ảnh và chi tiết</a>
+            </div>
+            <!-- Amenities Section -->
+            <div class="room-amenities" style="width: 30%; background-color: #ffffff; box-shadow: 0 2px 8px rgba(0, 0, 0, 0.1); padding: 20px;">
+                <h4 style="font-size: 18px; font-weight: bold; margin-bottom: 15px; color: #333;">Tiện ích</h4>
+                <ul style="list-style-type: none; padding: 0; margin: 0;">
+                    @foreach (var amenities in amenitiesList){
+                        <li style="display: flex; align-items: center; margin-bottom: 10px;">
+                                @Html.Raw(amenities.IconClass.Icon)
+                            <span style="color: #666; font-weight: 400; display: -webkit-box; overflow: hidden; text-overflow: ellipsis; -webkit-box-orient: vertical; line-height: calc(14.98px); font-size: 14px; margin: 0; padding: 0 10px;">
+                                @amenities.Name
+                            </span>
+                        </li>
+                     }
+                </ul>
+                    <h4 style="font-size: 18px; font-weight: bold; margin-bottom: 15px; color: #333;">Thông số phòng</h4>
+                    <ul style="list-style-type: none; padding: 0; margin: 0;">
+                        @if (rooms.RoomWithRoomProperties != null && rooms.RoomWithRoomProperties.Any())
+                        {
+                            // Lấy RoomProperty đầu tiên
+                            var firstRoomProperty = rooms.RoomWithRoomProperties.FirstOrDefault();
+
+                            if (firstRoomProperty != null)
+                            {
+                                <li style="display: flex; align-items: center; margin-bottom: 10px;">
+                                    @Html.Raw(firstRoomProperty.RoomProperty.IconClass?.Icon)
+                                    <span style="color: #666; font-weight: 400; display: -webkit-box; overflow: hidden; text-overflow: ellipsis; -webkit-box-orient: vertical; line-height: calc(14.98px); font-size: 14px; margin: 0; padding: 0 10px;">
+                                        @firstRoomProperty.RoomProperty.Name
+                                    </span>
+                                </li>
+                            }
+                        }
+                        else
+                        {
+                            <li>Không có thông số phòng nào.</li>
+                        }
+                    </ul>
+
+            </div>
+
+            <!-- Max Occupancy Section -->
+            <div class="room-occupancy" style="width: 7%;  box-shadow: 0 2px 8px rgba(0, 0, 0, 0.1);padding-top: 10px">
+                <div class="occupancy-icon" style="border-left: 1px solid gainsboro;display:block">
+                        <div style="display:flex; justify-content:center">
+                            <p>Adult: @rooms.MaxAdults</p><i class="fa-solid fa-person"></i>
+                        </div>
+                        <div style="display:flex; justify-content:center">
+                            <p>Child: @rooms.MaxChildren</p><i class="fa-solid fa-person"></i>
+                        </div>
+                    </div>
+            </div>
+
+            <!-- Price Section -->
+            <div class="room-price" style="width: 15%;border-left: 1px solid gainsboro; box-shadow: 0 2px 8px rgba(0, 0, 0, 0.1); padding-top: 10px">
+                <div class="discount-percentage">
+                    <p style="background-color: #e12d2d; color: #fff; text-align: center; border-radius: 5px; width: 70%;font-size: 14px;">Sale -@rooms.Discount%</p>
+                </div>
+                <div class="price-info" style="float: right;">
+                    <div class="original-price" style="color: black; text-decoration: line-through; font-size: 20px; float:right">@rooms.Price.ToString("N0").Replace(",", ".")đ</div><br>
+                    <div class="discounted-price " style="color: #ed5c59; font-weight: bold;display: flex;">
+                            <p style="font-size: 20px;"> @((rooms.Price - (rooms.Price * rooms.Discount / 100)).ToString("N0").Replace(",", "."))đ </p>
+                        <p class="vnd d-flex">đ<i class="fa-brands fa-salesforce" style="padding: 5px; color: gray"></i></p>
+                    </div>
+                </div>
+            </div>
+
+
+            <!-- Booking Buttons Section -->
+            <div class="booking-buttons" style="width: 28%; box-shadow: 0 2px 8px rgba(0, 0, 0, 0.1);">
+                <div class="count-book" style="border-left: 1px solid gainsboro; border-right: 1px solid gainsboro;">
+                    <div style="font-weight: bold;padding: 10px;">Đã có 20 lượt đặt</div>
+                </div>
+                <div class="btn-book-ralated" style="width: 100%; padding: 10px 0 10% 20%">
+                    <button class="btn-book">Đặt phòng</button>
+                    <button class="btn-add-to-cart">Thêm vào xe đẩy</button>
+                    <p style="color:#555;font-size: 12px; line-height: 1.17; margin: 9px 10px 9px 9px; text-align: right;">Đặt trong 2 phút</p>
+                </div>
+            </div>
+        </div>
+        }
+    </div>
+</div>
+
+
+

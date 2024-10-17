@@ -24,6 +24,10 @@ namespace Hotel.Data
         public DbSet<Message> Messages { get; set; }
         public DbSet<IconClass> IconClasses { get; set; }
         public DbSet<RoomAmenities> RoomAmenities { get; set; }
+        public DbSet<RoomWithRoomProperty> RoomWithRoomProperties { get; set; }
+
+        public DbSet<Payment> Payments { get; set; }
+
 
         protected override void OnModelCreating(ModelBuilder modelBuilder)
         {

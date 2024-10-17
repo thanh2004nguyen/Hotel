@@ -24,7 +24,7 @@
                         <!-- Phần tử hiển thị thông báo trong top-social -->
                         <div class="top-social" style="font-size:20px; transform:translate(20px, 5px);">
                             <div class="d-flex">
-                                <a asp-controller="SingleRoom" asp-action="MyOrder"><i class="fa-solid fa-cart-shopping"></i></a>
+                                <a asp-controller="Booking" asp-action="Index"><i class="fa-solid fa-cart-shopping"></i></a>
                                 <p id="order-count" style="transform:translate(2px, -15px)">0</p>
 
 
@@ -82,12 +82,10 @@
         <div class="searchbox Searchbox--horizontal SearchBox-Scrollable">
             <input type="text" placeholder="🏠 Tên khách sạn" class="hotel-name"
                    style="border: 1px solid #ccc;margin: 10px;height: 50px;border-radius: 8px;" />
-            <input type="date" class="check-in"
+            <input type="date" class="check-in" placeholder="Chọn ngày check-in"
                    style="border: 1px solid #ccc;margin: 10px;height: 50px;border-radius: 8px;" />
-            <span class="date-label check-in-label"></span>
-            <input type="date" class="check-out"
+            <input type="date" class="check-out" placeholder="Chọn ngày check-out"
                    style="border: 1px solid #ccc;margin: 10px;height: 50px;border-radius: 8px;" />
-            <span class="date-label check-out-label"></span>
 
             <!-- Dropdown chọn số người -->
             <div class="dropdown-container">
@@ -121,6 +119,12 @@
     </div>
 
     <script>
+        if (window.location.href === 'https://localhost:7196/') {
+            document.querySelector('.searchbox-container').style.display = 'block';
+        } else {
+            document.querySelector('.searchbox-container').style.display = 'none';
+        }
+
         let countChild = 0;
         let countAdult = 0;
         window.onscroll = function () {

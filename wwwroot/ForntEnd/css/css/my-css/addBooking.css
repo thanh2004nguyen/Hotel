@@ -1,0 +1,1233 @@
+﻿* {
+    box-sizing: border-box;
+    margin: 0;
+    padding: 0;
+}
+/* font-family: BlinkMacSystemFont, -apple-system, Segoe UI, Roboto, Helvetica, Arial, sans-serif; */
+body {
+    font-family: Arial, sans-serif;
+    height: 200vh
+}
+
+header {
+    display: flex;
+    align-items: center;
+    padding: 10px 20px;
+    width: 100%;
+    background-color: #f8f8f8;
+    font-family: BlinkMacSystemFont, -apple-system, Segoe UI, Roboto, Helvetica, Arial, sans-serif;
+}
+
+.logo {
+    width: 20%;
+    font-weight: bold;
+    font-size: 24px;
+}
+
+.steps-container {
+    width: 60%;
+    position: relative;
+}
+
+.steps {
+    list-style: none;
+    display: flex;
+    justify-content: space-around;
+    position: relative;
+}
+
+    .steps li {
+        padding: 10px;
+        cursor: pointer;
+        text-align: center;
+        position: relative;
+    }
+
+.step-number {
+    display: block;
+    font-weight: bold;
+    font-size: 18px;
+}
+
+.step-title {
+    font-size: 14px;
+}
+
+.steps li.active {
+    color: #007bff;
+}
+
+.steps li:not(.active) {
+    color: gray;
+}
+
+.progress-bar {
+    height: 5px;
+    background-color: gray;
+    border-radius: 3px;
+    position: absolute;
+    bottom: 0;
+    left: 0;
+    right: 0;
+    z-index: 0;
+}
+
+.progress {
+    height: 100%;
+    background-color: #007bff;
+    border-radius: 3px;
+}
+
+.account {
+    width: 20%;
+    text-align: right;
+}
+
+.countdown {
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    padding: 8px 16px 8px 8px;
+    width: 100%;
+    position: sticky;
+    top: 0px;
+    z-index: 100;
+    background-color: rgb(253, 243, 243);
+}
+
+#timer {
+    font-weight: bold;
+    color: red;
+}
+
+.fixed {
+    position: fixed;
+    top: 0;
+    left: 0;
+    right: 0;
+}
+
+.content-booking {
+    width: calc(100% + 0px);
+    margin: calc(0px);
+    max-width: calc(1240px);
+    margin: 0 auto;
+}
+
+fieldset {
+    border: none;
+}
+
+/* fieldset thông tin khách hàng  */
+.form-container {
+    display: flex;
+    justify-content: space-between;
+    margin-top: 10px;
+    font-family: BlinkMacSystemFont, -apple-system, Segoe UI, Roboto, Helvetica, Arial, sans-serif;
+}
+
+.left-section {
+    width: 60%;
+}
+
+.info-customer {
+    border-radius: 20px;
+    border: 1px solid #c1cbe0;
+    padding: 10px;
+}
+
+.left-section .whatyourname {
+    padding: 20px;
+}
+
+
+.left-section label {
+    display: block;
+    margin: 10px 0 5px;
+}
+
+input[type="text"],
+input[type="email"],
+input[type="tel"],
+select {
+    width: 100%;
+    padding: 8px;
+    margin-bottom: 15px;
+    border: 1px solid #ccc;
+    border-radius: 10px;
+}
+
+.note {
+    font-size: 14px;
+    color: #555;
+    margin-bottom: 15px;
+}
+
+
+
+
+/* inputGroup */
+.form-group {
+    position: relative;
+}
+
+.ip {
+    padding: .75rem;
+    border-radius: 10px;
+    border: 1px solid #c1cbe0;
+    color: black;
+    width: 300px;
+    outline: none;
+    height: 38px;
+}
+
+.lb {
+    position: absolute;
+    left: .75rem;
+    top: 0;
+    background: .75rem;
+    padding-inline: .3em;
+    transition: transform 200ms;
+    pointer-events: none;
+    transform-origin: left;
+    translate: -.3em;
+    color: #24262c;
+    font-size: 14px;
+    font-weight: 400;
+}
+
+.ip::placeholder {
+    opacity: 0;
+}
+
+.ip:focus + .lb,
+.ip:not(:placeholder-shown) + label {
+    transform: translateY(calc(-50% - .55rem)) scale(.8);
+    color: #3E6CEA;
+    background-color: white;
+}
+
+.ip:hover {
+    /* #e3edff */
+    background-color: white;
+    border: 1px solid #3E6CEA;
+}
+
+.ip:focus {
+    border: 1px solid #3E6CEA;
+}
+
+
+
+
+
+/* select request */
+.select-request {
+    margin: 20px 0;
+    border-radius: 20px;
+    border: 1px solid #c1cbe0;
+    padding: 10px;
+    font-family: BlinkMacSystemFont, -apple-system, Segoe UI, Roboto, Helvetica, Arial, sans-serif;
+}
+
+    .select-request legend {
+        margin: 0px 0px 8px;
+        font-weight: 600;
+        color: rgb(36, 38, 44);
+        fill: rgb(36, 38, 44);
+        font-size: clamp(18px, 17.1795px + 0.25641vw, 20px);
+        line-height: clamp(21px, 19.7692px + 0.384615vw, 24px);
+    }
+
+    .select-request p {
+        margin: calc(-1.19px) 0px calc(14.81px);
+        font-weight: 400;
+        color: rgb(36, 38, 44);
+        fill: rgb(36, 38, 44);
+        line-height: calc(18.19px);
+        font-size: 14px;
+    }
+
+.request-preferences {
+    background: #F6F8FC;
+    padding: 10px;
+    margin: 0 0 0 8px;
+    border-radius: 5px;
+    ;
+}
+
+.smoking-preferences,
+.bed-preferences {
+    margin-bottom: 10px;
+}
+
+    .smoking-preferences legend {
+        padding: 0px;
+        display: inherit;
+        box-sizing: content-box;
+        color: #24262C;
+        font-size: 14px;
+    }
+
+.smokings, .beds {
+    display: flex;
+}
+
+    .smokings label, .beds label {
+        width: 40%;
+    }
+
+.smoking-preferences,
+.bed-preferences legend {
+    font-size: 16px;
+}
+
+.smoking-preferences,
+.bed-preferences label {
+    display: block;
+}
+
+.smokings .custom-radio, .beds .custom-radio {
+    font-family: system-ui, sans-serif;
+    font-size: 20px;
+    font-weight: bold;
+    line-height: 1.1;
+    display: grid;
+    grid-template-columns: 1em auto;
+    gap: 0.5em;
+    align-items: center; /* Căn giữa theo chiều dọc */
+}
+
+.smokings p, .beds p {
+    margin: 0; /* Loại bỏ margin của thẻ p */
+}
+
+.specialRequestMessage {
+    width: 100%;
+    padding: 8px;
+    border: 1px solid #ccc;
+    border-radius: 4px;
+    margin-top: 10px;
+}
+
+.special-request-dropdown button {
+    padding: 10px 15px;
+    color: #3E6CEA;
+    border: none;
+    border-radius: 4px;
+    cursor: pointer;
+    background: transparent;
+    font-weight: 600;
+    font-size: 16px;
+    ;
+}
+
+    .special-request-dropdown button:hover a {
+        text-decoration: underline;
+    }
+
+/* Ẩn/hiện phần yêu cầu đặc biệt */
+#specialRequestContent {
+    margin-top: 15px;
+    padding: 10px;
+    border: 1px solid #ddd;
+    border-radius: 4px;
+}
+
+.special-request-container {
+    display: flex;
+    flex-wrap: wrap;
+    gap: 10px;
+}
+
+    .special-request-container label {
+        width: calc(50% - 10px);
+        display: flex;
+        align-items: center;
+    }
+
+    .special-request-container p {
+        margin: 0;
+        padding-left: 10px;
+        ;
+    }
+
+
+
+/* Nút 'Bước Kế Tiếp' */
+#nextStepSection {
+    width: 100%;
+    border-radius: 20px;
+    border: 1px solid #c1cbe0;
+    padding: 10px;
+}
+
+.next-step-container {
+    width: 100%;
+    text-align: center;
+}
+
+#nextStepButton {
+    min-width: 90%;
+    background-color: #3170e7;
+    ; /* Màu nền xanh */
+    color: #fff; /* Màu chữ trắng */
+    border: none;
+    border-radius: 20px;
+    padding: 10px 20px;
+    font-size: 14px;
+    cursor: pointer;
+    transition: background-color 0.3s ease;
+    max-width: 300px; /* Đặt giới hạn chiều ngang */
+}
+
+    #nextStepButton:hover {
+        background-color: #2b5aba; /* Màu nền xanh đậm hơn khi hover */
+    }
+
+/* Tin nhắn dưới nút */
+.confirmation-message {
+    margin: calc(-0.98px) 0px;
+    font-weight: 600;
+    color: rgb(40, 135, 28);
+    fill: rgb(40, 135, 28);
+    line-height: calc(14.98px);
+    font-size: 12px;
+    margin-top: 10px;
+}
+
+/* Hiệu ứng cho thanh tiến trình */
+.steps-container .steps li.active {
+    color: #3E6CEA; /* Màu xanh cho phần đã hoàn thành */
+}
+
+    .steps-container .steps li.active::before {
+        background-color: #3E6CEA; /* Màu xanh cho đường gạch ngang */
+    }
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+.right-section {
+    width: 40%;
+}
+
+.property-info {
+    background-color: #fff;
+    border: 1px solid #e0e0e0;
+    box-shadow: 0 2px 8px rgba(0, 0, 0, 0.1);
+    border-radius: 20px;
+    margin-left: 20px;
+    padding: 15px;
+}
+
+.property-discount {
+    background-color: #ef363f;
+    width: 80px;
+    height: 50px;
+    color: white;
+    text-align: center;
+    border-radius: 4px;
+    font-size: 16px;
+    font-weight: 400;
+    margin-left: -2%;
+    ;
+    margin-bottom: -7%;
+    position: absolute;
+    z-index: 2;
+}
+
+.hotel-info {
+    display: flex;
+    justify-content: center;
+    position: relative;
+    padding: 20px 0;
+}
+
+.hotel-image {
+    position: relative;
+}
+
+    .hotel-image img {
+        width: 84px;
+        height: 112px;
+        border-radius: 10px;
+        object-fit: cover;
+        z-index: 1;
+    }
+
+
+.hotel-details {
+    display: flex;
+    flex-direction: column;
+    justify-content: space-between;
+    padding-left: 10px;
+}
+
+.wifi-badge {
+    width: 100px;
+    background-color: #d4edda;
+    border: none;
+    padding: 4px 8px;
+    font-size: 12px;
+    border-radius: 4px;
+    margin-bottom: 10px;
+    ;
+}
+
+.hotel-name {
+    margin: 0px;
+    font-weight: 600;
+    color: rgb(36, 38, 44);
+    fill: rgb(36, 38, 44);
+    display: -webkit-box;
+    overflow: hidden;
+    text-overflow: ellipsis;
+    -webkit-line-clamp: 2;
+    -webkit-box-orient: vertical;
+    font-size: clamp(18px, 17.1795px + 0.25641vw, 20px);
+    line-height: clamp(21px, 19.7692px + 0.384615vw, 24px);
+}
+
+.rating {
+    display: flex;
+    align-items: center;
+}
+
+    .rating svg {
+        fill: #ffc107;
+    }
+
+.review-info {
+    display: flex;
+}
+
+    .review-info span {
+        color: #3170E7;
+        font-size: 14px;
+        font-weight: bold;
+        padding-right: 10px;
+        margin: 0;
+    }
+
+    .review-info p {
+        color: #6c757d;
+        font-size: 12px;
+        margin: 0;
+    }
+
+.review-count {
+    font-size: 12px;
+    color: #6c757d;
+}
+
+.hotel-address {
+    font-size: 12px;
+    color: #6c757d;
+}
+
+.checkin-info {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    border-top: 1px solid #c1cbe0;
+    border-bottom: 1px solid #c1cbe0;
+    padding: 5px;
+}
+
+.support-info {
+    margin-top: 10px;
+}
+
+    .support-info p {
+        font-size: 12px;
+        color: rgb(40, 135, 28);
+    }
+
+    .support-info span {
+        font-size: 12px;
+        color: rgb(36, 38, 44);
+        ;
+    }
+
+.checkin-info p {
+    margin: 0 -50px;
+}
+
+.checkin-info h3 {
+    margin: calc(-1.19px) 0px;
+    font-weight: 600;
+    color: rgb(36, 38, 44);
+    fill: rgb(36, 38, 44);
+    text-align: center;
+    line-height: calc(18.19px);
+    font-size: 14px;
+}
+
+.checkin-info span {
+    font-size: 12px;
+    color: #6c757d;
+}
+
+
+
+/* room-info */
+.room-info {
+    background-color: #f9f9f9;
+    border-radius: 15px;
+    padding: 15px;
+    margin: 20px 0;
+    box-shadow: 0 2px 4px rgba(0,0,0,0.1);
+    border: 1px solid #c1cbe0;
+    margin-left: 20px;
+}
+
+.room-header {
+    display: flex;
+    align-items: center;
+    border-bottom: 1px solid #c1cbe0;
+}
+
+.room-title {
+    margin: 0px;
+    font-weight: 600;
+    color: rgb(36, 38, 44);
+    fill: rgb(36, 38, 44);
+    display: -webkit-box;
+    overflow: hidden;
+    text-overflow: ellipsis;
+    -webkit-line-clamp: 2;
+    -webkit-box-orient: vertical;
+    font-size: clamp(18px, 17.1795px + 0.25641vw, 20px);
+    line-height: clamp(21px, 19.7692px + 0.384615vw, 24px);
+    padding-left: 10px;
+}
+
+.room-specs {
+    padding: 10px;
+    font-size: 12px;
+    color: #6c757d;
+}
+
+    .room-specs .room-size {
+        padding-right: 10px;
+        border-right: 1px solid #c1cbe0;
+    }
+
+    .room-specs .room-adult {
+        padding-left: 10px;
+    }
+
+    .room-specs .room-child {
+        padding-left: 10px;
+    }
+
+
+.room-amenity {
+    margin: calc(-0.98px) 0px;
+    font-weight: 400;
+    color: rgb(223, 85, 5);
+    fill: rgb(223, 85, 5);
+    display: -webkit-box;
+    overflow: hidden;
+    text-overflow: ellipsis;
+    -webkit-line-clamp: 1;
+    -webkit-box-orient: vertical;
+    line-height: calc(14.98px);
+    font-size: 12px;
+    padding-top: 10px;
+}
+
+.room-amenity-first {
+    font-size: 12px;
+    padding: 10px 0;
+    color: rgb(40, 135, 28);
+}
+
+.room-image {
+    width: 100%;
+    height: auto;
+    border-radius: 10px;
+    margin-bottom: 15px;
+    object-fit: cover;
+}
+
+.room-description {
+    font-size: 14px;
+    color: #666;
+    margin-bottom: 10px;
+}
+
+.room-features {
+    display: flex;
+    flex-wrap: wrap;
+}
+
+.room-feature {
+    background-color: #d4edda;
+    border-radius: 4px;
+    padding: 8px 12px;
+    margin: 5px;
+    font-size: 12px;
+    color: #3c763d;
+}
+
+.room-availability {
+    margin-top: 15px;
+    font-size: 14px;
+    font-weight: bold;
+    color: rgb(40, 135, 28);
+}
+
+
+
+/* Giá phòng */
+.price-section {
+    background-color: #f9f9f9;
+    border: 1px solid #e0e0e0;
+    border-radius: 10px;
+    padding: 20px;
+    margin: 10px 0 20px 20px;
+    ;
+    box-shadow: 0 2px 8px rgba(0, 0, 0, 0.1);
+}
+
+.price-breakdown {
+    margin-bottom: 15px;
+    border-bottom: 1px solid #e0e0e0;
+}
+
+.offers-ribbon {
+    padding: 5px;
+    border-radius: 5px;
+    margin-bottom: 10px;
+    width: 100%;
+}
+
+    .offers-ribbon .ribbon {
+        font-size: 12px;
+        color: #FFFFFF;
+        background-color: #E44746;
+        padding: 4px;
+        float: right;
+        margin-right: -7%;
+    }
+
+.breakdown-item {
+    display: flex;
+    justify-content: space-between;
+    margin-bottom: 8px;
+}
+
+.item-label {
+    font-size: 14px;
+    color: #333333;
+}
+
+.item-price {
+    font-size: 16px;
+    color: #333333;
+}
+
+.crossed-out {
+    text-decoration: line-through;
+    color: #333333;
+}
+
+.total-price-container {
+    font-weight: bold;
+    font-size: 16px;
+    color: #333333;
+    margin: 15px 0;
+    display: flex;
+    justify-content: space-between;
+}
+
+.charges {
+    font-size: 14px;
+    color: #666;
+    margin-bottom: 15px;
+}
+
+.price-match {
+    font-size: 14px;
+    background: #32a923;
+    color: #fff;
+    margin-bottom: 10px;
+    padding: 10px;
+}
+
+.you-saved {
+    font-size: 14px;
+    color: #666;
+}
+
+
+
+/* Payment */
+.form-container-payment {
+    display: flex;
+    justify-content: space-between;
+    margin-top: 10px;
+    font-family: BlinkMacSystemFont, -apple-system, Segoe UI, Roboto, Helvetica, Arial, sans-serif;
+}
+
+    .form-container-payment .left-section {
+        width: 60%;
+    }
+
+    .form-container-payment .right-section {
+        width: 40%;
+    }
+
+.payment-card .header-text {
+    padding: 0px 5px;
+    min-width: 120px;
+    font-weight: 700;
+    color: rgb(83, 146, 249);
+    font-size: 16px;
+    line-height: 20px;
+}
+
+.icon-payment {
+    color: rgb(83, 146, 249);
+}
+
+.payment-card {
+    border-radius: 20px;
+    border: 1px solid #c1cbe0;
+    padding-bottom: 20px;
+    margin-bottom: 20px;
+    ;
+}
+
+.card-wrapper {
+    padding: 20px;
+}
+
+    .card-wrapper .sub-header {
+        color: #333333;
+        font-size: 12px;
+        font-weight: bold;
+    }
+
+
+
+
+
+
+/* thẻ tín dụng */
+.accordion-container {
+    width: 100%;
+    display: flex;
+    cursor: pointer;
+    background: #5392F9;
+}
+
+.accordion-content {
+    display: flex;
+    align-items: center;
+}
+
+.radio-label {
+    display: flex;
+    align-items: center;
+}
+
+.radio-input {
+    margin-right: 8px;
+}
+
+.accordion-body {
+    padding: 10px;
+}
+
+.accordion-title {
+    font-size: 18px;
+    margin: 0;
+}
+
+.accordion-header {
+    width: 100%;
+    display: flex;
+}
+
+.accordion-title-text {
+    width: 60%;
+    margin-right: 200px;
+    display: flex;
+    align-items: center;
+}
+
+.payment-method {
+    font-weight: bold;
+}
+
+.payment-methods {
+    display: flex;
+}
+
+.card-list {
+    list-style: none;
+    display: flex;
+    padding: 0;
+    margin: 0;
+}
+
+.card-item {
+    margin-right: 10px;
+}
+
+.card-img {
+    width: 40px;
+    height: auto;
+}
+
+
+
+
+
+/* chọn phương thức thanh toán */
+
+.payment-wrapper {
+    font-family: Arial, sans-serif;
+    padding: 20px;
+    background-color: #f9f9f9;
+    border-radius: 8px;
+    margin: 0 auto;
+}
+
+.payment-title {
+    font-weight: bold;
+    font-size: 18px;
+    margin-bottom: 10px;
+    display: block;
+}
+
+.required {
+    color: red;
+}
+
+.payment-method-dropdown {
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    background-color: #fff;
+    border: 1px solid #ddd;
+    padding: 10px;
+    border-radius: 4px;
+    cursor: pointer;
+    margin-bottom: 10px;
+    ;
+}
+
+.payment-icon {
+    width: 30px;
+    height: 20px;
+}
+
+.payment-method-selected {
+    display: flex;
+}
+
+    .payment-method-selected img {
+        margin-right: 20px;
+    }
+
+    .payment-method-selected p {
+        margin: 0;
+        font-size: 14px;
+    }
+
+.dropdown-icon {
+    width: 1em;
+    height: 1em;
+    fill: #333;
+}
+
+.checkmark-icon {
+    width: 50%;
+    margin-left: 10px;
+}
+
+    .checkmark-icon svg {
+        width: 14px;
+        height: 14px;
+        fill: green;
+    }
+
+
+.annotation-message {
+    font-size: 12px;
+    line-height: 16px;
+    font-weight: 400 bold;
+    text-align: center;
+    background-color: rgb(243, 249, 242);
+    padding: 10px;
+}
+
+
+
+.credit-card-preview {
+    margin: 20px 0;
+    display: flex;
+    width: 100%;
+}
+
+.card-input {
+    width: 50%;
+}
+
+.dateAndcode {
+    display: flex;
+}
+
+    .dateAndcode .input-item {
+        width: 40%;
+        padding: 0 10px 0 0;
+    }
+
+    .dateAndcode img {
+        margin-top: 20px;
+        object-fit: cover;
+        width: 60px;
+        height: 40px;
+    }
+
+.card-preview {
+    width: 50%;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+}
+
+.input-item .label {
+    display: block;
+    color: #333333;
+    font-size: 14px;
+    ;
+}
+
+.required {
+    color: red;
+}
+
+
+
+.credit-card {
+    width: 300px; /* Chiều rộng của thẻ */
+    height: 180px; /* Chiều cao của thẻ */
+    border-radius: 10px; /* Góc bo cho thẻ */
+    padding: 10px;
+    position: relative;
+    background: #ddd;
+    color: white;
+}
+
+.card-logo {
+    display: flex;
+    justify-content: space-between;
+    margin-bottom: 20px;
+}
+
+.card-front {
+    position: absolute;
+    top: 10px;
+    left: 10px;
+}
+
+.card-number, .card-holder-name, .card-expiry {
+    margin-bottom: 10px;
+}
+
+.card-back {
+    position: absolute;
+    top: 10px;
+    left: 10px;
+    display: none; /* Ẩn mặt sau của thẻ, có thể điều chỉnh khi cần */
+}
+
+.final-step {
+    margin-top: 20px;
+}
+
+.input-wrapper {
+    display: flex;
+    flex-direction: column;
+    margin-top: 10px;
+}
+
+
+    .input-wrapper input {
+        padding: 8px;
+        border: 1px solid #ddd;
+        border-radius: 4px;
+        font-size: 14px;
+        width: 100%;
+    }
+
+
+
+
+
+
+
+
+/* chính sách */
+.info-section {
+    display: flex;
+    flex-direction: column;
+    padding: 20px;
+    border-radius: 8px;
+    margin: 20px 0;
+}
+
+
+.newsletter-subscription {
+    display: flex;
+    align-items: center;
+    cursor: pointer;
+}
+
+.checkbox-input {
+    margin: -35px 0 0 10px;
+}
+
+.checkbox-span {
+    display: inline-flex;
+    align-items: center;
+}
+
+.checkbox-text {
+    padding: 10px;
+    border-radius: 4px;
+}
+
+.text-content {
+    font-size: 14px;
+    color: #333333;
+}
+
+.agreement-text {
+    font-size: 14px;
+    padding: 0 10px;
+    color: #666666;
+}
+
+
+
+/* support */
+.support-section {
+    background-color: #f9f9f9;
+    border: 1px solid #e0e0e0;
+    border-radius: 10px;
+    padding: 20px;
+    margin: 10px 0 20px 20px;
+    ;
+    box-shadow: 0 2px 8px rgba(0, 0, 0, 0.1);
+}
+
+.support-breakdown {
+    margin-bottom: 15px;
+    border-bottom: 1px solid #e0e0e0;
+}
+
+.offers-support {
+    padding: 5px;
+    border-radius: 5px;
+    margin-bottom: 10px;
+    width: 100%;
+}
+
+    .offers-support .discount {
+        font-size: 12px;
+        color: #FFFFFF;
+        background-color: #28870C;
+        padding: 4px;
+        float: right;
+    }
+
+.support-item {
+    display: flex;
+    margin-bottom: 8px;
+    padding: 0 30px;
+}
+
+    .support-item i {
+        font-size: 14px;
+        color: #28870C;
+        margin-right: 10px;
+        padding-top: 5px;
+    }
+
+    .support-item span {
+        font-size: 14px;
+        color: #24262C;
+        margin: 0;
+    }
+
+#confirmPaymentButton {
+    min-width: 90%;
+    background-color: #3170e7;
+    ; /* Màu nền xanh */
+    color: #fff; /* Màu chữ trắng */
+    border: none;
+    border-radius: 20px;
+    padding: 10px 20px;
+    font-size: 14px;
+    cursor: pointer;
+    transition: background-color 0.3s ease;
+    max-width: 300px; /* Đặt giới hạn chiều ngang */
+}
+
+
+
+/* thành công thanh toán */
+.title-success {
+    color: #88B04B;
+    font-family: "Nunito Sans", "Helvetica Neue", sans-serif;
+    font-weight: 900;
+    font-size: 40px;
+    margin-bottom: 10px;
+    text-align: center;
+}
+
+.content-succuess {
+    color: #404F5E;
+    font-family: "Nunito Sans", "Helvetica Neue", sans-serif;
+    font-size: 20px;
+    margin: 0;
+    text-align: center;
+}
+
+.checkmark {
+    color: #9ABC66;
+    font-size: 100px;
+    line-height: 200px;
+    padding-left: 60px;
+    ;
+}
+
+.success-payment {
+    padding: 60px;
+    display: inline-block;
+    margin: 0 auto;
+    width: 100%;
+}
+
+
+

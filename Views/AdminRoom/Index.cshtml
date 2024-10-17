@@ -120,9 +120,9 @@
                             <span class="status disabled">Disabled</span>
                         </div>
                     }
-                    <div class="product-cell sales"><span class="cell-label">Sales:</span>@Html.DisplayFor(a => item.Discount)</div>
+                    <div class="product-cell sales"><span class="cell-label">Sales:</span>@item.Discount %</div>
 
-                    <div class="product-cell price"><span class="cell-label">Price:</span>@Html.DisplayFor(a => item.Price)VND</div>
+                    <div class="product-cell price"><span class="cell-label">Price:</span>@item.Price.ToString("N0").Replace(",", ".")đ</div>
                     <div class="product-cell active">
                         <span class="cell-label"> Active: </span>
                         <ul class="list-inline mb-0">

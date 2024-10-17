@@ -37,7 +37,6 @@ namespace Hotel.Controllers
         [HttpPost]
         public async Task<IActionResult> Create(Amenities ameniti)
         {
-            _logger.LogInformation($"IconClassId: {ameniti.IconClassId}, Name: {ameniti.Name}, theme: {ameniti.AmenitiesThemeId}");
             if (ameniti.IconClassId.HasValue)
             {
                 ameniti.IconClass = await _context.IconClasses.FindAsync(ameniti.IconClassId.Value);
@@ -55,22 +54,11 @@ namespace Hotel.Controllers
                 await _context.SaveChangesAsync();
                 return RedirectToAction("Index");
             }
-            foreach (var entry in ModelState)
-            {
-                var key = entry.Key;
-                var errors = entry.Value.Errors;
-
-                foreach (var error in errors)
-                {
-                    _logger.LogError($"Validation error for {key}: {error.ErrorMessage}");
-                }
-            }
             var icons = await _context.IconClasses.ToListAsync();
             var themes = await _context.AmenitiesThemes.ToListAsync();
 
             ViewBag.IconList = icons;
             ViewBag.ThemeList = themes;
-
             return View(ameniti);
         }
 

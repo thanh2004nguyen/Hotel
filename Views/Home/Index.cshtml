@@ -56,7 +56,7 @@
                 </div>
             </div>
         }
-    </section>
+    </section>@* 
     <div class="col-xl-4 col-lg-4 offset-xl-2 offset-lg-1"
          style="position: absolute; top: 9%; right: 10%; margin-top:165px;bottom: 9%;">
         <div class="booking-form">
@@ -83,7 +83,7 @@
                 <button type="submit">Check Availability</button>
             </form>
         </div>
-    </div>
+    </div> *@
 }
 
 @if (Model.hotelDatas != null)
@@ -162,18 +162,21 @@
                                 <div class="overlay"></div>
                                 <div class="hr-text position-absolute text-center" style="margin-bottom: -80px;">
                                     <h3>@r.RoomName</h3>
-                                    <h2>@r.Price.ToString("0")<span>vnd/Pernight</span></h2>
+                                    <h2>@r.Price.ToString("N0").Replace(",", ".")đ/Pernight </h2>
                                     <table class="text-white">
                                         <tbody>
                                             <tr>
                                                 <td class="r-o">Specifications:</td>
-                                                @if (r.roomProperties != null && r.roomProperties.Any())
+                                                 @if (r.RoomWithRoomProperties != null && r.RoomWithRoomProperties.Any())
                                                 {
-                                                    foreach (var property in r.roomProperties)
+                                                    var firstProperty = r.RoomWithRoomProperties.FirstOrDefault();
+                                                    if (firstProperty != null)
                                                     {
-                                                        <td style="max-width: 200px; overflow: hidden; text-overflow: ellipsis; white-space: nowrap; display: block;">@Html.Raw(@property.IconClass?.Icon)  @property.Name</td>
+                                                        <td style="max-width: 200px; overflow: hidden; text-overflow: ellipsis; white-space: nowrap; display: block;">
+                                                            @Html.Raw(firstProperty.RoomProperty?.IconClass?.Icon) @firstProperty.RoomProperty?.Name
+                                                        </td>
                                                     }
-                                                }
+                                                } 
                                             </tr>
                                             <tr>
                                                 <td class="r-o">Capacity:</td>

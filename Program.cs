@@ -1,4 +1,4 @@
-using Hotel.Data;
+﻿using Hotel.Data;
 using Hotel.Filters;
 using Microsoft.AspNetCore.Authentication.Cookies;
 using Microsoft.AspNetCore.Mvc.Authorization;
@@ -10,6 +10,14 @@ var builder = WebApplication.CreateBuilder(args);
 // Add services to the container.
 builder.Services.AddControllersWithViews();
 
+// Thêm dịch vụ PayPalClient
+builder.Services.AddSingleton(x =>
+    new PaypalClient(
+        builder.Configuration["PayPalOptions:ClientId"],
+        builder.Configuration["PayPalOptions:ClientSecret"],
+        builder.Configuration["PayPalOptions:Mode"]
+    )
+);
 builder.Services.AddDbContext<HotelDbContext>(o =>
 {
 	o.UseSqlServer(builder.Configuration.GetConnectionString("DemoConnectionString"));

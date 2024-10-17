@@ -7,36 +7,19 @@ namespace Hotel.Models
 {
     public class Booking: BaseEntity
     {
-        [Required]
-        public string? Name { get; set; }
-		public string? Status { get; set; }
-		[Required]
-        public string? Phone {  get; set; }
-
-        [ForeignKey("Room")]
+        public string CustomerName { get; set; }
+        public string CustomerEmail { get; set; }
+        public string CustomerPhone { get; set; }
+        public string SmokingPreference { get; set; }
+        public string BedPreference { get; set; }
+        public string SpecialRequest { get; set; } // Thêm trường yêu cầu đặc biệt
+        public decimal Price { get; set; }
+        public DateTime CheckinDate { get; set; }
+        public DateTime CheckoutDate { get; set; }
+        public int TotalNights { get; set; }
+        public int UserId { get; set; }
         public int RoomId { get; set; }
-        public Room? Room { get; set; }
-        public String? Message {  get; set; } //yêu cầu
-        public bool IsViewed { get; set; }
-        public DateTime DayCheckin { get; set; }
-        public DateTime DayCheckout { get; set; }
-		[Required]
-		public int UserId { get; set; }
-        public Booking()
-        {
-            Status = "Pending"; 
-        }
-
-        public Booking(OrderDto data)
-        {
-            UserId = data.UserId;
-            Status = data.Status;
-            Name = data.Name;
-            Phone = data.Phone;
-            Message= data.Message;
-            RoomId = data.RoomId;
-            DayCheckin = data.DayCheckIn;
-            DayCheckout = data.DayCheckOut;
-        }
+        [ForeignKey("RoomId")]
+        public Room Room { get; set; }
     }
 }

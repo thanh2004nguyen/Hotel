@@ -1,96 +1,331 @@
-﻿@* ﻿@using Hotel.Models.Shared;
+﻿ ﻿@using Hotel.Models.Shared;
 @model Hotel.Dtos.RoomViewDto
 
-
-<div class="hero-wrap" style="background-image: url('@Url.Content("~/images/HP.png")'); margin-top:-25px" >
+<div class="hero-wrap" style="background-image: url('@Url.Content("~/images/HP.png")'); margin-top:-25px; box-shadow: 0 1rem 2rem hsl(0 0% 0% / 20%); ">
 	<div class="overlay"></div>
 	<div class="container">
 		<div class="row no-gutters slider-text d-flex align-itemd-end justify-content-center">
 			<div class="col-md-9 ftco-animate text-center d-flex align-items-end justify-content-center">
 				<div class="text">
-
 					<h1 class="mb-4 bread">Danh sách phòng</h1>
 				</div>
 			</div>
 		</div>
 	</div>
 </div>
-<section class="ftco-section bg-light" style="padding-top:50px">
-	<div class="p-3">
-		<div class="row">
-			<div class="col-lg-12">
-				<div class="col-lg-12" style="display:flex;flex-direction:column;justify-content:center;align-items:center">
-
-					@foreach (var r in Model.ListRoom)
-					{
-						var img = $"~/images/{r.Images.ToArray()[0].Url}";
 
 
-                        <div class="ftco-animate col-lg-12" >
-                            <div class="room col-lg-12" style="background-color: white; border: 0.2rem solid #ccc; padding: 0;">
 
-                                <div class="row">
-                                    <div class="col-lg-8 " >
-                                        <a asp-controller="SingleRoom" asp-action="Index" asp-route-id="@r.Id" class="img d-flex justify-content-center align-items-center" style="height: 100%;">
-                                            <img src="@Url.Content(img)" alt="@img" style="width: 100%; height:50vh; object-fit: cover" />
-                                        </a>
-                                    </div>
 
-                                    <div class="col-lg-4 text p-3 text-center ">
-                                        
 
-                                        <h2 class="mb-3"><a asp-controller="SingleRoom" asp-action="Index" asp-route-id="@r.Id" style="font-size: 35px; font-weight: bold">@r.RoomType.Type</a></h2>
-
-                                        
-
-                                        @if (Model.ListProperty != null)
+<!-- sidebar + content -->
+<section class="p-5">
+    <div class="container"style="width: 100vw">
+        <div class="row" style="width: 120%; transform:translateX(-8%)">
+            <!-- sidebar -->
+            <div class="col-lg-3">
+                <!-- Toggle button -->
+                <button class="btn btn-outline-secondary mb-3 w-100 d-lg-none"
+                        type="button"
+                        data-mdb-toggle="collapse"
+                        data-mdb-target="#navbarSupportedContent"
+                        aria-controls="navbarSupportedContent"
+                        aria-expanded="false"
+                        aria-label="Toggle navigation">
+                    <span>Show filter</span>
+                </button>
+                <!-- Collapsible wrapper -->
+                <div class="collapse card d-lg-block mb-2" id="navbarSupportedContent">
+                    <div class="accordion" id="accordionPanelsStayOpenExample">
+               
+                        <!-- Room Types -->
+                        <div class="accordion-item">
+                            <h2 class="accordion-header" id="headingTwo">
+                                <button class="accordion-button text-dark bg-light"
+                                        type="button"
+                                        data-mdb-toggle="collapse"
+                                        data-mdb-target="#panelsStayOpen-collapseTwo"
+                                        aria-expanded="true"
+                                        aria-controls="panelsStayOpen-collapseTwo">
+                                    Room Types
+                                </button>
+                            </h2>
+                            <div id="panelsStayOpen-collapseTwo" class="accordion-collapse collapse show" aria-labelledby="headingTwo">
+                                <div class="accordion-body">
+                                    <div>
+                                        @foreach (var type in Model.RoomTypeCounts)
                                         {
-                                            foreach (var pro in Model.ListProperty)
-                                            {
-                                                if (pro.Name.Contains("giá"))
-                                                {
-                                                    foreach (var de in pro.Details)
-                                                        if (@de.RoomId == r.Id)
-                                                        {
-                                                            <p style="font-size:18px"><span class=" mr-2" style="font-size:18px">@pro.Name: </span><span class="per price" style="font-size:20px"> @de.Detail</span></p>
-                                                        }
-                                                }
-                                            }
-
-                                            <div class="d-flex align-items-start flex-column">
-                                                @foreach (var pro in Model.ListProperty)
-                                                {
-                                                    if (!pro.Name.Contains("giá"))
-                                                    {
-                                                        foreach (var de in pro.Details)
-                                                        {
-                                                            if (@de.RoomId == r.Id)
-                                                            {
-                                                                <div class="d-flex align-items-center">
-                                                                    <div class="ml-3" style="width: 40px;">
-                                                                        <i class="@CommonMethod.CheckIcon(pro.Name) mr-5 " style="font-size: 20px"></i>
-                                                                    </div>
-                                                                    <span class="ml-2">@de.Detail</span>
-                                                                </div>
-                                                            }
-                                                        }
-                                                    }
-                                                }
+                                            <div class="form-check">
+                                                <input name="roomTypes" type="checkbox" class="roomTypeCheckbox" value="@type.RoomTypeId" id="flexCheckChecked@type.RoomTypeId" style="width: 17px;height: 17px;transform:translateX(-120%)" />
+                                                <label class="form-check-label" for="flexCheckChecked@type.RoomTypeId" style="transform:translateX(-25%);">@type.RoomTypeName</label>
+                                                <span class="badge badge-secondary float-end">@type.RoomCount</span>
                                             </div>
-                                            <hr>
-                                            <p class="pt-1"><a asp-action="Index" asp-controller="SingleRoom" asp-route-id="@r.Id" class="btn-custom">Book Now <span class="icon-long-arrow-right"></span></a></p>
                                         }
                                     </div>
                                 </div>
                             </div>
                         </div>
+                        <!-- Price -->
+                        <div class="accordion-item">
+                            <h2 class="accordion-header" id="headingThree">
+                                <button class="accordion-button text-dark bg-light"
+                                        type="button"
+                                        data-mdb-toggle="collapse"
+                                        data-mdb-target="#panelsStayOpen-collapseThree"
+                                        aria-expanded="false"
+                                        aria-controls="panelsStayOpen-collapseThree">
+                                    Price
+                                </button>
+                            </h2>
+                            <div id="panelsStayOpen-collapseThree" class="accordion-collapse collapse show" aria-labelledby="headingThree">
+                                <div class="accordion-body">
+                                    <div class="range">
+                                        <input type="range" class="form-range" id="customRange1" min="0" max="10000000" step="100" value="0" />
+                                    </div>
+                                    <div class="row mb-3">
+                                        <div class="col-6">
+                                            <p class="mb-0">
+                                                Min
+                                            </p>
+                                            <div class="form-outline">
+                                                <input type="number" id="typeNumberMin" class="form-control" min="0" max="10000000" />
+                                                <label class="form-label" for="typeNumber">$0</label>
+                                            </div>
+                                        </div>
+                                        <div class="col-6">
+                                            <p class="mb-0">
+                                                Max
+                                            </p>
+                                            <div class="form-outline">
+                                                <input type="number" id="typeNumberMax" class="form-control" min="0" max="10000000" />
+                                                <label class="form-label" for="typeNumber">$1,0000</label>
+                                            </div>
+                                        </div>
+                                    </div>
+                                    
+                                </div>
+                            </div>
+                            
 
 
+                        </div>
+                        
+                        <!-- Ratings -->
+                        <div class="accordion-item">
+                            <h2 class="accordion-header" id="headingThree">
+                                <button class="accordion-button text-dark bg-light"
+                                        type="button"
+                                        data-mdb-toggle="collapse"
+                                        data-mdb-target="#panelsStayOpen-collapseFive"
+                                        aria-expanded="false"
+                                        aria-controls="panelsStayOpen-collapseFive">
+                                    Ratings
+                                </button>
+                            </h2>
+                            <div id="panelsStayOpen-collapseFive" class="accordion-collapse collapse show" aria-labelledby="headingThree">
+                                <div class="accordion-body">
+                                    <!-- Checkbox cho 5 sao -->
+                                    <div class="form-check">
+                                        <input type="checkbox" value="5" id="rating5" style="width: 17px;height: 17px;transform:translateX(-120%)" />
+                                        <label class="form-check-label" for="rating5" style="transform:translateX(-25%)">
+                                            <i class="fas fa-star text-warning"></i><i class="fas fa-star text-warning"></i><i class="fas fa-star text-warning"></i><i class="fas fa-star text-warning"></i>
+                                            <i class="fas fa-star text-warning"></i>
+                                        </label>
+                                    </div>
+                                    <!-- Checkbox cho 4 sao -->
+                                    <div class="form-check">
+                                        <input type="checkbox" value="4" id="rating4" style="width: 17px;height: 17px;transform:translateX(-120%)" />
+                                        <label class="form-check-label" for="rating4" style="transform:translateX(-25%)">
+                                            <i class="fas fa-star text-warning"></i><i class="fas fa-star text-warning"></i><i class="fas fa-star text-warning"></i><i class="fas fa-star text-warning"></i>
+                                            <i class="fas fa-star text-secondary"></i>
+                                        </label>
+                                    </div>
+                                    <!-- Checkbox cho 3 sao -->
+                                    <div class="form-check">
+                                        <input type="checkbox" value="3" id="rating3" style="width: 17px;height: 17px;transform:translateX(-120%)" />
+                                        <label class="form-check-label" for="rating3" style="transform:translateX(-25%)">
+                                            <i class="fas fa-star text-warning"></i><i class="fas fa-star text-warning"></i><i class="fas fa-star text-warning"></i><i class="fas fa-star text-secondary"></i>
+                                            <i class="fas fa-star text-secondary"></i>
+                                        </label>
+                                    </div>
+                                    <!-- Checkbox cho 2 sao -->
+                                    <div class="form-check">
+                                        <input type="checkbox" value="2" id="rating2" style="width: 17px;height: 17px;transform:translateX(-120%)" />
+                                        <label class="form-check-label" for="rating2" style="transform:translateX(-25%)">
+                                            <i class="fas fa-star text-warning"></i><i class="fas fa-star text-warning"></i><i class="fas fa-star text-secondary"></i><i class="fas fa-star text-secondary"></i>
+                                            <i class="fas fa-star text-secondary"></i>
+                                        </label>
+                                    </div>
+                                    <!-- Checkbox cho 1 sao -->
+                                    <div class="form-check">
+                                        <input type="checkbox" value="1" id="rating1" style="width: 17px;height: 17px;transform:translateX(-120%)" />
+                                        <label class="form-check-label" for="rating1" style="transform:translateX(-25%)">
+                                            <i class="fas fa-star text-warning"></i><i class="fas fa-star text-secondary"></i><i class="fas fa-star text-secondary"></i><i class="fas fa-star text-secondary"></i>
+                                            <i class="fas fa-star text-secondary"></i>
+                                        </label>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </div><button type="button" class="btn btn-white w-100 border border-secondary" id="filterBtn">apply</button>
+            </div>
+            <!-- sidebar -->
+            <!-- content -->
+            <div class="col-lg-9">
+                <header class="d-sm-flex align-items-center border-bottom mb-4 pb-3">
+                    <strong class="d-block py-2" id="totalRooms">@Model.roomsCount Items found </strong>
+                    <div class="ms-auto">
+                        <select class="form-select d-inline-block w-auto border pt-1" id="selectMost">
+                            <option value="0">Newest Room</option>
+                            <option value="1">Most Bookings</option>
+                            <option value="2">Most rating</option>
+                        </select>
+                        <div class="btn-group shadow-0 border">
+                            <a href="#" class="btn btn-light" title="List view">
+                                <i class="fa fa-bars fa-lg"></i>
+                            </a>
+                            <a href="#" class="btn btn-light active" title="Grid view">
+                                <i class="fa fa-th fa-lg"></i>
+                            </a>
+                        </div>
+                    </div>
+                </header>
+                <!-- rooms -->
+                <div class="row justify-content-center mb-3" id="room-list">
+                    <div class="col-md-12">
+                        <div class="card shadow-0 border rounded-3">
+                            <!--Room-->
+                            @foreach (var room in Model.ListRooms)
+                            {
 
-					}
-				</div>
+                                <div class="card-body" data-id="@room.Id">
+                                    <div class="row g-0">
+                                        <div class="col-xl-3 col-md-4 d-flex justify-content-center">
+                                            <div class="bg-image hover-zoom ripple rounded ripple-surface me-md-3 mb-3 mb-md-0">
+                                                <!-- Room image -->
+                                                <img src="~/images/@room?.Images?.FirstOrDefault()?.Url" class="w-100" alt="Room Image" />
+                                                <a href="#!">
+                                                    <div class="hover-overlay">
+                                                        <div class="mask" style="background-color: rgba(253, 253, 253, 0.15);"></div>
+                                                    </div>
+                                                </a>
+                                            </div>
+                                        </div>
+                                        <div class="col-xl-6 col-md-5 col-sm-7">
+                                            <!-- Room Name -->
+                                            <h5>@room?.RoomName</h5>
 
-			</div>
-		</div>
-	</div>
-</section> *@
+                                            <!-- Room Rating and Bookings -->
+                                            <div class="d-flex flex-row">
+                                                <div class="text-warning mb-1 me-2">
+                                                    <!-- Assuming you calculate an average rating for the room -->
+                                                    @{
+                                                        double rating = room!.Rating; 
+                                                        int fullStars = (int)rating; 
+                                                        bool halfStar = (rating - fullStars) >= 0.5; 
+                                                    }
+
+                                                    @for (var i = 0; i < 5; i++)
+                                                    {
+                                                        if (i < fullStars)
+                                                        {
+                                                            <i class="fa fa-star" style="color: orange;"></i> <!-- Full star -->
+                                                        }
+                                                        else if (i == fullStars && halfStar)
+                                                        {
+                                                            <i class="fa fa-star-half-alt" style="color: orange"></i> <!-- Half star -->
+                                                        }
+                                                        else
+                                                        {
+                                                            <i class="fa fa-star" style="color: lightgray;"></i> <!-- Empty star -->
+                                                        }
+                                                    }
+                                                    <span class="ms-1">@rating</span> <!-- Display the average rating -->
+                                                </div>
+                                                <span class="text-muted">100 bookings</span> <!-- Assuming Bookings is the property for booking count -->
+                                            </div>
+
+
+                                            <!-- Room Description -->
+                                            <p class="text mb-4 mb-md-0"
+                                               style="display: -webkit-box;-webkit-line-clamp: 2;-webkit-box-orient: vertical;overflow: hidden;text-overflow: ellipsis;">
+                                                @room.Description
+                                            </p>
+
+                                            <!-- Room Amenities grouped by AmenitiesTheme -->
+                                            <div class="d-flex flex-wrap">
+                                                @foreach (var themeGroup in room.RoomAmenities.GroupBy(a => a.Amenities.AmenitiesTheme).Take(3))
+                                                {
+                                                    <div class="me-3">
+                                                        <ul class="list-unstyled">
+                                                            @foreach (var amenity in themeGroup.Take(1))
+                                                            {
+                                                                <li>
+                                                                    @Html.Raw(amenity.Amenities.AmenitiesTheme.IconClass?.Icon)
+                                                                    @amenity.Amenities.Name
+                                                                </li>
+                                                            }
+                                                        </ul>
+                                                    </div>
+                                                }
+                                            </div>
+                                        </div>
+                                        <div class="col-xl-3 col-md-3 col-sm-5">
+                                            <!-- Room Price -->
+                                            <div class="d-flex flex-row align-items-center mb-1">
+                                                <h4 class="mb-1 me-1" style="font-family:none;">@string.Format("{0:N0}", room.Price - (room.Price * room.Discount / 100)) đ</h4>
+                                                <span class="text-danger"><s>@string.Format("{0:N0}", room.Price) đ</s></span>
+                                            </div>
+
+                                            <!-- Free shipping or additional info -->
+                                            <h6 class="text-success">@room?.RoomType?.Type</h6>
+
+                                            <!-- Action Buttons -->
+                                            <div class="mt-4 d-flex" >
+                                                <a href="#!" class="btn btn-light border px-2 pt-2 icon-hover">
+                                                    <i class="fa-solid fa-cart-plus"></i>
+                                                </a>
+                                                <a href="/room/booking/@room.Id">
+                                                    <button class="btn btn-primary shadow-0" type="button" style="margin-left: 20px;">Book now</button>
+                                                </a>
+                                            </div>
+                                        </div>
+                                    </div>
+                                </div>
+                            }
+                        </div>
+                    </div>
+                </div>
+                <!-- Pagination -->
+                <nav aria-label="Page navigation example" class="d-flex justify-content-center mt-3">
+                    <ul class="pagination">
+                        <!-- Nút Previous -->
+                        <li class="page-item @(Model.CurrentPage == 1 ? "disabled" : "")">
+                            <a class="page-link" href="@Url.Action("Index", new { page = Model.CurrentPage - 1 })" aria-label="Previous">
+                                <span aria-hidden="true">&laquo;</span>
+                            </a>
+                        </li>
+
+                        <!-- Liệt kê các trang -->
+                        @for (int i = 1; i <= Model.TotalPages; i++)
+                        {
+                            <li class="page-item @(Model.CurrentPage == i ? "active" : "")">
+                                <a class="page-link" href="@Url.Action("Index", new { page = i })">@i</a>
+                            </li>
+                        }
+
+                        <!-- Nút Next -->
+                        <li class="page-item @(Model.CurrentPage == Model.TotalPages ? "disabled" : "")">
+                            <a class="page-link" href="@Url.Action("Index", new { page = Model.CurrentPage + 1 })" aria-label="Next">
+                                <span aria-hidden="true">&raquo;</span>
+                            </a>
+                        </li>
+                    </ul>
+                </nav>
+                <!-- Pagination -->
+
+            </div>
+        </div>
+    </div>
+</section>

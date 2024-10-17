@@ -1,0 +1,168 @@
+﻿@model Hotel.Models.Room
+
+@{
+    ViewData["Title"] = "Room Details";
+    var mainImage = Model.Images?.FirstOrDefault();
+    var smallImages = Model.Images?.Skip(1).Take(1).ToList();
+    var roomProperties = Model.RoomWithRoomProperties.Select(rwp => rwp.RoomProperty).FirstOrDefault();
+    var originalPrice = Model.Price; // Giá gốc
+    var discount = Model.Discount; // Tỷ lệ giảm giá
+    var discountedPrice = originalPrice - (originalPrice * discount / 100); // Giá đã giảm
+    var discountAmount = (originalPrice * discount / 100); // Tính giá giảm
+}
+
+<div class="right-section">
+    <!-- info-check-int -->
+    <div class="property-info">
+        <div class="property-discount">
+            <p style="color: white;text-align: center;font-size: 16px; font-weight: 400; margin-bottom: -5px">@Model.Discount%</p>
+            <p style="color: white;text-align: center;font-size: 16px; font-weight: 400;">GIẢM GIÁ</p>
+        </div>
+
+        <div class="hotel-info">
+            <div class="hotel-image" style="width: 84px;">
+                <img src="~/images/@mainImage.Url" alt="Hotel" style="min-height: 112px;">
+            </div>
+
+            <div class="hotel-details">
+                <button class="wifi-badge">Wi-Fi miễn phí</button>
+                <h3 class="hotel-name">@Model.RoomName</h3>
+                <div class="hotel-rating">
+                    @{
+                        double rating = Model.Rating;
+                        int fullStars = (int)rating;
+                        bool halfStar = (rating - fullStars) >= 0.5;
+                    }
+
+                    @for (var i = 0; i < 5; i++)
+                    {
+                        if (i < fullStars)
+                        {
+                            <i class="fa fa-star" style="color: orange;"></i> <!-- Full star -->
+                        }
+                        else if (i == fullStars && halfStar)
+                        {
+                            <i class="fa fa-star-half-alt" style="color: orange"></i> <!-- Half star -->
+                        }
+                        else
+                        {
+                            <i class="fa fa-star" style="color: lightgray;"></i> <!-- Empty star -->
+                        }
+                    }
+                    <span class="ms-1">@rating</span>
+                </div>
+                <div class="review-info">
+                    <span>8,6</span>
+                    <span>Tuyệt vời</span>
+                    <p>2993 bài</p>
+                </div>
+                <div class="hotel-address">
+                    <span>15 Cavour Street, Termini Central Station, Rome, Lazio, Ý, 00184</span>
+                </div>
+            </div>
+        </div>
+
+
+        <div class="checkin-info">
+            <div class="checkin-date" id="checkinDate">
+                <h3>T7, tháng 10 12</h3>
+                <span>Nhận phòng</span>
+            </div>
+            <p>-></p>
+            <div class="checkout-date" id="checkoutDate">
+                <h3>T7, tháng 10 12</h3>
+                <span>Trả phòng</span>
+            </div>
+            <div class="count-pernight">
+                <h3 id="totalNights">2</h3>
+                <span>Đêm</span>
+            </div>
+        </div>
+        <!-- Lịch ẩn ban đầu -->
+        <div class="row">
+            <div class="col-lg-6 mb-4" id="checkin-calendar" style="display: none;">
+                <div id="inline_cal_from"></div>
+            </div>
+            <div class="col-lg-6 mb-4" id="checkout-calendar" style="display: none;">
+                <div id="inline_cal_to"></div>
+            </div>
+        </div>
+
+
+        <!-- Hidden input fields for the date values -->
+
+        <div class="support-info">
+            <p><i class="fa-solid fa-person-walking-luggage"></i> Có giữ hành lý</p>
+            <span> <i class="fa-solid fa-shield-halved"></i> Không hỗ trợ hoàn tiền</span>
+        </div>
+    </div>
+
+
+
+    <!-- Thông tin phòng -->
+    <section class="room-info">
+        <div class="room-header">
+            <div class="room-image" style="width: 84px; min-width: 84px; height: 63px;">
+                <img width="100%" alt="Room Image" src="~/images/@mainImage.Url" loading="lazy" class="room-image">
+            </div>
+            <div class="room-details" style="display:block">
+                <h1 class="room-title">@Model.RoomName</h1>
+                <div class="room-specs">
+                    <span class="room-size">@roomProperties.Name</span> <br />
+                    <span class="room-adult">Tối đa: @Model.MaxAdults người lớn</span>
+                    <span class="room-child">Tối đa: @Model.MaxChildren trẻ em</span>
+                </div>
+            </div>
+        </div>
+        <div class="room-separator"></div>
+        <div class="room-amenities" style="width: 100%;">
+            <div class="room-amenity">
+                <i class="fa-solid fa-clock" style="color: #DF5505"></i>
+                <span>Nhanh lên! Phòng cuối cùng của chúng tôi ở mức giá này cho ngày bạn chọn</span>
+            </div>
+            <div class="room-amenity-first">
+                <i class="fa-solid fa-wifi"></i>
+                <span>WiFi miễn phí</span>
+            </div>
+        </div>
+    </section>
+
+    <section class="price-section">
+        <!-- Giá phòng 1 đêm lưu vào thẻ hidden để JavaScript sử dụng -->
+        <input type="hidden" id="pricePerNight" value="@Model.Price" />
+
+        <div class="price-breakdown">
+            <!-- Hiển thị ribbon giảm giá -->
+            <div class="offers-ribbon">
+                <span class="ribbon discount">GIẢM <span id="discount-price">@Model.Discount</span>% HÔM NAY</span>
+            </div><br>
+
+            <!-- Thông tin về giá gốc (giá gốc không thay đổi, chỉ hiển thị) -->
+            <div class="breakdown-item">
+                <span class="item-label">Giá gốc&nbsp;(1 phòng x <span id="total-nights">0</span> đêm)</span>
+                <span class="item-price crossed-out" id="old-price">25.313.959 ₫</span>
+            </div>
+
+            <!-- Thông tin về giá phòng sau khi giảm giá -->
+            <div class="breakdown-item">
+                <span class="item-label">Giá phòng&nbsp;(1 phòng x <span id="total-nights-price">0</span> đêm)</span>
+                <span class="item-price" id="room-price">22.612.112 ₫</span>
+            </div>
+        </div>
+
+        <!-- Hiển thị thông tin thuế -->
+        <div class="charges">
+            <span class="included-charge">Giá đã bao gồm: Thuế 10%</span>
+        </div>
+
+        <!-- Thông tin khớp giá -->
+        <div class="price-match">
+            <span class="price-match-text">Chúng tôi khớp giá. Tìm được giá nào thấp hơn thì chúng tôi sẽ khớp giá đó!</span>
+        </div>
+
+        <!-- Thông báo bạn đã tiết kiệm được bao nhiêu -->
+        <div class="you-saved">Lựa chọn khôn khéo! Bạn tiết kiệm được <span id="duocgiam"></span> </div>
+    </section>
+
+
+</div>

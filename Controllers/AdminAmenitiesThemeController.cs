@@ -40,28 +40,10 @@ namespace Hotel.Controllers
                 await _context.SaveChangesAsync();
                 return RedirectToAction("Index");
             }
-
-            // Log validation errors
-            foreach (var entry in ModelState)
-            {
-                var key = entry.Key;
-                var errors = entry.Value.Errors;
-
-                foreach (var error in errors)
-                {
-                    _logger.LogError($"Validation error for {key}: {error.ErrorMessage}");
-                }
-            }
-
-            // Reload IconList if validation fails
             var icons = await _context.IconClasses.ToListAsync();
             ViewBag.IconList = icons;
-
             return View(am);
         }
-
-
-
         public async Task<IActionResult> Edit(int id)
         {
             var property = await _context.RoomProperties.SingleOrDefaultAsync(a => a.Id == id);
