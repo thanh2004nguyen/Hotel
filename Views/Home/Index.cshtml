@@ -150,10 +150,6 @@
                 <div class="row">
                     @foreach (var r in Model.Rooms)
                     {
-                        foreach (var amenity in r.RoomAmenities)
-                        {
-                            Console.WriteLine($"{amenity.Amenities.Name}, Icon: {amenity.Amenities.IconClass}");
-                        }
                         var rimg = $"~/images/{r.Images?.ToArray()[0].Url}";
                         <div class="col-lg-4 col-md-6 mb-4">
                             <div class="hp-room-item position-relative"

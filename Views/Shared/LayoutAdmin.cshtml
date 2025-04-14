@@ -1,6 +1,14 @@
 ﻿<!doctype html>
 <html lang="en" >
-
+@using Hotel.Filters;
+@using System.Security.Claims;
+@{
+    var userClaims = User.Identity as ClaimsIdentity;
+    var userId = userClaims?.FindFirst("id")?.Value;
+    var userName = userClaims?.FindFirst(ClaimTypes.NameIdentifier)?.Value;
+    var userRole = userClaims?.FindFirst(ClaimTypes.Role)?.Value;
+    var employeeId = userClaims?.FindFirst("empId")?.Value;
+}
 <head>
     <!-- Required meta tags -->
     <meta charset="utf-8">
@@ -20,6 +28,8 @@
     <link href="~/dashboard/css/listaccount.css" rel="stylesheet" />
     <link href="~/dashboard/css/listRoom.css" rel="stylesheet" />
     <link href="~/dashboard/css/createRoom.css" rel="stylesheet" />
+    @*My css*@
+    <link href="~/forntend/css/css/my-css/chatbox.css" rel="stylesheet" />
     <!-- Create room -->
     <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/css/bootstrap.min.css" rel="stylesheet">
     <link href="https://cdnjs.cloudflare.com/ajax/libs/select2/4.0.13/css/select2.min.css" rel="stylesheet" />
@@ -44,6 +54,10 @@
         <!-- ============================================================== -->
         <!-- navbar -->
         <!-- ============================================================== -->
+       
+
+
+
         <div class="dashboard-header">
             <nav class="navbar navbar-expand-lg bg-white fixed-top">
                 <a class="navbar-brand" href="/dashboard">Hotel</a>
@@ -164,6 +178,54 @@
         <!-- ============================================================== -->
         <div class="nav-left-sidebar sidebar-dark">
             <div class="menu-list" style="height: 80vh;">
+                @if (userRole == "user")
+                {
+                    <!-- Chat Box HTML -->
+                    <div id="chat-section">
+                        <div id="chat-header">
+                            <h6 class="header-text">Employee Hotel</h6>
+                            <button id="closeChat" class="btn btn-danger btn-sm">×</button>
+                        </div>
+                        <div id="chat-box">
+                            <div id="messages"></div>
+                        </div>
+                        <div id="message-input">
+                            <input type="text" id="messageInput" placeholder="Enter message" />
+                            <button id="Send" type="button"><i class="fa-solid fa-paper-plane"></i></button>
+                        </div>
+                    </div>
+                }
+                else
+                {
+                    <div id="wrapper-chat-emp">
+                        <!-- Chat Box HTML -->
+
+                        <div id="employee-chat-container">
+                            <div id="plist" class="people-list">
+                                <div id="employee-user-list">
+                                    <h6>List user</h6>
+                                    <div id="user-list">
+                                        <!-- Danh sách người dùng sẽ được thêm vào đây -->
+                                    </div>
+                                </div>
+                            </div>
+
+                            <div id="employee-chat-section">
+                                <div id="employee-chat-header">
+                                    <h6 id="employeeChatWith"></h6>
+                                    <button id="closeChatEmp" class="btn btn-danger btn-sm">x</button>
+                                </div>
+                                <div id="employee-chat-box">
+                                    <div id="employee-messages"></div>
+                                </div>
+                                <div id="employee-message-input">
+                                    <input type="text" id="employeeMessageInput" placeholder="Enter message" />
+                                    <button id="EmpSend" type="button"><i class="fa-solid fa-paper-plane"></i></button>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                }
                 <nav class="navbar navbar-expand-lg navbar-light">
                     <a class="d-xl-none d-lg-none" href="#">Dashboard</a>
                     <button class="navbar-toggler" type="button" data-toggle="collapse" data-target="#navbarNav" aria-controls="navbarNav" aria-expanded="false" aria-label="Toggle navigation">

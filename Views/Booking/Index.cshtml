@@ -228,7 +228,7 @@ table.table .avatar {
             <div class="table-title">
                 <div class="row">
                     <div class="col-sm-4">
-                        <h2>Order <b>Details</b></h2>
+                        <h2>Order <b>Lists</b></h2>
                     </div>
                 </div>
             </div>
@@ -256,7 +256,12 @@ table.table .avatar {
 							{
 								<tr>
 									<td>@index</td>
-									<td><img style="width:50px;height:50px;border-radius:50%;" src="https://t4.ftcdn.net/jpg/03/59/58/91/360_F_359589186_JDLl8dIWoBNf1iqEkHxhUeeOulx0wOC5.jpg" alt="Alternate Text" /></td>
+									<td>
+										@if (item.FirstImage != null)
+										{
+											<img style="width:50px;height:50px;border-radius:50%;" src="~/images/@item.FirstImage.Url" alt="Alternate Text" />
+										}
+									</td>
 									<td>@item.Booking.CustomerName</td>
 									<td>@payment.PaymentMethod</td>
 									<td>@item.Booking.CheckinDate.ToShortDateString()</td>
@@ -267,7 +272,7 @@ table.table .avatar {
 										<a href="@Url.Action("Review", "Booking", new { id = item.Booking.Id })">Leave Review</a>
 									</td>
 								</tr>
-								index++;
+									
 							}
 						}
 					}

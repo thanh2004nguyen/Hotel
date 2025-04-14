@@ -27,6 +27,7 @@ namespace Hotel.Data
         public DbSet<RoomWithRoomProperty> RoomWithRoomProperties { get; set; }
 
         public DbSet<Payment> Payments { get; set; }
+        public DbSet<RefreshToken> RefreshTokens { get; set; }
 
 
         protected override void OnModelCreating(ModelBuilder modelBuilder)

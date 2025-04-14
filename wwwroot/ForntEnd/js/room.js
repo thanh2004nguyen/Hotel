@@ -1,4 +1,20 @@
-﻿document.addEventListener("DOMContentLoaded", function () {
+﻿
+
+//dropdown setting account
+function toggleDropdown() {
+    const dropdownContent = document.querySelector('.dropdown-container .dropdown-content');
+    dropdownContent.style.display = "block";
+}
+// Close dropdown if clicked outside
+window.onclick = function (event) {
+    const dropdowns = document.querySelectorAll('.dropdown-content');
+    dropdowns.forEach(dropdown => {
+        if (!dropdown.parentElement.contains(event.target)) {
+            dropdown.style.display = "none";
+        }
+    });
+}
+document.addEventListener("DOMContentLoaded", function () {
     const currentPath = window.location.pathname;
     const targetPath = "/Room";
 

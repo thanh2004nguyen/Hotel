@@ -1,36 +1,17 @@
 ﻿@model dynamic 
 
-<h2>Booking Details</h2>
-
-<div>
-    <h4>Room Information</h4>
-    <img src="@Model.Booking.Room.Images.FirstOrDefault()?.Url" alt="Room Image" />
-    <p>Room Name: @Model.Booking.Room.Name</p>
-    <p>Room Type: @Model.Booking.Room.Type</p>
-    <p>Price: @Model.Booking.Room.Price.ToString("C")</p>
-</div>
-
-<div>
-    <h4>Booking Information</h4>
-    <p>Customer Name: @Model.Booking.CustomerName</p>
-    <p>Order Type: @Model.Booking.OrderType</p>
-    <p>Order Date: @Model.Booking.OrderDate.ToString("MM/dd/yyyy")</p>
-    <p>Status: @Model.Booking.Status</p>
-</div>
-
-<div>
-    <h4>Payments</h4>
-    <ul>
-        @foreach (var payment in Model.Payments)
-        {
-            <li>
-                Amount: @payment.Amount.ToString("C") - Date: @payment.PaymentDate.ToString("MM/dd/yyyy") - Transaction ID: @payment.TransactionId
-            </li>
-        }
-    </ul>
-</div>
-
-<div>
+@{
+    var exchangeRate = 0.000041M; // Exchange rate as decimal
+    var pricePerNightUSD = Model.Booking.Room.Price * exchangeRate; // Calculate price per night
+    var totalExpectedPriceUSD = pricePerNightUSD * (decimal)Model.Booking.TotalNights; // Total expected price
+    var priceDiscount = Model.Booking.Price; // Discounted price
+    var savedAmountUSD = totalExpectedPriceUSD - priceDiscount; // Calculate saved amount
+}
+<!-- Style -->
+<link rel="stylesheet" href="https://stackpath.bootstrapcdn.com/bootstrap/4.5.2/css/bootstrap.min.css">
+<link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/5.15.3/css/all.min.css">
+<link rel="stylesheet" href="css/style.css">
+<div>@* 
     <h4>Review</h4>
     <form method="post" action="@Url.Action("SubmitReview", "Booking")">
         <input type="hidden" name="BookingId" value="@Model.Booking.Id" />
@@ -39,7 +20,218 @@
         <label for="comment">Comment:</label>
         <textarea name="Comment" required></textarea>
         <button type="submit">Submit Review</button>
-    </form>
+    </form> *@
 </div>
 
 <a href="@Url.Action("Index")">Back to Booking List</a>
+
+
+
+<style>
+    body {
+    min-height: 100vh;
+    background-size: cover;
+    font-family: 'Lato', sans-serif;
+    color: rgba(116, 116, 116, 0.667);
+
+}
+.container-fluid {
+    margin-top: 200px ;
+}
+
+p {
+    font-size: 14px;
+    margin-bottom: 7px;
+
+}
+
+.small {
+    letter-spacing: 0.5px !important;
+}
+
+.card-1 {
+    box-shadow: 2px 2px 10px 0px rgb(126, 110, 180);
+}
+
+hr {
+    background-color: rgba(248, 248, 248, 0.667);
+}
+
+
+.bold {
+    font-weight: 500;
+}
+
+.change-color {
+    color: #20274D !important;
+}
+
+.card-2 {
+    box-shadow: 1px 1px 3px 0px rgb(112, 115, 139);
+
+}
+
+.fa-circle.active {
+    font-size: 8px;
+    color: #20274D;
+}
+
+.fa-circle {
+    font-size: 8px;
+    color: #aaa;
+}
+
+.rounded {
+    border-radius: 2.25rem !important;
+}
+
+
+.progress-bar {
+    background-color: #20274D !important;
+}
+
+
+.progress {
+    height: 5px !important;
+    margin-bottom: 0;
+        background-color: #20274D;
+}
+
+.invoice {
+    position: relative;
+    top: -70px;
+}
+
+.Glasses {
+    position: relative;
+    top: -12px !important;
+}
+
+.card-footer {
+    background-color: #20274D;
+    color: #fff;
+}
+
+h2 {
+    color: #20274D;
+    letter-spacing: 2px !important;
+}
+
+.display-3 {
+    font-weight: 500 !important;
+}
+
+    .progress-text{
+        display:flex;
+        justify-content:space-between;
+    }
+    h2 {
+        color: #20274D;
+        font-size: 17px;
+    }
+
+    .display-3 {
+        font-size: 28px;
+        font-weight: 500 !important;
+    }
+
+.border-line {
+    border-right: 1px solid rgb(226, 206, 226)
+}
+</style>
+
+    <div class="container-fluid my-5  d-flex  justify-content-center">
+        <div class="card card-1">
+            <div class="card-header bg-white">
+                <div class="media flex-sm-row flex-column-reverse justify-content-between  ">
+                <div class="col my-auto"> <h4 class="mb-0">Thanks for your Order,<span class="change-color"> @Model.Booking.CustomerName</span> !</h4> </div>
+                    <div class="col-auto text-center  my-auto pl-0 pt-sm-4"> <img class="img-fluid my-auto align-items-center mb-0 pt-3" src="https://encrypted-tbn0.gstatic.com/images?q=tbn:ANd9GcTExwGZ1nCY07MStgdWtoHV68e2ickm5aUNtg&s" width="115" height="115"> <p class="mb-4 pt-0 Glasses">Glasses For Everyone</p>  </div>
+                </div>
+            </div>
+            <div class="card-body">
+                <div class="row justify-content-between mb-3">
+                    <div class="col-auto"> <h6 class="color-1 mb-0 change-color">Receipt</h6> </div>
+                <div class="col-auto  ">
+                    <small>
+                        Mã payment :  @foreach (var payment in Model.Payments)
+                        {
+                             @payment.TransactionId
+                        }
+                    </small>
+                </div>
+                </div>
+
+                <div class="row">
+                    <div class="col">
+                        <div class="card card-2">
+                            <div class="card-body">
+                                <div class="media">
+                                    <div class="sq align-self-center ">
+                                    <img class="img-fluid  my-auto align-self-center mr-2 mr-md-4 pl-0 p-0 m-0" src="~/images/@ViewBag.FirstImageUrl" width="135" height="135" />
+                                </div>
+                                    <div class="media-body my-auto text-right">
+                                        <div class="row  my-auto flex-column flex-md-row">
+                                        <div class="col-auto my-auto"> <small> @Model.Booking.Room.RoomName</small>  </div>
+                                        <div class="col-auto my-auto"> <small>@Model.Booking.CheckinDate.ToString("dd/MM/yyyy")</small></div>
+                                        <div class="col my-auto"> <small>@Model.Booking.CheckoutDate.ToString("dd/MM/yyyy")</small></div>
+                                        <div class="col-auto my-auto"> <small>@Model.Booking.TotalNights Pernight </small></div>
+                                            <div class="col my-auto">
+                                            <h6 class="mb-0">&#8377;@Model.Booking.Price</h6>
+                                            </div>
+                                        </div>
+                                    </div>
+                                </div>
+                                <hr class="my-3 ">
+                                <div class="row">
+                                    <div class="col-md-3 mb-3"> <small> Track Order <span><i class=" ml-2 fa fa-refresh" aria-hidden="true"></i></span></small> </div>
+                                    <div class="col mt-auto">
+                                        <div class="progress my-auto"> </div>
+                                        <div class="progress-text">
+                                            <div class="col-auto text-right"><span> <small class="text-right mr-sm-2">Thất bại</small> <i class="fa fa-circle active"></i> </span></div>
+                                            <div class="flex-col"> <span> <small class="text-right mr-sm-2">Đang chờ</small><i class="fa fa-circle active"></i></span></div>
+                                            <div class="col-auto flex-col-auto"><small class="text-right mr-sm-2">Đã thanh toán</small><span> <i class="fa fa-circle"></i></span></div>
+                                        </div>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+
+                <div class="row mt-4">
+                    <div class="col">
+                        <div class="row justify-content-between">
+                            <div class="col-auto"><p class="mb-1 text-dark"><b>Order Details</b></p></div>
+                            <div class="flex-sm-col text-right col"> <p class="mb-1"><b>Total</b></p> </div>
+                        <div class="flex-sm-col col-auto"> <p class="mb-1">&#8377;@Model.Booking.Price</p> </div>
+                        </div>
+                        <div class="row justify-content-between">
+                            <div class="flex-sm-col text-right col"><p class="mb-1"> <b>Pernight</b></p> </div>
+                        <div class="flex-sm-col col-auto"><p class="mb-1">&#8377;@Model.Booking.TotalNights</p></div>
+                        </div>
+                        <div class="row justify-content-between">
+                            <div class="flex-sm-col text-right col"><p class="mb-1"><b>Price 1 night</b></p></div>
+                        <div class="flex-sm-col col-auto"><p class="mb-1"> @((Model.Booking.Room.Price * exchangeRate).ToString("C2", System.Globalization.CultureInfo.GetCultureInfo("en-US")))</p></div>
+                        </div>
+                        <div class="row justify-content-between">
+                        <div class="flex-sm-col text-right col"><p class="mb-1"><b>Saved </b></p></div>
+                        <div class="flex-sm-col col-auto"><p class="mb-1">@savedAmountUSD.ToString("C2", System.Globalization.CultureInfo.GetCultureInfo("en-US"))</p></div>
+                        </div>
+                    </div>
+                </div>
+                <div class="row invoice ">
+                    
+                <div class="col">
+                    @foreach (var payment in Model.Payments)
+                    {
+                        <p class="mb-1"> Invoice Number : @payment.TransactionId </p>
+                        <p class="mb-1">Invoice Date : @payment.PaymentDate</p>
+                        <p class="mb-1">Payment method: @payment.PaymentMethod</p>
+                    }
+                </div>
+                </div>
+            </div>
+        </div>
+    </div>
+<script src="https://code.jquery.com/jquery-3.5.1.slim.min.js"></script>
+<script src="https://cdn.jsdelivr.net/npm/bootstrap@4.5.2/dist/js/bootstrap.bundle.min.js"></script>

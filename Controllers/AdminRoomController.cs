@@ -13,6 +13,7 @@ namespace Hotel.Controllers
     [Authorize(Policy = "AdminOnly")]
     public class AdminRoomController : MyBaseController
     {
+     
         private readonly ILogger<AdminAmenitiesThemeController> _logger;
 
         public AdminRoomController(HotelDbContext context, ILogger<AdminAmenitiesThemeController> logger) : base(context)
@@ -32,7 +33,7 @@ namespace Hotel.Controllers
 
             var roomProperties = await _context.RoomProperties.ToListAsync();
 
-            ViewBag.RoomPropertyList = new SelectList(roomProperties, "Id", "Name");
+            ViewBag.RoomPropertyList = new SelectList(roomProperties, CommonText.Id, CommonText.Name);
 
             return View(rooms);
         }
@@ -44,14 +45,18 @@ namespace Hotel.Controllers
             {
                 return Json(new List<string>());
             }
-            var ids = themeIds.Split(',').Where(id => int.TryParse(id, out _)).Select(int.Parse).ToArray();
+            var ids = themeIds.Split(',')
+                .Where(id => int.TryParse(id, out _)).Select(int.Parse)
+                .ToArray();
 
             if (ids.Length == 0)
             {
                 return Json(new List<string>());
             }
             var amenities = _context.Amenities
-                .Where(a => a.AmenitiesThemeId.HasValue && ids.Contains(a.AmenitiesThemeId.Value)) // So sánh với int array
+                .Where(a => a.AmenitiesThemeId
+                .HasValue && ids
+                .Contains(a.AmenitiesThemeId.Value)) // So sánh với int array
                 .ToList();
 
             return Json(amenities);

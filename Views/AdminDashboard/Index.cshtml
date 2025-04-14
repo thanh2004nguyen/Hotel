@@ -1,4 +1,5 @@
-﻿@{
+﻿@model IEnumerable<dynamic>
+@{
     Layout = "~/Views/Shared/LayoutAdmin.cshtml"; // Thêm dòng này để sử dụng LayoutAdmin
     ViewData["Title"] = "Index";
 }
@@ -31,11 +32,11 @@
             <div class="row">
                 <!-- ============================================================== -->
                 <!-- ============================================================== -->
-                <!-- recent orders  -->
+                <!-- List new bookings -->
                 <!-- ============================================================== -->
                 <div class="col-xl-9 col-lg-12 col-md-6 col-sm-12 col-12">
                     <div class="card">
-                        <h5 class="card-header">Recent Orders</h5>
+                        <h5 class="card-header">Recent Bookings</h5>
                         <div class="card-body p-0">
                             <div class="table-responsive">
                                 <table class="table">
@@ -53,61 +54,35 @@
                                         </tr>
                                     </thead>
                                     <tbody>
-                                        <tr>
-                                            <td>1</td>
-                                            <td>
-                                                <div class="m-r-10"><img src="" alt="user" class="rounded" width="45"></div>
-                                            </td>
-                                            <td>Product #1 </td>
-                                            <td>id000001 </td>
-                                            <td>20</td>
-                                            <td>$80.00</td>
-                                            <td>27-08-2018 01:22:12</td>
-                                            <td>Patricia J. King </td>
-                                            <td><span class="badge-dot badge-brand mr-1"></span>InTransit </td>
-                                        </tr>
-                                        <tr>
-                                            <td>2</td>
-                                            <td>
-                                                <div class="m-r-10"><img src="" alt="user" class="rounded" width="45"></div>
-                                            </td>
-                                            <td>Product #2 </td>
-                                            <td>id000002 </td>
-                                            <td>12</td>
-                                            <td>$180.00</td>
-                                            <td>25-08-2018 21:12:56</td>
-                                            <td>Rachel J. Wicker </td>
-                                            <td><span class="badge-dot badge-success mr-1"></span>Delivered </td>
-                                        </tr>
-                                        <tr>
-                                            <td>3</td>
-                                            <td>
-                                                <div class="m-r-10"><img src="" alt="user" class="rounded" width="45"></div>
-                                            </td>
-                                            <td>Product #3 </td>
-                                            <td>id000003 </td>
-                                            <td>23</td>
-                                            <td>$820.00</td>
-                                            <td>24-08-2018 14:12:77</td>
-                                            <td>Michael K. Ledford </td>
-                                            <td><span class="badge-dot badge-success mr-1"></span>Delivered </td>
-                                        </tr>
-                                        <tr>
-                                            <td>4</td>
-                                            <td>
-                                                <div class="m-r-10"><img src="" alt="user" class="rounded" width="45"></div>
-                                            </td>
-                                            <td>Product #4 </td>
-                                            <td>id000004 </td>
-                                            <td>34</td>
-                                            <td>$340.00</td>
-                                            <td>23-08-2018 09:12:35</td>
-                                            <td>Michael K. Ledford </td>
-                                            <td><span class="badge-dot badge-success mr-1"></span>Delivered </td>
-                                        </tr>
-                                        <tr>
-                                            <td colspan="9"><a href="#" class="btn btn-outline-light float-right">View Details</a></td>
-                                        </tr>
+                                        @if (Model != null && Model.Any())
+                                        {
+                                            int index = 1;
+                                            foreach (var item in Model)
+                                            {
+                                                @foreach (var payment in item.Payments)
+                                                {
+                                                    <tr>
+                                                        <td>@index</td>
+                                                        <td>
+                                                            <div class="m-r-10">
+                                                                @if (item.FirstImage != null)
+                                                                {
+                                                                    <img src="~/images/@item.FirstImage.Url" alt="room-image" class="rounded" width="45">
+                                                                }
+                                                            </div>
+                                                        </td>
+                                                        <td>@item.Booking.Room.RoomName</td>
+                                                        <td>@item.Booking.Room.RoomNumber </td>
+                                                        <td>@payment.PaymentMethod</td>
+                                                        <td>@payment.Amount.ToString("C")</td>
+                                                        <td>@item.Booking.CreatedDate.ToString("dd/mm/yyyy")</td>
+                                                        <td>@item.Booking.CustomerName </td>
+                                                        <td><span class="badge-dot badge-brand mr-1"></span>InTransit </td> @* badge-dot badge-success mr-1 *@
+                                                    </tr>
+                                                    index++;
+                                                }
+                                            }
+                                        }
                                     </tbody>
                                 </table>
                             </div>

@@ -5,6 +5,8 @@ namespace Hotel.Models.Shared
     public class CommonMethod
     {
 
+       
+
         public static async Task<string> uploadImage(IFormFile file)
         {
             try

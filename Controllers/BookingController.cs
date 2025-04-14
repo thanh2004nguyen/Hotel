@@ -31,38 +31,46 @@
 
 			// Lấy danh sách bookings và payments
 			var bookingsWithPayments = await (from b in _context.Bookings
-											  where b.UserId == userId
+                                              .Include(b => b.Room)
+                                             .ThenInclude(r => r.Images)
+                                              where b.UserId == userId
 											  join p in _context.Payments on b.Id equals p.BookingId into payments
-											  select new
+                                              let room = b.Room
+                                              select new
 											  {
 												  Booking = b,
-												  Payments = payments.ToList() // Chuyển payments thành danh sách
-											  }).ToListAsync();
+												  Payments = payments.ToList(),
+                                                  FirstImage = room.Images.FirstOrDefault()
+                                              }).ToListAsync();
 			return View(bookingsWithPayments);
 
 		}
 
+        public async Task<IActionResult> Details(int id)
+        {
+            var bookingWithDetails = await (from b in _context.Bookings
+                                             .Include(b => b.Room)
+                                             .ThenInclude(r => r.Images) 
+                                            where b.Id == id
+                                            join p in _context.Payments on b.Id equals p.BookingId into payments
+                                            select new
+                                            {
+                                                Booking = b,
+                                                Payments = payments.ToList(),
+                                                FirstImage = b.Room.Images.FirstOrDefault() 
+                                            }).FirstOrDefaultAsync();
 
-		public async Task<IActionResult> Details(int id)
-		{
-			var bookingWithDetails = await (from b in _context.Bookings
-											 .Include(b => b.Room) // Bao gồm thông tin phòng
-											where b.Id == id
-											join p in _context.Payments on b.Id equals p.BookingId into payments
-											select new
-											{
-												Booking = b,
-												Payments = payments.ToList() // Chuyển payments thành danh sách
-											}).FirstOrDefaultAsync();
+            if (bookingWithDetails == null)
+            {
+                return NotFound();
+            }
 
-			if (bookingWithDetails == null)
-			{
-				return NotFound();
-			}
+            // Gửi thông tin hình ảnh đầu tiên và booking tới view
+            ViewBag.FirstImageUrl = bookingWithDetails.FirstImage?.Url;
 
-			return View(bookingWithDetails);
-		}
+            return View(bookingWithDetails);
+        }
 
 
-	}
+    }
 }

@@ -1,5 +1,7 @@
 ﻿using Hotel.Data;
 using Hotel.Filters;
+using Hotel.ServiceImql;
+using Hotel.Services;
 using Microsoft.AspNetCore.Authentication.Cookies;
 using Microsoft.AspNetCore.Mvc.Authorization;
 using Microsoft.EntityFrameworkCore;
@@ -23,6 +25,9 @@ builder.Services.AddDbContext<HotelDbContext>(o =>
 	o.UseSqlServer(builder.Configuration.GetConnectionString("DemoConnectionString"));
 });
 
+// Đăng ký dịch vụ service
+builder.Services.AddScoped<ILoginService, LoginService>();
+
 builder.Services.AddScoped<BaseDataActionFilter>();
 
 // add authozied use cookie
@@ -42,6 +47,7 @@ builder.Services.AddAuthorization(options =>
 
 // Add session services
 builder.Services.AddSession();
+
 builder.Services.AddSignalR();
 builder.Services.AddMvc(options =>
 {
